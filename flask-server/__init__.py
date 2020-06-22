@@ -28,4 +28,8 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    @app.route('/')
+    def serve_index():
+        return app.send_static_file('index.html')
+
     return app
