@@ -1,4 +1,6 @@
-papers/*
+papers/
 *.pyc
-.vscode/*
+.vscode/
 .DS_Store
+*/__pycache__/ 
+flask-server/__pycache__/
