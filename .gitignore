@@ -1,1 +1,4 @@
 papers/*
+*.pyc
+.vscode/*
+.DS_Store
