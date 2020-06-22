@@ -26,7 +26,7 @@
     /*padding: 0 5px 0 0;
     content: url(point.png);
     vertical-align: -50%;*/
-    background-image: url('point.png');
+    background-image: url('../images/point.png');
     background-size: 50px 50px;
     display: inline-block;
     width: 50px; 
@@ -42,13 +42,13 @@
 }
 
 .cell-queen-white{
-    content: url("wqueen.png");
+    content: url("../images/wqueen.png");
 }
 .cell-queen-black{
-    content: url("bqueen.png");
+    content: url("../images/bqueen.png");
 }
 .cell-fire{
-    content: url("fire.png");
+    content: url("../images/fire.png");
 }
 
 #controls-in-game{
