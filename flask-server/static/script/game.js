@@ -105,18 +105,6 @@ function toggle_move_indicators(){
     show_move_indicators = !show_move_indicators
 }
 
-function coord2index(coord){
-    x = coord[0]
-    if (x=="A") x=0
-    if (x=="B") x=1
-    if (x=="C") x=2
-    if (x=="D") x=3
-    if (x=="E") x=4
-    if (x=="F") x=6
-    y = Number(coord[1])-1
-    return [x,y]
-}
-
 // @cell index in the form XY e.g. 02 as a string
 function update_cell_image(cell, type, add_or_remove)
 {
