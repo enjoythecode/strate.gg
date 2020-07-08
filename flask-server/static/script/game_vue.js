@@ -4,6 +4,14 @@
 // 2: queen black
 // 3: border
 
+var app = new Vue({
+    el: '#app',
+    data: {
+      start_game_message: 'Start game (6x6, config 0)'
+    }
+  })
+
+
 var player_1 = null
 var player_2 = null
 
