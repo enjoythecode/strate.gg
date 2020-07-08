@@ -14,6 +14,10 @@ $ pip3 install flask
 
 For Mac/Linux:
 
+Run the shell script `dev_server.sh`
+
+OR
+
 ```
 $ export FLASK_APP=flask-server
 $ export FLASK_ENV=development
