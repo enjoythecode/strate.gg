@@ -32,4 +32,8 @@ def create_app(test_config=None):
     def serve_index():
         return app.send_static_file('index.html')
 
+    @app.route('/game.html')
+    def serve_game():
+        return app.send_static_file('game.html')
+
     return app
