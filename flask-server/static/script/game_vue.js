@@ -1,7 +1,8 @@
-// empty
-// 1 queen white
-// 2 queen black
-// 3 border
+// board state encoding
+// 0: empty
+// 1: queen white
+// 2: queen black
+// 3: border
 
 var player_1 = null
 var player_2 = null
