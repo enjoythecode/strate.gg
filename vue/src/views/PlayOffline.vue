@@ -1,6 +1,6 @@
 <template>
   <div class="playOffline">
-    <h1>This is the play offline page</h1>
+    <h1>Play (Offline)</h1>
     <GameSettingSelector />
   </div>
 </template>
