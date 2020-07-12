@@ -1,6 +1,9 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }} Settings Selector</h1>
+    <p>Settings Selector</p>
+        <button @click="start_game(4,0)">4x4, config 1</button>
+        <button @click="start_game(6,0)">6x6, config 1</button>
+        <button @click="start_game(10,0)">10x10, config 1</button>
   </div>
 </template>
 
@@ -8,7 +11,6 @@
 export default {
   name: "GameSettingSelector",
   props: {
-    msg: String
   }
 };
 </script>
