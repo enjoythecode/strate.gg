@@ -1,6 +1,6 @@
-import base_amazons_player
+import amazons_agent
 
-class AmazonsPlayer(base_amazons_player.AmazonsPlayer):
+class AmazonsPlayer(amazons_agent.AmazonsAgent):
 
 	def __init__(self, friend, enemy):
 		self.meta_name = "Human-Computer Interface"
@@ -17,4 +17,5 @@ class AmazonsPlayer(base_amazons_player.AmazonsPlayer):
 		"""
 		Takes in a amazons_state and returns a move object ["AB","CD","EF"]
 		"""
+		print(state)
 		return input("Human's next move: ").split(" ")

@@ -1,7 +1,7 @@
 import amazons_agent
 import math
 
-MAX_CALCULATIONS = 10000
+MAX_CALCULATIONS = 10_000
 MAX_VAL = 1e9
 MIN_VAL = -1e9
 

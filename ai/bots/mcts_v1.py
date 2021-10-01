@@ -5,8 +5,8 @@ import random
 
 import amazons_agent
 
-MAX_ITERATIONS = 2500
-
+MAX_ITERATIONS = 3_000
+PRINT_EVERY = 1_000
 
 class GameNode:
     """ A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
@@ -118,5 +118,9 @@ class AmazonsPlayer(amazons_agent.AmazonsAgent):
             while node is not None:  # back-propagate from the expanded node and work back to the root node
                 node.update(backprop_result)  # state is terminal. update node with result from POV of playerJustMoved
                 node = node.parentnode
+
+            if i % PRINT_EVERY == 0:
+                print(f"Iteration {i} out of {MAX_ITERATIONS} [{round(i/MAX_ITERATIONS * 100, 2)}%]")
+                print(sorted(root_node.childnodes, key=lambda c: c.visits)[-1].move)
 
         return sorted(root_node.childnodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
