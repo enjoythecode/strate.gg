@@ -49,6 +49,19 @@ class AmazonsState:
         self.game_size = len(board)
         self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
 
+    @classmethod
+    def create_from_size(self, size = 10, config = 0):
+        b = (size, config)
+
+        if b == (10, 0):
+            starting_board = starting_board_10x0
+        elif b == (6, 0):
+            starting_board = starting_board_6x0
+        elif b == (4, 0):
+            starting_board = starting_board_4x0
+
+        return AmazonsState(starting_board)
+
     def clone(self):
         """ Create a deep clone of this game state.
         """
