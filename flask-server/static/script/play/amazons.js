@@ -22,7 +22,7 @@ player_list = []
 $(document).ready(function() {
     amazons_status_el = document.getElementById("amazons-play-game-status")
     amazons_players_el = document.getElementById("amazons-play-game-players")
-    load_game()
+    join_game()
 });
 
 
@@ -59,55 +59,60 @@ function update_status_text(){
     amazons_players_el.textContent = player_list.toString()
 }
 
-function load_game()
+function process_game_data(info){
+    game_in_progress = info.in_progress
+    game_is_playing = info.client_is_player
+    player_list = info.players
+
+    board = info.board
+    game_size = info.game_size
+
+    update_status_text()
+
+    $("#game").empty()
+    $("#game").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
+
+    for (let row = 0; row < game_size; row++) {
+        for (let col = 0; col < game_size; col++) {
+            
+            cell_count = row.toString() + col.toString()
+            if( (col + row) %2 == 0 ){
+                cell_color = "white"
+            }else{
+                cell_color = "black"
+            }
+            $("#game").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
+        
+            if(board[row][col] != 0){
+                update_cell_image(row.toString() + col.toString(),board[row][col] - 1, 0)
+            }
+
+        }
+        $("#game").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
+    }
+    for (let c = 0; c < game_size; c++) {
+        $("#game").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
+        
+    }
+
+    $(".game-cell").click(function() {
+        handle_click($(this).data("cell"));
+    });
+}
+
+function join_game()
 {
     if(socket && socket.connected){
         gid = get_game_id()
         poll_game_join(gid).then( info => {
-
-            game_in_progress = info.in_progress
-            game_is_playing = info.client_is_player
-            player_list = info.players
-
-            board = info.board
-            game_size = info.game_size
-
-            update_status_text()
-
-            $("#game").empty()
-            $("#game").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
-
-            for (let row = 0; row < game_size; row++) {
-                for (let col = 0; col < game_size; col++) {
-                    
-                    cell_count = row.toString() + col.toString()
-                    if( (col + row) %2 == 0 ){
-                        cell_color = "white"
-                    }else{
-                        cell_color = "black"
-                    }
-                    $("#game").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
-                
-                    if(board[row][col] != 0){
-                        update_cell_image(row.toString() + col.toString(),board[row][col] - 1, 0)
-                    }
-
-                }
-                $("#game").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
-            }
-            for (let c = 0; c < game_size; c++) {
-                $("#game").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
-                
-            }
-
-            $(".game-cell").click(function() {
-                handle_click($(this).data("cell"));
-            });
-
+            process_game_data(info)
+            socket.on("game-update", info => {
+                console.log("Game update received!")
+                process_game_data(info)
+            })
         }, err => console.log(err))
-
     }else{
-        setTimeout(load_game, 300); // try again in 300 milliseconds
+        setTimeout(join_game, 300); // try again in 300 milliseconds
     }
 }
 
