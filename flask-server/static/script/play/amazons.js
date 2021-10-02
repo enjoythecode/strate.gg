@@ -1,26 +1,12 @@
+var player_1 = null
+var player_2 = null
+
+// CODES?
 // empty
 // 1 queen white
 // 2 queen black
 // 3 border
-
-var player_1 = null
-var player_2 = null
-
-var board = [] // used to store actual game
-var starting_positions = {
-    "10_0": [
-        [0,"03"],[0,"06"],[0,"30"],[0,"29"],
-        [1,"93"],[1,"96"],[1,"60"],[1,"69"]
-    ],
-    "6_0": [
-        [0,"02"],[0,"53"],
-        [1,"30"],[1,"25"]
-    ],
-    "4_0": [
-        [0,"11"],
-        [1,"22"]
-    ]
-}
+var board = []
 var moves = []
 var turn = 0
 var game_size = null
@@ -30,27 +16,76 @@ temp_move = null
 temp_shoot = null
 temp_step = 0
 
-show_move_indicators = true
+load_board()
 
-var socket;
-
-// Socket Connectivity
-$(document).ready(function() {
-    socket = io('http://localhost:5000');
-    socket.on('connect', function() {
-    });
-    socket.on('message', function(msg) {
-        alert(msg);
-    });
-    socket.on('error', function(e){
-        console.log("Error", e);
-    })
-    console.log(socket);
-});
-
-function toggle_move_indicators(){
-    show_move_indicators = !show_move_indicators
+function get_game_id(){
+    params = new URLSearchParams(window.location.search);
+    return params.get('gid');
 }
+
+function poll_game_info(gid){
+    return new Promise((resolve, reject) => {
+        socket.emit('game-get-info', {"gid": gid}, (data) =>{
+            if(data){
+                if(data.result && data.result === "success"){
+                    console.log(data.info.board)
+                    return resolve(data.info);
+                }else{
+                    return reject(data.error)
+                }
+            }else{
+                return reject("Payload not defined!")
+            }
+        })
+    })
+}
+
+function load_board()
+{
+    if(socket && socket.connected){
+        gid = get_game_id()
+        poll_game_info(gid).then( info => {
+
+            board = info.board
+            game_size = info.game_size
+
+            $("#game").empty()
+            $("#game").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
+
+            for (let row = 0; row < game_size; row++) {
+                for (let col = 0; col < game_size; col++) {
+                    
+                    cell_count = row.toString() + col.toString()
+                    if( (col + row) %2 == 0 ){
+                        cell_color = "white"
+                    }else{
+                        cell_color = "black"
+                    }
+                    $("#game").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
+                
+                    if(board[row][col] != 0){
+                        update_cell_image(row.toString() + col.toString(),board[row][col] - 1, 0)
+                    }
+
+                }
+                $("#game").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
+            }
+            for (let c = 0; c < game_size; c++) {
+                $("#game").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
+                
+            }
+
+            $(".game-cell").click(function() {
+                handle_click($(this).data("cell"));
+            });
+
+        }, err => console.log(err))
+
+    }else{
+        setTimeout(load_board, 300); // try again in 300 milliseconds
+    }
+}
+
 
 // @cell index in the form XY e.g. 02 as a string
 function update_cell_image(cell, type, add_or_remove)
@@ -80,61 +115,6 @@ function index2coord(index){
     if (x=="5") x="F"
     y = (Number(index[0])+1).toString()
     return x + y
-}
-
-function start_game(size, config){
-    game_size = size
-    
-    player_1 = $("#player-select-1").val()
-    player_2 = $("#player-select-2").val()
-
-    // allocate board in memory
-    board = []
-    for (let i = 0; i < size; i++) {
-        temp = Array(size).fill(0)
-        board.push(temp)
-    }
-
-
-    // draw cells for board
-    $("#game").empty()
-    $("#game").css("grid-template-columns","50px ".repeat(size) + "50px") // one extra cell for the trailing space AND the column number
-
-    for (let row = 0; row < size; row++) {
-        for (let col = 0; col < size; col++) {
-            
-            cell_count = row.toString() + col.toString()
-            if( (col + row) %2 == 0 ){
-                cell_color = "white"
-            }else{
-                cell_color = "black"
-            }
-
-            $("#game").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
-        }
-        $("#game").append('<div class="game-cell center-content">' + row.toString() + '</div>')
-    }
-    for (let c = 0; c < size; c++) {
-        $("#game").append('<div class="game-cell center-content">' + c.toString() + '</div>')
-        
-    }
-
-    $(".game-cell").click(function() {
-        handle_click($(this).data("cell"));
-    });
-
-    //upload game position
-    starting_positions[size.toString() + "_" + config.toString()].forEach(element => {
-        board[Number(element[1][0])][Number(element[1][1])] = element[0]+1;update_cell_image(element[1],element[0],0)
-    });
-   
-    $("#controls-out-of-game").hide()
-    $("#controls-in-game").show()
-
-    if (player_1 === "bot"){
-        bot_play()
-    }
-
 }
 
 function cell_can_reach(from, to){
@@ -185,7 +165,7 @@ function valid_move_indicator(cell, mode){
                 }
             }
         }
-    }else if(show_move_indicators){
+    }else {
 
         c_x = Number(cell[0])
         c_y = Number(cell[1])
@@ -227,35 +207,6 @@ function reset_move(msg, cont){
     temp_step = 0
 }
 
-function undo_last_move(){
-    reset_move("undoing last move") // reset current move progress
-    last_move = moves.pop()
-    
-    // delete from <ul> moves
-    $("#move-list").last().remove()
-
-    // change board
-    last_move_turn = last_move[0]
-    last_move_from = last_move[1]
-    last_move_to = last_move[2]
-    last_move_shot = last_move[3]
-
-    board[Number(last_move_from.charAt(0))][Number(last_move_from.charAt(1))] = last_move_turn + 1
-    board[Number(last_move_to.charAt(0))][Number(last_move_to.charAt(1))] = 0
-    board[Number(last_move_shot.charAt(0))][Number(last_move_shot.charAt(1))] = 0
-
-    if (last_move_turn == 0){
-        moving_element = "cell-queen-white";
-    }else{
-        moving_element = "cell-queen-black"
-    }
-    update_cell_image(last_move_from,last_move_turn,0)
-    update_cell_image(last_move_to,last_move_turn,1)
-    update_cell_image(last_move_shot,2,2)
-    
-    if (last_move_turn==0){turn = 0}else{turn = 1}
-}
-
 function handle_click(cell){
     cell = cell.toString()
     if (temp_step == 0){
@@ -267,6 +218,7 @@ function handle_click(cell){
             
             temp_step += 1;
         }else{//not players turn
+            console.log(board[Number(cell[0])][Number(cell[1])], turn + 1)
             reset_move("not players turn",false)
         }
     }else if(temp_step == 1){
