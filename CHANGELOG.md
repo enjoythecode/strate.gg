@@ -1,6 +1,7 @@
 # 2021-10-02
 - Establish basic status text in the client.
 - Establish simple room-joining logic.
+- Emit relevant updates when joining rooms.
 # 2021-10-01
 - Restarting this project with a focus on the ability to play correspondence games against other players.
 - Cleared up instructions for running the codebase.

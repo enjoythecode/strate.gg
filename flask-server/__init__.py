@@ -87,14 +87,15 @@ def get_game_data(payload):
         response = g["game"].game_data()
         response["players"] = g["players"]
         response["in_progress"] = g["in_progress"]
-        response["client_is_player"] = request.sid in response["players"]
+        sckt.emit("game-update", response, to = "amazons_" + gid) # we want to emit these without emitting player specific data!
 
-        sckt.emit("game-update", response)
+        # Client-specific info!
+        response["client_is_player"] = request.sid in response["players"]
+        response["client_side"] = 0 if not response["client_is_player"] else g["players"].index(request.sid) + 1
         sckt.join_room("amazons_" + gid)
 
         return {"result": "success", "info": response}
     else:
-        print("err")
         return {"result": "error", "error": "Game not found."}
 
 if __name__ == "__main__":

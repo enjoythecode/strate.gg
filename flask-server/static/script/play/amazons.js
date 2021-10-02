@@ -1,17 +1,13 @@
 var player_1 = null
 var player_2 = null
 
-// CODES?
-// empty
-// 1 queen white
-// 2 queen black
-// 3 border
 var board = []
 var moves = []
 var turn = 0
 var game_size = null
 var game_in_progress = false
 var game_is_playing = false
+var game_player_side = 0 // 1: White, 2: Black, 0: game_is_playing == False
 
 temp_source = null
 temp_move = null
@@ -61,7 +57,12 @@ function update_status_text(){
 
 function process_game_data(info){
     game_in_progress = info.in_progress
-    game_is_playing = info.client_is_player
+    if(info.client_is_player){
+        game_is_playing = info.client_is_player
+    }
+    if(info.client_side){
+        game_player_side = info.client_side
+    }
     player_list = info.players
 
     board = info.board
@@ -243,7 +244,7 @@ function handle_click(cell){
     }
     cell = cell.toString()
     if (temp_step == 0){
-        if(board[Number(cell[0])][Number(cell[1])] == turn + 1){
+        if(board[Number(cell[0])][Number(cell[1])] == turn + 1 || game_player_side != turn + 1){
             temp_source = cell
             board[Number(temp_source.charAt(0))][Number(temp_source.charAt(1))] = 0
             document.getElementById("cell-" + cell).classList.add("selected-indicator-source");
@@ -295,7 +296,6 @@ function play(source, move, shoot){
     
     $("#move-list").append("<li>" + index2coord(source) + " > " + index2coord(move) + " x " + index2coord(shoot) + "</li>")
 
-    
     reset_move("played succesfully", true);
     
     if ((turn == 0 && player_1 === "bot") || (turn == 1 && player_2 === "bot")){
