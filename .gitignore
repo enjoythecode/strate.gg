@@ -4,3 +4,4 @@ papers/
 .DS_Store
 */__pycache__/ 
 flask-server/__pycache__/
+venv/
