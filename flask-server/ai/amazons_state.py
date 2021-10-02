@@ -62,6 +62,15 @@ class AmazonsState:
 
         return AmazonsState(starting_board)
 
+    def game_data(self):
+        """Returns relevant game data in a dictionary. Intended to be passed onto a client for consumption"""
+        return {
+            "board": self.board,
+            "game_size": self.game_size,
+            "pjm": self.playerJustMoved,
+            "turns_taken": self.number_of_turns
+        }
+
     def clone(self):
         """ Create a deep clone of this game state.
         """

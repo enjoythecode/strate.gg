@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, send, emit
 from ai.amazons_state import AmazonsState as amzn_state
-import os
+import random, os, string, json
+ 
+# Returns a random string of the requires size.
+def generate_ID(size, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for x in range(size))
 
 games = {}
 users = {}
@@ -19,10 +23,12 @@ socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 def serve_index():
     return app.send_static_file('index.html')
 
-# Vue front-end, WIP
-@app.route('/game.html')
-def serve_game():
-    return app.send_static_file('game.html')
+@app.route('/play/<game>')
+def serve_play(game):
+    if game == "amazons":
+        return app.send_static_file('play/amazons.html')
+    else:
+        return "False"
 
 ############# SOCKETS #############
 @socketio.on('message')
@@ -40,11 +46,27 @@ def test_disconnect():
 
 @socketio.on('game-create')
 def create_game(payload):
+
+    gid = generate_ID(8)
+    while gid in games:
+        gid = generate_ID(8)
     g = amzn_state.create_from_size(payload["size"], payload["config"])
-    print(g)
-    #users.append({username : request.sid})
-    #print(users)
-    print('Game created!')
+
+    games[gid] = {
+        "game": g,
+        "users": [request.sid],
+        "started": False
+    }
+    return {"result": "success", "gid": gid}
+
+@socketio.on('game-get-info')
+def get_game_data(payload):
+    if payload["gid"] and payload["gid"] in games:
+        game_data = games[payload["gid"]]["game"].game_data()
+        return {"result": "success", "info": game_data}
+    else:
+        print("err")
+        return {"result": "error", "error": "Game not found."}
 
 if __name__ == "__main__":
     socketio.run(app)
