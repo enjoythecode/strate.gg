@@ -29,11 +29,11 @@ function get_game_id(){
 }
 
 function poll_game_join(gid){
+    //https://stackoverflow.com/questions/37876889/react-redux-and-websockets-with-socket-io
     return new Promise((resolve, reject) => {
         socket.emit('game-join', {"gid": gid}, (data) =>{
             if(data){
                 if(data.result && data.result === "success"){
-                    console.log(data.info.board)
                     return resolve(data.info);
                 }else{
                     return reject(data.error)
@@ -65,7 +65,10 @@ function process_game_data(info){
     }
     player_list = info.players
 
+    console.log(board)
     board = info.board
+    console.log(info.board, board == info.board)
+    turn = info.turn
     game_size = info.game_size
 
     update_status_text()
@@ -244,14 +247,14 @@ function handle_click(cell){
     }
     cell = cell.toString()
     if (temp_step == 0){
-        if(board[Number(cell[0])][Number(cell[1])] == turn + 1 || game_player_side != turn + 1){
+        if(board[Number(cell[0])][Number(cell[1])] == turn + 1 && game_player_side == turn + 1){
             temp_source = cell
             board[Number(temp_source.charAt(0))][Number(temp_source.charAt(1))] = 0
             document.getElementById("cell-" + cell).classList.add("selected-indicator-source");
             valid_move_indicator(temp_source,0)
             
             temp_step += 1;
-        }else{//not players turn
+        }else{
             console.log(board[Number(cell[0])][Number(cell[1])], turn + 1)
             reset_move("not players turn",false)
         }
@@ -279,26 +282,27 @@ function handle_click(cell){
 }
 
 function play(source, move, shoot){
-    
-    if (turn == 0){
-        moving_element = "cell-queen-white";
-    }else{
-        moving_element = "cell-queen-black"
-    }
+    console.log(source, move, shoot)
+    //https://stackoverflow.com/questions/37876889/react-redux-and-websockets-with-socket-io
+    p = new Promise((resolve, reject) => {
+        socket.emit('game-move', {"gid": gid, "move": {"from": source, "to": move, "shoot": shoot}}, (data) =>{
+            if(data){
+                if(data.result && data.result === "success"){
+                    return resolve(data);
+                }else{
+                    return reject(data)
+                }
+            }else{
+                return reject("No response received!")
+            }
+        })
+    })
 
-    update_cell_image(source,turn,1)
-    update_cell_image(move,turn,0)
-    update_cell_image(shoot,2,0)
-   
-    moves.push([turn, source, move, shoot])
+    p.then( info => {
+        // no need to receive or process game data here because it will already be emitted to the room
+        moves.push([turn, source, move, shoot])
+        temp_step = 0
+        console.log("new turn", turn)
+    }, err => console.log(err))
 
-    if (turn==0){turn = 1}else{turn = 0}
-    
-    $("#move-list").append("<li>" + index2coord(source) + " > " + index2coord(move) + " x " + index2coord(shoot) + "</li>")
-
-    reset_move("played succesfully", true);
-    
-    if ((turn == 0 && player_1 === "bot") || (turn == 1 && player_2 === "bot")){
-        bot_play()
-    }
 }

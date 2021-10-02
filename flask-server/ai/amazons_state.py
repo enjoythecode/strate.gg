@@ -67,7 +67,7 @@ class AmazonsState:
         return {
             "board": self.board,
             "game_size": self.game_size,
-            "pjm": self.playerJustMoved,
+            "turn": 2 - self.playerJustMoved,
             "turns_taken": self.number_of_turns
         }
 

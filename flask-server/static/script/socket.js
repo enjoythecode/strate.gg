@@ -2,7 +2,7 @@ var socket;
 
 // Socket Connectivity
 $(document).ready(function() {
-    socket = io('http://localhost:5000');
+    socket = io(location.protocol + '//' + location.host);
 
     socket.on('connect', function() {
     });

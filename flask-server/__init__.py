@@ -55,7 +55,7 @@ def create_game(payload):
     g = amzn_state.create_from_size(payload["size"], payload["config"])
 
     games[gid] = {
-        "game": g,
+        "board": g,
         "players": [],
         "in_progress": False,
         "started": False
@@ -84,7 +84,7 @@ def get_game_data(payload):
             g["in_progress"] = True
 
         # Build Response
-        response = g["game"].game_data()
+        response = g["board"].game_data()
         response["players"] = g["players"]
         response["in_progress"] = g["in_progress"]
         sckt.emit("game-update", response, to = "amazons_" + gid) # we want to emit these without emitting player specific data!
@@ -97,6 +97,30 @@ def get_game_data(payload):
         return {"result": "success", "info": response}
     else:
         return {"result": "error", "error": "Game not found."}
+
+@socketio.on('game-move')
+def handle_game_move(payload):
+    gid = payload["gid"]
+    sid = request.sid
+
+    if gid and gid in games:
+        g = games[gid]
+        b = g["board"]
+        if sid in g["players"] and b.playerJustMoved != g["players"].index(request.sid) + 1:
+            move = [
+                payload["move"]["from"],
+                payload["move"]["to"],
+                payload["move"]["shoot"]
+            ]
+            b.make_move(move)
+        
+            response = b.game_data()
+            response["players"] = g["players"]
+            response["in_progress"] = g["in_progress"]
+            sckt.emit("game-update", response, to = "amazons_" + gid)
+            print("--------", sckt.rooms(), "----------")
+            return {"result": "success"}
+
 
 if __name__ == "__main__":
     socketio.run(app)
