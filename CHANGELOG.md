@@ -4,3 +4,4 @@
 - Configured basic socket connection between client and server!
 - Improved Amazons State creation.
 - Moved amazons game logic inside flask-server
+- Introduce proper venv! (fixed socketio versioning problem across dev platforms)

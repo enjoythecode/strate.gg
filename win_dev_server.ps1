@@ -1,3 +1,1 @@
-$env:FLASK_APP = "flask-server"
-$env:FLASK_ENV = "development"
-flask run
+python flask-server/__init__.py

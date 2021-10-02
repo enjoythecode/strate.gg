@@ -6,6 +6,9 @@ This is also my sandbox for testing out different reinforcement learning techniq
 
 ## Running
 
+### Start Virtual Environment
+`python -m venv venv`
+
 ### Install requirements
 `pip install -r requirements.txt`
 
