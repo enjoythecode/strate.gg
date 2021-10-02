@@ -10,22 +10,31 @@ var board = []
 var moves = []
 var turn = 0
 var game_size = null
+var game_in_progress = false
+var game_is_playing = false
 
 temp_source = null
 temp_move = null
 temp_shoot = null
 temp_step = 0
 
-load_board()
+player_list = []
+$(document).ready(function() {
+    amazons_status_el = document.getElementById("amazons-play-game-status")
+    amazons_players_el = document.getElementById("amazons-play-game-players")
+    load_game()
+});
+
+
 
 function get_game_id(){
     params = new URLSearchParams(window.location.search);
     return params.get('gid');
 }
 
-function poll_game_info(gid){
+function poll_game_join(gid){
     return new Promise((resolve, reject) => {
-        socket.emit('game-get-info', {"gid": gid}, (data) =>{
+        socket.emit('game-join', {"gid": gid}, (data) =>{
             if(data){
                 if(data.result && data.result === "success"){
                     console.log(data.info.board)
@@ -40,14 +49,30 @@ function poll_game_info(gid){
     })
 }
 
-function load_board()
+function update_status_text(){
+    console.log(amazons_status_el, amazons_players_el, game_in_progress)
+    if(game_in_progress){
+        amazons_status_el.textContent = "Game is in progress."
+    }else{
+        amazons_status_el.textContent = "Waiting for opponent"
+    }
+    amazons_players_el.textContent = player_list.toString()
+}
+
+function load_game()
 {
     if(socket && socket.connected){
         gid = get_game_id()
-        poll_game_info(gid).then( info => {
+        poll_game_join(gid).then( info => {
+
+            game_in_progress = info.in_progress
+            game_is_playing = info.client_is_player
+            player_list = info.players
 
             board = info.board
             game_size = info.game_size
+
+            update_status_text()
 
             $("#game").empty()
             $("#game").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
@@ -82,10 +107,9 @@ function load_board()
         }, err => console.log(err))
 
     }else{
-        setTimeout(load_board, 300); // try again in 300 milliseconds
+        setTimeout(load_game, 300); // try again in 300 milliseconds
     }
 }
-
 
 // @cell index in the form XY e.g. 02 as a string
 function update_cell_image(cell, type, add_or_remove)
@@ -208,6 +232,10 @@ function reset_move(msg, cont){
 }
 
 function handle_click(cell){
+    if(!game_in_progress || !game_is_playing){
+        console.log("game is not played by this client, or game is not in progress.")
+        return null;
+    }
     cell = cell.toString()
     if (temp_step == 0){
         if(board[Number(cell[0])][Number(cell[1])] == turn + 1){

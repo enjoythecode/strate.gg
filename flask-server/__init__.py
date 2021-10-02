@@ -54,16 +54,29 @@ def create_game(payload):
 
     games[gid] = {
         "game": g,
-        "users": [request.sid],
+        "users": [],
         "started": False
     }
     return {"result": "success", "gid": gid}
 
-@socketio.on('game-get-info')
+@socketio.on('game-join')
 def get_game_data(payload):
     if payload["gid"] and payload["gid"] in games:
-        game_data = games[payload["gid"]]["game"].game_data()
-        return {"result": "success", "info": game_data}
+
+        # Include player to game
+        # TODO
+
+        # Start game if full
+        # TODO
+        
+        # Build Response
+        g = games[payload["gid"]]
+        response = g["game"].game_data()
+        response["players"] = g["users"]
+        response["in_progress"] = False
+        response["client_is_player"] = request.sid in response["players"]
+
+        return {"result": "success", "info": response}
     else:
         print("err")
         return {"result": "error", "error": "Game not found."}
