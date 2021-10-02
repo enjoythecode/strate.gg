@@ -24,6 +24,7 @@ var starting_positions = {
 var moves = []
 var turn = 0
 var game_size = null
+
 temp_source = null
 temp_move = null
 temp_shoot = null
@@ -31,52 +32,20 @@ temp_step = 0
 
 show_move_indicators = true
 
-// Connectivity
+var socket;
+
+// Socket Connectivity
 $(document).ready(function() {
-
-    var socket = io.connect('http://127.0.0.1:5000');
+    socket = io('http://localhost:5000');
     socket.on('connect', function() {
-    
-        socket.send('I am now connected!');
-        socket.emit('game-create', {"size":10, "config": 0});
-        
-        socket.on('message', function(msg) {
-            alert(msg);
-        });
-
     });
-    
-
-    /*
-    $('#send').on('click', function() {
-        var message = $('#message').val();
-
-        socket_messages.emit('message from user', message);
-
-    });
-
-    socket_messages.on('from flask', function(msg) {
+    socket.on('message', function(msg) {
         alert(msg);
     });
-
-    var private_socket = io('http://127.0.0.1:5000/private')
-
-    $('#send_username').on('click', function() {
-        private_socket.emit('username', $('#username').val());
-    });
-
-    $('#send_private_message').on('click', function() {
-        var recipient = $('#send_to_username').val();
-        var message_to_send = $('#private_message').val();
-
-        private_socket.emit('private_message', {'username' : recipient, 'message' : message_to_send});
-    });
-
-    private_socket.on('new_private_message', function(msg) {
-        alert(msg);
-    });
-    */
-
+    socket.on('error', function(e){
+        console.log("Error", e);
+    })
+    console.log(socket);
 });
 
 function toggle_move_indicators(){

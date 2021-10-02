@@ -12,7 +12,7 @@ app.config.from_mapping(
     SECRET_KEY = 'dev',
     DEBUG = True
 )
-socketio = SocketIO(app, async_mode="eventlet")
+socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 
 ############ ROUTES ###############
 @app.route('/')
@@ -28,6 +28,15 @@ def serve_game():
 @socketio.on('message')
 def handle_message(data):
     print('Received message:', data)
+
+@socketio.on('connect')
+def test_connect():
+    print('Client connected')
+    print(request.sid)
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
 
 @socketio.on('game-create')
 def create_game(payload):
