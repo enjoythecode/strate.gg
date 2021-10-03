@@ -73,8 +73,8 @@ function process_game_data(info){
 
     update_status_text()
 
-    $("#game").empty()
-    $("#game").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
+    $("#board").empty()
+    $("#board").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
 
     for (let row = 0; row < game_size; row++) {
         for (let col = 0; col < game_size; col++) {
@@ -85,17 +85,17 @@ function process_game_data(info){
             }else{
                 cell_color = "black"
             }
-            $("#game").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
+            $("#board").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
         
             if(board[row][col] != 0){
                 update_cell_image(row.toString() + col.toString(),board[row][col] - 1, 0)
             }
 
         }
-        $("#game").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
+        $("#board").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
     }
     for (let c = 0; c < game_size; c++) {
-        $("#game").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
+        $("#board").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
         
     }
 
