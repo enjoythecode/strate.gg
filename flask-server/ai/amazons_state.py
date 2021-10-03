@@ -134,7 +134,7 @@ class AmazonsState:
             for q_y in range(self.game_size):
                 if self.board[q_x][q_y] == player:
                     q = str(q_x) + str(q_y)
-                    out.extend([[q, x] for x in self.get_valid_moves(q)])
+                    out.extend([[q, x] for x in self.get_sliding_squares(q)])
 
         return out
 
@@ -147,139 +147,55 @@ class AmazonsState:
             for q_y in range(self.game_size):
                 if self.board[q_x][q_y] == player:
                     q = str(q_x) + str(q_y)
-                    out += self.count_valid_moves(q)
+                    out += self.count_sliding_squares(q)
 
         return out
 
     def get_possible_shots_from_queen(self, source, ignore):
-        return self.get_valid_moves(source, ignore, True)
+        return self.get_sliding_squares(source, ignore, True)
 
     def count_possible_shots_from_queen(self, source, ignore):
-        return self.count_valid_moves(source, ignore, True)
+        return self.count_sliding_squares(source, ignore, True)
 
-    def get_valid_moves(self, cell_from, ignore=None, include_ignore=False):
+    def get_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
+        """
+        Helper function that returns the sliding move squares from a given square in the given board state.
+
+        This is used by most other move functions since all movement and shooting in Amazons is the same 8-direction sliding attack
+        """
         out = []
         from_x = int(cell_from[0])
         from_y = int(cell_from[1])
         ignore_x = int(ignore[0]) if ignore is not None else -1
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
-        x, y = from_x, from_y
-        while x + 1 < self.game_size:
-            x += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
+        # neat!
+        deltas = [ # incremental changes to x and y to move in 8 directions
+            (-1, 1), (0, 1), (1, 1),
+            (-1, 0),        (1, 0),
+            (-1,-1), (0,-1), (1,-1)
+        ]
+
+        for dx, dy in deltas:
+            x, y = from_x, from_y
+            while 0 <= x + dx < self.game_size and 0 <= y + dy < self.game_size:
+                x += dx
+                y += dy
+                if self.board[x][y] != 0:
+                    if ignore_x == x and ignore_y == y:
+                        if include_ignore:
+                            out.append(str(x) + str(y))
+                        continue2
+                    else:
+                        break
                 else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while x > 0:
-            x -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while y + 1 < self.game_size:
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while y > 0:
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while x + 1 < self.game_size and y + 1 < self.game_size:
-            x += 1
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while x + 1 < self.game_size and y > 0:
-            x += 1
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while x > 0 and y + 1 < self.game_size:
-            x -= 1
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        x, y = from_x, from_y
-        while x > 0 and y > 0:
-            x -= 1
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out.append(str(x) + str(y))
-                    continue
-                else:
-                    break
-            else:
-                out.append(str(x) + str(y))
-
-        return out
-
-    def count_valid_moves(self, cell_from, ignore=None, include_ignore=False):
+                    out.append(str(x) + str(y))
+        return out 
+        
+    def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
         '''
-            Different from len(get_valid_moves) because natively counting is marginally faster than
+            Different from len(get_sliding_squares) because natively counting is marginally faster than
             adding all the possible moves to a list and counting it. 
-            
-            This method will be deprecated after the implementation of bitboard move calculation.
         '''
         out = 0
         from_x = int(cell_from[0])
@@ -287,114 +203,27 @@ class AmazonsState:
         ignore_x = int(ignore[0]) if ignore is not None else -1
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
-        x, y = from_x, from_y
-        while x + 1 < self.game_size:
-            x += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
+        # neat!
+        deltas = [ # incremental changes to x and y to move in 8 directions
+            (-1, 1), (0, 1), (1, 1),
+            (-1, 0),         (1, 0),
+            (-1,-1), (0,-1), (1,-1)
+        ]
 
-        x, y = from_x, from_y
-        while x > 0:
-            x -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
+        for dx, dy in deltas:
+            x, y = from_x, from_y
+            while 0 <= x + dx < self.game_size and 0 <= y + dy < self.game_size:
+                x += dx
+                y += dy
+                if self.board[x][y] != 0:
+                    if ignore_x == x and ignore_y == y:
+                        if include_ignore:
+                            out += 1
+                        continue
+                    else:
+                        break
                 else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while y + 1 < self.game_size:
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while y > 0:
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while x + 1 < self.game_size and y + 1 < self.game_size:
-            x += 1
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while x + 1 < self.game_size and y > 0:
-            x += 1
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while x > 0 and y + 1 < self.game_size:
-            x -= 1
-            y += 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
-        x, y = from_x, from_y
-        while x > 0 and y > 0:
-            x -= 1
-            y -= 1
-            if self.board[x][y] != 0:
-                if ignore_x == x and ignore_y == y:
-                    if include_ignore:
-                        out += 1
-                    continue
-                else:
-                    break
-            else:
-                out += 1
-
+                    out += 1
         return out
 
     def is_game_going_on(self):
@@ -418,3 +247,8 @@ class AmazonsState:
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
         )
+
+# small, informal tests
+if __name__ == "__main__":
+    g = AmazonsState.create_from_size(10, 0)
+    print(g.count_possible_moves())
