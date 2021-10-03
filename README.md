@@ -20,14 +20,20 @@ Windows PowerShell
 `win_dev_server.ps1`
 
 ## TODOs
+- Overall
+    - Add time control (?)
+        - Back-end mechanism for clock control enforcement
+        - UI for setting time controls in a game, displaying time
+
 - Back-end
+    - Handle disconnects (notify and terminate games, etc.)
     - Amazons
-        - Simplify amazons_state.get_valid_moves() and amazons_state.count_valid_moves()
-        - Improve amazons_state.is_valid_move() performance.
+        - Improve amazons_state.is_valid_move() performance
+
 - Front-end
-    - Simple page-wide CSS updates
-    - Phase out jQuery (it is mostly just $(cssSelector), tbh)
     - Amazons
         - Fix board display bug with clean-up of reset_move
         - Add animation to new moves
         - Add move list
+        - Phase out jQuery (it is mostly just $(cssSelector), tbh)
+    - Display connection status, number of active users in top-right
