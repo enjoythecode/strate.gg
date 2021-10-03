@@ -1,3 +1,5 @@
+# 2021-10-03
+- Updated front-end Amazons JavaScript to be a little smarter and a whole lot more bug-free.
 # 2021-10-02
 - Establish basic status text in the client.
 - Establish simple room-joining logic.

@@ -21,8 +21,6 @@ Windows PowerShell
 
 ## TODOs
 In rough order of priority;
-1. FE-Amazons: Investigate board display bug with clean-up of reset_move.
-    - Likely refactor how in-progress moves are tracked and visualized.
 1. FE: Display connection status, number of active users in top-right
 1. BE: Handle disconnects (notify and terminate games, etc.)
 1. Phase out jQuery (it is mostly just $(cssSelector), tbh)

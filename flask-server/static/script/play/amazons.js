@@ -106,6 +106,13 @@ function process_game_move_update(info){
 
     move = info.move;
 
+    from = move[0]
+    to = move[1]
+    shoot = move[2]
+    board[Number(from[0])][Number(from[1])] = 0;
+    board[Number(to[0])][Number(to[1])] = turn + 1;
+    board[Number(shoot[0])][Number(shoot[1])] = 3;
+
     update_cell_image(move[0],turn,"remove")
     update_cell_image(move[1],turn,"add")
     update_cell_image(move[2],2,"add")
@@ -196,47 +203,40 @@ function index2coord(index){
     return x + y
 }
 
-function cell_can_reach(from, to){
+function cell_can_reach(from, to, ignore){
     from_x = Number(from.toString()[0])
     from_y = Number(from.toString()[1])
     to_x = Number(to.toString()[0])
     to_y = Number(to.toString()[1])
     d_x = to_x - from_x
     d_y = to_y - from_y
+
     if(d_x == 0 && d_y == 0) return false;
-    flag = true;
-    if(d_x == 0){
-        for (let i = 1; i <= Math.abs(d_y); i++) {
-            if(board[from_x][from_y + i*(d_y/Math.abs(d_y))] != 0){
-                flag = false;
+    if(d_x != 0 && d_y != 0 && Math.abs(d_x) != Math.abs(d_y)) return false // on the diagonal, |x| must == |y|
+    
+    // normalize d_x, d_y to 1, 0, or -1. 
+    step_x = d_x == 0 ? 0 : d_x / Math.abs(d_x) //the short-hand if prevents division by 0
+    step_y = d_y == 0 ? 0 : d_y / Math.abs(d_y) //the short-hand if prevents division by 0
+    
+    steps = Math.max(Math.abs(d_x), Math.abs(d_y)) // how many squares is between from and to?
+    
+    for (let i = 1; i <=steps; i++) {
+        new_x = from_x + step_x * i
+        new_y =from_y + step_y * i
+        if(board[new_x][new_y] != 0){
+            if (new_x.toString() + new_y.toString() != ignore){
+                return false
             }
-        }
-    }
-    if(d_y == 0){
-        for (let i = 1; i <= Math.abs(d_x); i++) {
-            if(board[from_x + i*(d_x/Math.abs(d_x))][from_y] != 0){
-                flag = false;
-            }
-        }
-    }
-    if(d_x != 0 && d_y != 0){
-        if(Math.abs(d_x)==Math.abs(d_y)){
-            //check diagonal
-            for (let i = 1; i <= Math.abs(d_x); i++) {
-                if(board[from_x + i*(d_x/Math.abs(d_x))][from_y + i*(d_y/Math.abs(d_y))] != 0){
-                    flag = false;
-                }
-            }
-        }else{//not a queen movement
-            flag = false
+
         }
     }
 
-    return flag
+    return true
 }
 
-function valid_move_indicator(cell, removeOrAdd, moveOrShoot){
+function valid_move_indicator(cell, removeOrAdd, moveOrShoot, shootingQueen){
 
+    // TODO optimize: this function loops over the whole board. this is unnecessary, especially for the valid move indicator!
     if(moveOrShoot == "move"){
         indicatorName = "valid-move-indicator"
     }else{
@@ -257,40 +257,15 @@ function valid_move_indicator(cell, removeOrAdd, moveOrShoot){
         c_y = Number(cell[1])
         for (let x = 0; x < game_size; x++) {
             for (let y = 0; y < game_size; y++) {
-                if(cell_can_reach(cell,x.toString() + y.toString())){
-                    
-                    document.getElementById("cell-" + x.toString() + y.toString()).classList.add(indicatorName)
-                    
+                // the shooting queen (the queen which is moving and shooting) can shoot to her origin
+                console.log(cell, shootingQueen)
+                newCell = x.toString() + y.toString()
+                if(cell_can_reach(cell,newCell) || (shootingQueen && newCell == shootingQueen)){
+                    document.getElementById("cell-" + newCell).classList.add(indicatorName)
                 }
             }
         }
     }
-}
-
-function reset_move(msg, cont){
-    console.log(msg)
-    
-    if(!cont){
-        if(temp_source){
-            board[Number(temp_source.charAt(0))][Number(temp_source.charAt(1))] = turn + 1
-        }
-        if(temp_move){
-            board[Number(temp_move.charAt(0))][Number(temp_move.charAt(1))] = 0
-        }
-    }
-
-    if(temp_source){
-        document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source");
-        valid_move_indicator(temp_source,"remove","move")
-    }
-    if(temp_move){
-        document.getElementById("cell-" + temp_move).classList.remove("selected-indicator-move");
-        valid_move_indicator(temp_move,"remove","shoot")
-    }
-    temp_move = null 
-    temp_source = null
-    temp_shoot = null
-    temp_step = 0
 }
 
 function handle_click(cell){
@@ -298,39 +273,57 @@ function handle_click(cell){
         console.log("game is not played by this client, or game is not in progress.")
         return null;
     }
+
     cell = cell.toString()
+    cell_classes = document.getElementById("cell-" + cell).classList
+    reset = false
+
+    // the visualization commands here are quite hefty and overall this board script would
+    // benefit greatly from a declarative class library.
     if (temp_step == 0){
         if(board[Number(cell[0])][Number(cell[1])] == turn + 1 && game_player_side == turn + 1){
             temp_source = cell
-            board[Number(temp_source.charAt(0))][Number(temp_source.charAt(1))] = 0
-            document.getElementById("cell-" + cell).classList.add("selected-indicator-source");
+            cell_classes.add("selected-indicator-source");
             valid_move_indicator(temp_source,"add","move")
-            
             temp_step += 1;
         }else{
-            console.log(board[Number(cell[0])][Number(cell[1])], turn + 1)
-            reset_move("not players turn",false)
+            reset = true
+            valid_move_indicator(temp_source,"remove","move")
+            cell_classes.remove("selected-indicator-source");
         }
     }else if(temp_step == 1){
         if(cell_can_reach(temp_source,cell)){
             temp_move = cell
-            board[Number(temp_move.charAt(0))][Number(temp_move.charAt(1))] = turn + 1
             valid_move_indicator(temp_source,"remove","move")
-            valid_move_indicator(temp_move,"add", "shoot")
-            document.getElementById("cell-" + cell).classList.add("selected-indicator-move");
+            valid_move_indicator(temp_move,"add", "shoot", temp_source)
+            cell_classes.add("selected-indicator-move");
             temp_step += 1;
         }else{
-            reset_move("invalid movement", false)
+            reset = true
+            valid_move_indicator(temp_move,"remove", "shoot")
+            valid_move_indicator(temp_source,"remove","move")
+            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
+            cell_classes.remove("selected-indicator-move");
         }
     }else if(temp_step == 2){
         temp_shoot = cell
         if(cell_can_reach(temp_move,temp_shoot,temp_source)){
-            valid_move_indicator(temp_move,"remove", "shoot")
-            board[Number(temp_shoot.charAt(0))][Number(temp_shoot.charAt(1))] = 3
             play(temp_source, temp_move, temp_shoot);
+            valid_move_indicator(temp_move,"remove", "shoot")
+            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
+            document.getElementById("cell-" + temp_move).classList.remove("selected-indicator-move")
         }else{
-            reset_move("invalid shot",false)
+            reset = true
+            valid_move_indicator(temp_move,"remove", "shoot")
+            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
+            document.getElementById("cell-" + temp_move).classList.remove("selected-indicator-move")
         }
+    }
+    if (reset){
+        temp_move = null 
+        temp_source = null
+        temp_shoot = null
+        temp_step = 0
     }
 }
 
