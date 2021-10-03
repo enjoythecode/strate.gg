@@ -1,0 +1,95 @@
+
+#game{
+    display: grid;
+    grid-template-columns: 50px 50px 50px 50px 50px 50px 50px;
+}
+.game-cell{
+    border: 2x solid grey;
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+    padding: 0;
+}
+.cell-black{
+    background-color: #946F51;
+}
+.cell-white{
+    background-color: #F0D9B5;
+}
+
+/* not-queen indicator for move */
+.valid-move-indicator.cell-black:not(.cell-queen){
+    background:radial-gradient(
+        circle at 50% 50%, 
+        rgba(125, 131, 206, 0.87) 20%,
+        #946F51 20%
+    );
+}
+.valid-move-indicator.cell-white:not(.cell-queen){
+    background:radial-gradient(
+        circle at 50% 50%, 
+        rgba(125, 131, 206, 0.87) 20%,
+        #F0D9B5 20%
+    );
+}
+/* not-queen indicator for shoot */
+.valid-shoot-indicator.cell-black:not(.cell-queen){
+    background:radial-gradient(
+        circle at 50% 50%, 
+        rgba(206, 125, 125, 0.6) 20%,
+        #946F51 20%
+    );
+}
+.valid-shoot-indicator.cell-white:not(.cell-queen){
+    background:radial-gradient(circle at 50% 50%, 
+        rgba(206, 125, 125, 0.6) 20%,
+        #F0D9B5 20%
+    );
+}
+
+/* QUEEN indicator for move */
+.valid-move-indicator.cell-black.cell-queen{
+    background:radial-gradient(
+        circle at 50% 50%, 
+        #946F51 80%,
+        rgba(125, 131, 206, 0.87) 80%
+    );
+}
+.valid-move-indicator.cell-white.cell-queen{
+    background:radial-gradient(
+        circle at 50% 50%, 
+        #F0D9B5 80%,
+        rgba(125, 131, 206, 0.87) 80%
+    );
+}
+/* QUEEN indicator for shoot */
+.valid-shoot-indicator.cell-black.cell-queen{
+    background:radial-gradient(
+        circle at 50% 50%, 
+        #946F51 80%,
+        rgba(206, 125, 125, 0.6) 80%
+    );
+}
+.valid-shoot-indicator.cell-white.cell-queen{
+    background:radial-gradient(circle at 50% 50%, 
+        #F0D9B5 80%,
+        rgba(206, 125, 125, 0.6) 80%
+    );
+}
+
+.selected-indicator-source{
+    background-color: lightblue;
+}
+.selected-indicator-move{
+    background-color: lightcoral;
+}
+
+.cell-queen-white{
+    content: url("../images/wqueen.png");
+}
+.cell-queen-black{
+    content: url("../images/bqueen.png");
+}
+.cell-fire{
+    content: url("../images/fire.png");
+}
