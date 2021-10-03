@@ -112,15 +112,17 @@ def handle_game_move(payload):
                 payload["move"]["to"],
                 payload["move"]["shoot"]
             ]
+            
+            if not b.is_valid_move(move):
+                return {"result": "error", "error": "invalid move"}
+
             b.make_move(move)
         
             response = b.game_data()
             response["players"] = g["players"]
             response["in_progress"] = g["in_progress"]
             sckt.emit("game-update", response, to = "amazons_" + gid)
-            print("--------", sckt.rooms(), "----------")
             return {"result": "success"}
-
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port='8080')

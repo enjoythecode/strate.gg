@@ -88,6 +88,9 @@ class AmazonsState:
 
         self.number_of_turns += 1
 
+    def is_valid_move(self, move):
+        return move in self.get_possible_moves()
+
     def count_possible_moves(self, player=None):
         """ Get # of possible moves from this state.
         """
