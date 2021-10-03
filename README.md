@@ -18,3 +18,14 @@ Mac/Linux:
 
 Windows PowerShell
 `win_dev_server.ps1`
+
+## TODOs
+- Amazons
+    - Simplify amazons_state.get_valid_moves() and amazons_state.count_valid_moves()
+    - Improve amazons_state.is_valid_move() performance.
+- Front-end
+    - Simple page-wide CSS updates
+    - Amazons
+        - Fix board display bug with clean-up of reset_move
+        - Add animation to new moves
+        - Add move list
