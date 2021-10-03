@@ -21,8 +21,6 @@ $(document).ready(function() {
     join_game()
 });
 
-
-
 function get_game_id(){
     params = new URLSearchParams(window.location.search);
     return params.get('gid');
@@ -55,7 +53,7 @@ function update_status_text(){
     amazons_players_el.textContent = player_list.toString()
 }
 
-function process_game_data(info){
+function process_game_join(info){
     game_in_progress = info.in_progress
     if(info.client_is_player){
         game_is_playing = info.client_is_player
@@ -88,7 +86,7 @@ function process_game_data(info){
             $("#board").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
         
             if(board[row][col] != 0){
-                update_cell_image(row.toString() + col.toString(),board[row][col] - 1, 0)
+                update_cell_image(row.toString() + col.toString(),board[row][col] - 1, "add")
             }
 
         }
@@ -104,15 +102,55 @@ function process_game_data(info){
     });
 }
 
+function process_game_move_update(info){
+
+    move = info.move;
+
+    update_cell_image(move[0],turn,"remove")
+    update_cell_image(move[1],turn,"add")
+    update_cell_image(move[2],2,"add")
+
+    turn = info.turn;
+
+    moves.push(move)
+
+    new_move_list_item = document.createElement("li")
+    new_move_list_item.appendChild(document.createTextNode(move.toString()))
+    document.getElementById("move-list").appendChild(new_move_list_item)
+}
+
+function process_game_meta_update(info){
+    game_in_progress = info.in_progress
+    if(info.client_is_player){
+        game_is_playing = info.client_is_player
+    }
+    if(info.client_side){
+        game_player_side = info.client_side
+    }
+    player_list = info.players
+
+    console.log(board)
+    board = info.board
+    console.log(info.board, board == info.board)
+    turn = info.turn
+    game_size = info.game_size
+
+    update_status_text()
+}
+
 function join_game()
 {
     if(socket && socket.connected){
         gid = get_game_id()
-        poll_game_join(gid).then( info => {
-            process_game_data(info)
-            socket.on("game-update", info => {
-                console.log("Game update received!")
-                process_game_data(info)
+        poll_game_join(gid).then(info => {
+            process_game_join(info)
+            socket.on("game-update-move", info => {
+                console.log("Game move update received!")
+                process_game_move_update(info)
+            })
+            socket.on("game-update-meta", info => {
+                console.log("Game meta update received!")
+                process_game_meta_update(info)
             })
         }, err => console.log(err))
     }else{
@@ -133,7 +171,7 @@ function update_cell_image(cell, type, add_or_remove)
 
     el_clist = document.getElementById("cell-" + cell).classList;
 
-    if(add_or_remove == 0){
+    if(add_or_remove === "add"){
         el_clist.add(class_name)
         if(class_name.includes("queen")){
             el_clist.add("cell-queen")

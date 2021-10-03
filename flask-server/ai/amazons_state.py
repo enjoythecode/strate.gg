@@ -185,7 +185,7 @@ class AmazonsState:
                     if ignore_x == x and ignore_y == y:
                         if include_ignore:
                             out.append(str(x) + str(y))
-                        continue2
+                        continue
                     else:
                         break
                 else:

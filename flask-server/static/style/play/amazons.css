@@ -88,11 +88,11 @@
 }
 
 .cell-queen-white{
-    content: url("../images/wqueen.png");
+    content: url("../../images/wqueen.png");
 }
 .cell-queen-black{
-    content: url("../images/bqueen.png");
+    content: url("../../images/bqueen.png");
 }
 .cell-fire{
-    content: url("../images/fire.png");
+    content: url("../../images/fire.png");
 }

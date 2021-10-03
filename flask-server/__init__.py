@@ -75,7 +75,6 @@ def get_game_data(payload):
             sid = request.sid
             g["players"].append(sid)
 
-
         print("GAME PLAYERS:", g["players"])
 
         # Start game if full
@@ -87,7 +86,7 @@ def get_game_data(payload):
         response = g["board"].game_data()
         response["players"] = g["players"]
         response["in_progress"] = g["in_progress"]
-        sckt.emit("game-update", response, to = "amazons_" + gid) # we want to emit these without emitting player specific data!
+        sckt.emit("game-update-meta", response, to = "amazons_" + gid) # we want to emit these without emitting player specific data!
 
         # Client-specific info!
         response["client_is_player"] = request.sid in response["players"]
@@ -119,9 +118,10 @@ def handle_game_move(payload):
             b.make_move(move)
         
             response = b.game_data()
+            response["move"] = move
             response["players"] = g["players"]
             response["in_progress"] = g["in_progress"]
-            sckt.emit("game-update", response, to = "amazons_" + gid)
+            sckt.emit("game-update-move", response, to = "amazons_" + gid)
             return {"result": "success"}
 
 if __name__ == "__main__":
