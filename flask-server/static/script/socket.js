@@ -1,7 +1,7 @@
 var socket;
 
 // Socket Connectivity
-$(document).ready(function() {
+ready(function() {
   const div = document.createElement('div');
   div.id = 'connection-info';
   div.innerHTML = '<span id="connection-info-network">You\re offline</span>. <span id="connection-info-users">??</span> active users.';

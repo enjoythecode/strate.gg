@@ -1,6 +1,7 @@
 # 2021-10-03
 - Updated front-end Amazons JavaScript to be a little smarter and a whole lot more bug-free.
 - Display connection information, number of active users.
+- Phased out the jQuery dependency, reducing page size from ~250kb to ~180kb (-30%!)
 # 2021-10-02
 - Establish basic status text in the client.
 - Establish simple room-joining logic.

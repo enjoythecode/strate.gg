@@ -15,9 +15,9 @@ temp_shoot = null
 temp_step = 0
 
 player_list = []
-$(document).ready(function() {
-    amazons_status_el = document.getElementById("amazons-play-game-status")
-    amazons_players_el = document.getElementById("amazons-play-game-players")
+ready(function() {
+    amazons_status_el = $("amazons-play-game-status")
+    amazons_players_el = $("amazons-play-game-players")
     join_game()
 });
 
@@ -53,6 +53,20 @@ function update_status_text(){
     amazons_players_el.textContent = player_list.toString()
 }
 
+function create_board_square(cell_count, cell_color, text){
+    newSq = document.createElement("div")
+    newSq.classList.add("game-cell")
+    if(text){
+        newSq.textContent = text;
+        newSq.classList.add("center-content")
+    }else{
+        newSq.classList.add("cell-" + cell_color)
+        newSq.id = "cell-" + cell_count
+        newSq.setAttribute("data-cell", cell_count)
+    }
+    return newSq
+}
+
 function process_game_join(info){
     game_in_progress = info.in_progress
     if(info.client_is_player){
@@ -71,8 +85,10 @@ function process_game_join(info){
 
     update_status_text()
 
-    $("#board").empty()
-    $("#board").css("grid-template-columns","50px ".repeat(game_size) + "50px") // one extra cell for the trailing space AND the column number
+    board_el = $("board")
+
+    empty(board_el)
+    board_el.style.gridTemplateColumns = "50px ".repeat(game_size) + "50px" // one extra cell for the trailing space AND the column number
 
     for (let row = 0; row < game_size; row++) {
         for (let col = 0; col < game_size; col++) {
@@ -83,23 +99,23 @@ function process_game_join(info){
             }else{
                 cell_color = "black"
             }
-            $("#board").append('<div class="game-cell cell-' + cell_color + '" id="cell-' + cell_count + '" data-cell="' + cell_count + '"></div>')
+            
+            newSq = create_board_square(cell_count, cell_color)
+            newSq.addEventListener("click",function(event){
+                handle_click(event.target.dataset.cell)
+            });
+            board_el.appendChild(newSq)
         
             if(board[row][col] != 0){
                 update_cell_image(row.toString() + col.toString(),board[row][col] - 1, "add")
             }
 
         }
-        $("#board").append('<div class="game-cell center-content">' + (game_size-row).toString() + '</div>')
+        board_el.appendChild(create_board_square(null, null, (game_size-row).toString()))
     }
     for (let c = 0; c < game_size; c++) {
-        $("#board").append('<div class="game-cell center-content">' + String.fromCharCode(65 + c) + '</div>')
-        
+        board_el.appendChild(create_board_square(null, null, String.fromCharCode(65 + c)))
     }
-
-    $(".game-cell").click(function() {
-        handle_click($(this).data("cell"));
-    });
 }
 
 function process_game_move_update(info){
@@ -123,7 +139,7 @@ function process_game_move_update(info){
 
     new_move_list_item = document.createElement("li")
     new_move_list_item.appendChild(document.createTextNode(move.toString()))
-    document.getElementById("move-list").appendChild(new_move_list_item)
+    $("move-list").appendChild(new_move_list_item)
 }
 
 function process_game_meta_update(info){
@@ -136,9 +152,7 @@ function process_game_meta_update(info){
     }
     player_list = info.players
 
-    console.log(board)
     board = info.board
-    console.log(info.board, board == info.board)
     turn = info.turn
     game_size = info.game_size
 
@@ -176,7 +190,7 @@ function update_cell_image(cell, type, add_or_remove)
         class_name = "cell-fire"
     }
 
-    el_clist = document.getElementById("cell-" + cell).classList;
+    el_clist = $("cell-" + cell).classList;
 
     if(add_or_remove === "add"){
         el_clist.add(class_name)
@@ -246,7 +260,7 @@ function valid_move_indicator(cell, removeOrAdd, moveOrShoot, shootingQueen){
     if(removeOrAdd === "remove"){ // remove indicators
         for (let x = 0; x < game_size; x++) {
             for (let y = 0; y < game_size; y++) {
-                cellClasses = document.getElementById("cell-" + x.toString() + y.toString()).classList;
+                cellClasses = $("cell-" + x.toString() + y.toString()).classList;
                 if(cellClasses.contains(indicatorName)){
                     cellClasses.remove(indicatorName)
                 }
@@ -261,7 +275,7 @@ function valid_move_indicator(cell, removeOrAdd, moveOrShoot, shootingQueen){
                 console.log(cell, shootingQueen)
                 newCell = x.toString() + y.toString()
                 if(cell_can_reach(cell,newCell) || (shootingQueen && newCell == shootingQueen)){
-                    document.getElementById("cell-" + newCell).classList.add(indicatorName)
+                    $("cell-" + newCell).classList.add(indicatorName)
                 }
             }
         }
@@ -275,7 +289,7 @@ function handle_click(cell){
     }
 
     cell = cell.toString()
-    cell_classes = document.getElementById("cell-" + cell).classList
+    cell_classes = $("cell-" + cell).classList
     reset = false
 
     // the visualization commands here are quite hefty and overall this board script would
@@ -302,7 +316,7 @@ function handle_click(cell){
             reset = true
             valid_move_indicator(temp_move,"remove", "shoot")
             valid_move_indicator(temp_source,"remove","move")
-            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
+            $("cell-" + temp_source).classList.remove("selected-indicator-source")
             cell_classes.remove("selected-indicator-move");
         }
     }else if(temp_step == 2){
@@ -310,13 +324,13 @@ function handle_click(cell){
         if(cell_can_reach(temp_move,temp_shoot,temp_source)){
             play(temp_source, temp_move, temp_shoot);
             valid_move_indicator(temp_move,"remove", "shoot")
-            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
-            document.getElementById("cell-" + temp_move).classList.remove("selected-indicator-move")
+            $("cell-" + temp_source).classList.remove("selected-indicator-source")
+            $("cell-" + temp_move).classList.remove("selected-indicator-move")
         }else{
             reset = true
             valid_move_indicator(temp_move,"remove", "shoot")
-            document.getElementById("cell-" + temp_source).classList.remove("selected-indicator-source")
-            document.getElementById("cell-" + temp_move).classList.remove("selected-indicator-move")
+            $("cell-" + temp_source).classList.remove("selected-indicator-source")
+            $("cell-" + temp_move).classList.remove("selected-indicator-move")
         }
     }
     if (reset){
