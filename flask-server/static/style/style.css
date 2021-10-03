@@ -3,6 +3,10 @@ html{
     font-family: "Noto Sans", Sans-Serif;
 }
 
+button{
+    font-family: "Noto Sans", Sans-Serif;
+}
+
 .center-content{
     display: flex;
     align-items: center;
