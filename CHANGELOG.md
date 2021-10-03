@@ -8,6 +8,8 @@
     - Better JS code signatures
     - Show different indicator on queen
     - Show different colors for move and shoot
+- Site-wide CSS updates
+- Improve amazons_state.py
 # 2021-10-01
 - Restarting this project with a focus on the ability to play correspondence games against other players.
 - Cleared up instructions for running the codebase.
