@@ -21,7 +21,6 @@ Windows PowerShell
 
 ## TODOs
 In rough order of priority;
-1. FE: Display connection status, number of active users in top-right
 1. BE: Handle disconnects (notify and terminate games, etc.)
 1. Phase out jQuery (it is mostly just $(cssSelector), tbh)
 1. BE: Improve code folder structure to be more sensible and extensible

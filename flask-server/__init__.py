@@ -39,12 +39,14 @@ def handle_message(data):
 def handle_connect():
     users[request.sid] = True
     print(f'Client (#{request.sid}) connected. Currently connected: {len(users)}')
+    socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
     # Handle: notify any games they were in and change those accordingly!
     users.pop(request.sid)
     print(f'Client (#{request.sid}) disconnected. Currently connected: {len(users)}')
+    socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
 
 @socketio.on('game-create')
 def create_game(payload):

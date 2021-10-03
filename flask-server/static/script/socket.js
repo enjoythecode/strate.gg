@@ -2,18 +2,32 @@ var socket;
 
 // Socket Connectivity
 $(document).ready(function() {
-    socket = io(location.protocol + '//' + location.host);
+  const div = document.createElement('div');
+  div.id = 'connection-info';
+  div.innerHTML = '<span id="connection-info-network">You\re offline</span>. <span id="connection-info-users">??</span> active users.';
+  document.getElementsByTagName("body")[0].appendChild(div);
 
-    socket.on('connect', function() {
-    });
+  socket = io(location.protocol + '//' + location.host);
 
-    socket.on('message', function(m) {
-        alert(m);
-    });
+  socket.on('connect', function() {
+    document.getElementById("connection-info-network").textContent = "You're online"
+  });
 
-    socket.on('error', function(e){
-        console.log("Error", e);
-    })
+  socket.on('disconnect', function() {
+    document.getElementById("connection-info-network").textContent = "You're offline"
+  });
+
+  socket.on('connection-info-update', function(info) {
+    document.getElementById("connection-info-users").textContent = info.users;
+  });
+
+  socket.on('message', function(m) {
+      alert(m);
+  });
+
+  socket.on('error', function(e){
+      console.log("Error", e);
+  })
 });
 
 /*

@@ -13,3 +13,11 @@ button{
     justify-content: center;
     font-size: 25px;
 }
+
+#connection-info{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: smaller;
+    color: #454545;
+}
