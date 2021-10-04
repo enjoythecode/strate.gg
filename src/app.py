@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import flask_socketio as sckt
-from ai.amazons_state import AmazonsState as amzn_state
+from py_logic.amazons_state import AmazonsState as amzn_state
 import random, os, string, json
  
 # Returns a random string of the requires size.
@@ -21,12 +21,12 @@ socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 ############ ROUTES ###############
 @app.route('/')
 def serve_index():
-    return app.send_static_file('index.html')
+    return app.send_static_file('view/index.html')
 
 @app.route('/play/<game>')
 def serve_play(game):
     if game == "amazons":
-        return app.send_static_file('play/amazons.html')
+        return app.send_static_file('view/play/amazons.html')
     else:
         return "False"
 

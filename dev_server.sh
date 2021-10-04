@@ -1,1 +1,1 @@
-python flask-server/__init__.py
+python src/app.py
