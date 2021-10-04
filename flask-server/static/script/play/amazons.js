@@ -6,7 +6,8 @@ var moves = []
 var turn = 0
 var game_size = null
 var game_in_progress = false
-var game_is_playing = false
+var game_is_started = false
+var resolution = ""
 var game_player_side = 0 // 1: White, 2: Black, 0: game_is_playing == False
 
 temp_source = null
@@ -44,11 +45,14 @@ function poll_game_join(gid){
 }
 
 function update_status_text(){
-    console.log(amazons_status_el, amazons_players_el, game_in_progress)
     if(game_in_progress){
         amazons_status_el.textContent = "Game is in progress."
     }else{
-        amazons_status_el.textContent = "Waiting for opponent"
+        if(game_is_started){
+            amazons_status_el.textContent = "Game over. Result:" + resolution
+        }else{
+            amazons_status_el.textContent = "Waiting for opponent."
+        }
     }
     amazons_players_el.textContent = player_list.toString()
 }
@@ -143,19 +147,17 @@ function process_game_move_update(info){
 }
 
 function process_game_meta_update(info){
-    game_in_progress = info.in_progress
-    if(info.client_is_player){
-        game_is_playing = info.client_is_player
-    }
-    if(info.client_side){
-        game_player_side = info.client_side
-    }
-    player_list = info.players
-
-    board = info.board
-    turn = info.turn
-    game_size = info.game_size
-
+    console.log(info)
+    console.log(game_is_started)
+    if("in_progress" in info) game_in_progress = info.in_progress
+    if("is_started" in info) game_is_started = info.is_started
+    if("client_is_player" in info) game_is_playing = info.client_is_player
+    if("client_side" in info) game_player_side = info.client_side
+    if("resolution" in info) resolution = info.resolution
+    if("players" in info) player_list = info.players
+    if("turn" in info) turn = info.turn
+    if("game_size" in info)game_size = info.game_size
+    console.log(game_is_started)
     update_status_text()
 }
 
