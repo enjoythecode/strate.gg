@@ -37,10 +37,11 @@ Windows PowerShell
 ## TODOs
 In rough order of priority;
 1. BE: Create abstract classes that model how additional games might be implemented
-    - One class for an instance of a game
     - One class for the board status
 1. BE: Extend the abstract classes for Amazons
 1. BE: Generic handling of game socket I/O, test with the abstract classes
+1. Observe games by default.
+    - Add a button to join game, rather than on-load.
 1. FE: Find a VDOM library to use
     - Should be able to define an "abstract" class for the game structure and override it for specific games (i.e. OOP)
     - Should be fast, open source, and scalable.

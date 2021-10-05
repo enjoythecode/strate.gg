@@ -1,3 +1,5 @@
+# 2021-10-04
+- Created class for a Challenge and a User in the back-end.
 # 2021-10-03
 - Updated front-end Amazons JavaScript to be a little smarter and a whole lot more bug-free.
 - Display connection information, number of active users.
