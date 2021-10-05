@@ -30,7 +30,6 @@ starting_board_4x0 = [
     [0, 0, 2, 0]
 ]
 
-
 def prettify_board_character(n):
     '''Convenience method that turns the board representation of different board entities to their representations
     '''
@@ -51,8 +50,23 @@ class AmazonsState(game_state.GameState):
         self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
 
     @classmethod
-    def create_from_size(self, size = 10, config = 0):
-        b = (size, config)
+    def is_valid_config(self, config):
+        if "size" in config and config["size"]:
+            if not config["size"] in [4, 6, 10]:
+                return False
+
+        if "variation" in config and config["variation"]:
+            if not config["variation"] in [0]:
+                return False
+
+        return True
+
+    @classmethod
+    def create_from_config(self, config):
+
+        if not config:
+
+        b = (config["size"], config["variation"])
 
         if b == (10, 0):
             starting_board = starting_board_10x0
@@ -62,6 +76,10 @@ class AmazonsState(game_state.GameState):
             starting_board = starting_board_4x0
 
         return AmazonsState(starting_board)
+
+    @classmethod
+    def get_max_no_players(self):
+        return 2
 
     def game_data(self):
         """Returns relevant game data in a dictionary. Intended to be passed onto a client for consumption"""

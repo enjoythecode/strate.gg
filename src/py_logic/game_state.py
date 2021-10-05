@@ -8,6 +8,11 @@ class GameState(ABC):
 
     @staticmethod
     @abstractmethod
+    def is_valid_config(config):
+        raise NotImplementedError("Not implemented!")
+
+    @staticmethod
+    @abstractmethod
     def create_from_config(config):
         raise NotImplementedError("Not implemented!")
 
