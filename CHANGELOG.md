@@ -1,6 +1,10 @@
 # 2021-10-04
 - Created class for a Challenge and a User in the back-end.
-- Created abstract class for game states.
+- Created abstract class for game states (`game_state`)
+- Adapted `amazons_state` to conform to `game_state`
+- Updated BE `app.py` to use `Challenge` exclusively to manage game (decoupled game-specific game from the I/O layer)
+- Updated FE to work with the reduced, non-redundant amount of data that BE is now sending (the data sent was refactored thanks to the BE rewrite)
+- Update Amazons move notation to a reasonably standard notation (a1-a2/a3)
 # 2021-10-03
 - Updated front-end Amazons JavaScript to be a little smarter and a whole lot more bug-free.
 - Display connection information, number of active users.

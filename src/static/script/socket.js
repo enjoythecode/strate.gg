@@ -1,4 +1,5 @@
 var socket;
+var pid;
 
 // Socket Connectivity
 ready(function() {
@@ -19,6 +20,10 @@ ready(function() {
 
   socket.on('connection-info-update', function(info) {
     document.getElementById("connection-info-users").textContent = info.users;
+  });
+
+  socket.on('connection-player-id', function(info) {
+    pid = info.pid;
   });
 
   socket.on('message', function(m) {
