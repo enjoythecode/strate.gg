@@ -6,8 +6,8 @@ class GameState(ABC):
     def __init__(self):
         raise NotImplementedError("Not implemented!")
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def create_from_config(config):
         raise NotImplementedError("Not implemented!")
 
