@@ -36,11 +36,6 @@ Windows PowerShell
 
 ## TODOs
 In rough order of priority;
-1. BE: Create abstract classes that model how additional games might be implemented
-    - One class for an instance of a game
-    - One class for the board status
-1. BE: Extend the abstract classes for Amazons
-1. BE: Generic handling of game socket I/O, test with the abstract classes
 1. FE: Find a VDOM library to use
     - Should be able to define an "abstract" class for the game structure and override it for specific games (i.e. OOP)
     - Should be fast, open source, and scalable.
@@ -48,15 +43,21 @@ In rough order of priority;
     - We should be able to inject a smaller board into index.html, and watch the game play out, as a test.
 1. Add Mancala
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
+1. FE: Display game status, player IDs better
 1. Add time control
     - BE: Planning-- how do we architecture things? How do we account for network latency?
     - FE: Display time, add configuration of time controls when creating a game
+1. Add option to resign
+1. FE: Add option to request/suggest undo of the last move
 1. Find a good name for the project
     - Update GitHub project name
     - Explain project goals and mission in README
     - Include libre license, attribute inspiration to Lichess
     - Get a domain
+1. Observe games by default.
+    - Add a button to join game, rather than on-load.
 1. Rudimentary DevOps
     - Script to spawn an AWS EC2 instance
     - Static IP for the website, put that in DNS
+1. Add a game-specific chat
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance

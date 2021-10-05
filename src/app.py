@@ -1,13 +1,14 @@
 from flask import Flask, render_template, request
 import flask_socketio as sckt
-from py_logic.amazons_state import AmazonsState as amzn_state
+from py_logic.user import User
+from py_logic.challenge import Challenge
 import random, os, string, json
  
-# Returns a random string of the requires size.
+# Returns a random string of the required size.
 def generate_ID(size, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-games = {}
+challenges = {}
 users = {}
 
 # create and configure the app
@@ -39,121 +40,76 @@ def handle_message(data):
 @socketio.on('connect')
 def handle_connect():
     sid = request.sid
-    users[sid] = {"sid": sid, "games_playing": [], "games_observing":  []}
+    users[sid] = User(sid)
     print(f'Client (#{sid}) connected. Currently connected: {len(users)}')
     socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
+
+    # this helps the client distinguish themselves among other users
+    socketio.emit("connection-player-id", {"pid": sid}, to = sid) 
 
 @socketio.on('disconnect')
 def handle_disconnect():
     # Handle: notify any games they were in and change those accordingly!
     sid = request.sid
     user = users[sid]
-    games_played = user["games_playing"]
-    games_observed = user["games_observing"]
 
-    for gid in games_played:
-        handle_player_disconnect(gid, sid)
+    for cid in user.games_playing:
+        handle_player_disconnect(cid, user)
 
-    users.pop(request.sid)
+    users.pop(sid)
     
     socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
-    print(f'Client (#{request.sid}) disconnected. Currently connected: {len(users)}')
+    print(f'Client (#{sid}) disconnected. Currently connected: {len(users)}')
 
 ### Game Events
 @socketio.on('game-create')
 def create_game(payload):
 
-    gid = generate_ID(8)
-    while gid in games:
-        gid = generate_ID(8)
-    g = amzn_state.create_from_size(payload["size"], payload["config"])
+    cid = generate_ID(8)
+    while cid in challenges:
+        cid = generate_ID(8)
+        
+    c = Challenge()
+    challenges[cid] = c
+    response = c.initialize_challenge(payload["game_name"], cid, payload["config"])
 
-    games[gid] = {
-        "gid": gid,
-        "board": g,
-        "players": [],
-        "in_progress": False,
-        "is_started": False
-    }
-    return {"result": "success", "gid": gid}
+    return response
 
 @socketio.on('game-join')
 def game_join(payload):
-    gid = payload["gid"]
+    cid = payload["cid"]
     sid = request.sid
-
     user = users[sid]
 
-    if gid and gid in games:
-        g = games[gid]
+    if cid and cid in challenges:
+        c = challenges[cid]
+        response = c.join_player(user)
 
-        # Include player to game
-        sckt.join_room("amazons_" + gid)
-        if len(g["players"]) < 2:
-            g["players"].append(sid)
-            user["games_playing"].append(gid)
-        else: # lobby full, observe instead
-            user["games_observing"].append(gid)
+        sckt.join_room(c.get_socket_room_name())
 
-        print("GAME PLAYERS:", g["players"])
-
-        # Start game if full
-        if len(g["players"]) == 2:
-            g["is_started"] = True
-            g["in_progress"] = True
-
-        # Build Response
-        response = g["board"].game_data()
-        response["players"] = g["players"]
-        response["in_progress"] = g["in_progress"]
-        response["is_started"] = g["is_started"]
-        sckt.emit("game-update-meta", response, to = "amazons_" + gid) # we want to emit these without emitting player specific data!
-
-        # Client-specific info!
-        response["client_is_player"] = request.sid in response["players"]
-        response["client_side"] = 0 if not response["client_is_player"] else g["players"].index(request.sid) + 1
-        print(json.dumps(users, indent = 2))
+        # we want to emit these without emitting player specific data!
+        sckt.emit("game-update-meta", response, to=challenges[cid].get_socket_room_name())
+        print(response)
         return {"result": "success", "info": response}
     else:
         return {"result": "error", "error": "Game not found."}
 
 @socketio.on('game-move')
 def handle_game_move(payload):
-    gid = payload["gid"]
+    cid = payload["cid"]
     sid = request.sid
 
-    if gid and gid in games:
-        g = games[gid]
-        b = g["board"]
-        if sid in g["players"] and b.playerJustMoved != g["players"].index(request.sid) + 1:
-            move = [
-                payload["move"]["from"],
-                payload["move"]["to"],
-                payload["move"]["shoot"]
-            ]
-            
-            if not b.is_valid_move(move):
-                return {"result": "error", "error": "invalid move"}
+    if cid and cid in challenges:
+        c = challenges[cid]
+        response = c.make_move(payload["move"], users[sid])
+        sckt.emit("game-update-move", response, to=challenges[cid].get_socket_room_name())
+    else:
+        return {"result": "error", "error": "Game not found"}
 
-            b.make_move(move)
-        
-            response = b.game_data()
-            response["move"] = move
-            response["players"] = g["players"]
-            response["in_progress"] = g["in_progress"]
-            sckt.emit("game-update-move", response, to = "amazons_" + gid)
-            return {"result": "success"}
+def handle_player_disconnect(cid, user):
 
-def handle_player_disconnect(gid, sid):
-    games[gid]["in_progress"] = False
-    games[gid]["resolution"] = "PLAYER_DISCONNECT"
-
-    response = {
-        "in_progress": False,
-        "resolution": "PLAYER_DISCONNECT"
-    }
-
-    sckt.emit("game-update-meta", response, to = "amazons_" + gid)
+    response = challenges[cid].handle_disconnect(user)
+    sckt.emit("game-update-meta", response, to=challenges[cid].get_socket_room_name())
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port='8080')
