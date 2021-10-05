@@ -64,8 +64,6 @@ class AmazonsState(game_state.GameState):
     @classmethod
     def create_from_config(self, config):
 
-        if not config:
-
         b = (config["size"], config["variation"])
 
         if b == (10, 0):
@@ -100,15 +98,22 @@ class AmazonsState(game_state.GameState):
         """ Update a state by carrying out the given move.
             Must update playerJustMoved.
         """
+
+        fr = move["from"]
+        to = move["to"]
+        sh = move["shoot"]
+
         self.playerJustMoved = 3 - self.playerJustMoved
-        self.board[int(move[0][0])][int(move[0][1])] = 0
-        self.board[int(move[1][0])][int(move[1][1])] = self.playerJustMoved
-        self.board[int(move[2][0])][int(move[2][1])] = 3
+        self.board[int(fr[0])][int(fr[1])] = 0
+        self.board[int(to[0])][int(to[1])] = self.playerJustMoved
+        self.board[int(sh[0])][int(sh[1])] = 3
 
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        return move in self.get_possible_moves()
+        move_arr = [v for v in move.values()]
+        print(move_arr)
+        return move_arr in self.get_possible_moves()
 
     def count_possible_moves(self, player=None):
         """ Get # of possible moves from this state.

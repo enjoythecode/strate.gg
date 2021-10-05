@@ -22,6 +22,34 @@ ready(function() {
     join_game()
 });
 
+// a function that should not exist for too long. 2021-10-04. replace with cycl
+function challengeStatus2gameIsStartedInProgress(status){
+    switch (status) {
+        case "WAITING_FOR_PLAYERS":
+            game_in_progress = false;
+            game_is_started = false;
+            break;
+    
+        case "IN_PROGRESS":
+            game_in_progress = true;
+            game_is_started = true;
+            break;
+        
+        case "OVER_DISCONNECT":
+        case "OVER_TIME":
+        case "OVER_NORMAL":
+            game_in_progress = false;
+            game_is_started = true;
+            resolution = status
+            break;
+        default:
+            game_in_progress = false;
+            game_is_started = true;
+            resolution = "Something went wrong in info.status"
+    }
+    return 
+}
+
 function get_game_id(){
     params = new URLSearchParams(window.location.search);
     return params.get('cid');
@@ -72,20 +100,11 @@ function create_board_square(cell_count, cell_color, text){
 }
 
 function process_game_join(info){
-    game_in_progress = info.in_progress
-    if(info.client_is_player){
-        game_is_playing = info.client_is_player
-    }
-    if(info.client_side){
-        game_player_side = info.client_side
-    }
-    player_list = info.players
+    process_game_meta_update(info)
 
-    console.log(board)
-    board = info.board
-    console.log(info.board, board == info.board)
-    turn = info.turn
-    game_size = info.game_size
+    board = info.game.board
+    turn = info.game.turn
+    game_size = info.game.game_size
 
     update_status_text()
 
@@ -124,40 +143,47 @@ function process_game_join(info){
 
 function process_game_move_update(info){
 
+    console.log("move-upd", info)
+
     move = info.move;
 
-    from = move[0]
-    to = move[1]
-    shoot = move[2]
+    from = move.from
+    to = move.to
+    shoot = move.shoot
     board[Number(from[0])][Number(from[1])] = 0;
     board[Number(to[0])][Number(to[1])] = turn + 1;
     board[Number(shoot[0])][Number(shoot[1])] = 3;
 
-    update_cell_image(move[0],turn,"remove")
-    update_cell_image(move[1],turn,"add")
-    update_cell_image(move[2],2,"add")
+    update_cell_image(from,turn,"remove")
+    update_cell_image(to,turn,"add")
+    update_cell_image(shoot,2,"add")
 
-    turn = info.turn;
+    turn = turn == 0 ? 1 : 0;
 
     moves.push(move)
 
     new_move_list_item = document.createElement("li")
-    new_move_list_item.appendChild(document.createTextNode(move.toString()))
+    new_move_text = index2coord(move.from) + "-" + index2coord(move.to) + "/" + index2coord(move.shoot)
+    new_move_list_item.appendChild(document.createTextNode(new_move_text))
     $("move-list").appendChild(new_move_list_item)
 }
 
 function process_game_meta_update(info){
-    console.log(info)
-    console.log(game_is_started)
-    if("in_progress" in info) game_in_progress = info.in_progress
-    if("is_started" in info) game_is_started = info.is_started
-    if("client_is_player" in info) game_is_playing = info.client_is_player
-    if("client_side" in info) game_player_side = info.client_side
-    if("resolution" in info) resolution = info.resolution
-    if("players" in info) player_list = info.players
-    if("turn" in info) turn = info.turn
-    if("game_size" in info)game_size = info.game_size
-    console.log(game_is_started)
+
+    if("status" in info){
+        challengeStatus2gameIsStartedInProgress(info.status)
+    }
+
+    if("players" in info){
+        player_list = info.players
+        game_is_playing = player_list.includes(pid)
+        if(game_is_playing){
+            game_player_side = player_list.indexOf(pid) + 1
+        }
+    }
+    
+    if("game" in info && "turn" in info.game) turn = info.game.turn
+
     update_status_text()
 }
 
@@ -208,13 +234,7 @@ function update_cell_image(cell, type, add_or_remove)
 }
 
 function index2coord(index){
-    x = index[1]
-    if (x=="0") x="A"
-    if (x=="1") x="B"
-    if (x=="2") x="C"
-    if (x=="3") x="D"
-    if (x=="4") x="E"
-    if (x=="5") x="F"
+    x = String.fromCharCode(65 + Number(index[1]))
     y = (Number(index[0])+1).toString()
     return x + y
 }
@@ -274,7 +294,6 @@ function valid_move_indicator(cell, removeOrAdd, moveOrShoot, shootingQueen){
         for (let x = 0; x < game_size; x++) {
             for (let y = 0; y < game_size; y++) {
                 // the shooting queen (the queen which is moving and shooting) can shoot to her origin
-                console.log(cell, shootingQueen)
                 newCell = x.toString() + y.toString()
                 if(cell_can_reach(cell,newCell) || (shootingQueen && newCell == shootingQueen)){
                     $("cell-" + newCell).classList.add(indicatorName)
@@ -328,6 +347,7 @@ function handle_click(cell){
             valid_move_indicator(temp_move,"remove", "shoot")
             $("cell-" + temp_source).classList.remove("selected-indicator-source")
             $("cell-" + temp_move).classList.remove("selected-indicator-move")
+            reset = true;
         }else{
             reset = true
             valid_move_indicator(temp_move,"remove", "shoot")
