@@ -17,7 +17,7 @@ class Challenge:
     Represent a challenge of an N-player game
     """
 
-    def __init__(self, game_name, gid, config):
+    def __init__(self, game_name, cid, config):
         if not game_name in game_classes:
             return {"result": "error", "error": "Not a valid name."}
         
@@ -31,20 +31,20 @@ class Challenge:
         self.players = []
         self.moves = []
         self.status = ChallengeStatus.WAITING_FOR_PLAYERS
-        self.gid = gid
+        self.cid = cid
 
         response = {
             "result" : "success",
-            "gid": gid
+            "cid": cid
         }
         return response
 
     def join_player(self, user):
         if len(self.players) < self.state.get_max_no_players():
             self.players.append(user.sid)
-            user.games_playing.append(self.gid)
+            user.games_playing.append(self.cid)
         else:
-            user.games_observing.append(self.gid)
+            user.games_observing.append(self.cid)
 
         if len(self.players) == self.state.max_no_players():
             self.status = ChallengeStatus.IN_PROGRESS

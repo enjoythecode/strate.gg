@@ -24,13 +24,13 @@ ready(function() {
 
 function get_game_id(){
     params = new URLSearchParams(window.location.search);
-    return params.get('gid');
+    return params.get('cid');
 }
 
-function poll_game_join(gid){
+function poll_game_join(cid){
     //https://stackoverflow.com/questions/37876889/react-redux-and-websockets-with-socket-io
     return new Promise((resolve, reject) => {
-        socket.emit('game-join', {"gid": gid}, (data) =>{
+        socket.emit('game-join', {"cid": cid}, (data) =>{
             if(data){
                 if(data.result && data.result === "success"){
                     return resolve(data.info);
@@ -164,8 +164,8 @@ function process_game_meta_update(info){
 function join_game()
 {
     if(socket && socket.connected){
-        gid = get_game_id()
-        poll_game_join(gid).then(info => {
+        cid = get_game_id()
+        poll_game_join(cid).then(info => {
             process_game_join(info)
             socket.on("game-update-move", info => {
                 console.log("Game move update received!")
@@ -347,7 +347,7 @@ function play(source, move, shoot){
     console.log(source, move, shoot)
     //https://stackoverflow.com/questions/37876889/react-redux-and-websockets-with-socket-io
     p = new Promise((resolve, reject) => {
-        socket.emit('game-move', {"gid": gid, "move": {"from": source, "to": move, "shoot": shoot}}, (data) =>{
+        socket.emit('game-move', {"cid": cid, "move": {"from": source, "to": move, "shoot": shoot}}, (data) =>{
             if(data){
                 if(data.result && data.result === "success"){
                     return resolve(data);
