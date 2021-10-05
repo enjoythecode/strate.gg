@@ -36,8 +36,6 @@ Windows PowerShell
 
 ## TODOs
 In rough order of priority;
-1. BE: Create abstract classes that model how additional games might be implemented
-    - One class for the board status
 1. BE: Extend the abstract classes for Amazons
 1. BE: Generic handling of game socket I/O, test with the abstract classes
 1. Observe games by default.

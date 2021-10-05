@@ -143,6 +143,8 @@ def handle_game_move(payload):
             response["in_progress"] = g["in_progress"]
             sckt.emit("game-update-move", response, to = "amazons_" + gid)
             return {"result": "success"}
+    else:
+        return {"result": "error", "error": "Game not found"}
 
 def handle_player_disconnect(gid, sid):
     games[gid]["in_progress"] = False
