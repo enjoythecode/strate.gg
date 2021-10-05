@@ -40,13 +40,13 @@ class Challenge:
         return response
 
     def join_player(self, user):
-        if len(self.players) < self.state.max_no_players:
+        if len(self.players) < self.state.get_max_no_players():
             self.players.append(user.sid)
             user.games_playing.append(self.gid)
         else:
             user.games_observing.append(self.gid)
 
-        if len(self.players) == self.state.max_no_players:
+        if len(self.players) == self.state.max_no_players():
             self.status = ChallengeStatus.IN_PROGRESS
 
         response = {
