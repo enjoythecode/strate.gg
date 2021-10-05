@@ -1,4 +1,4 @@
-from amazons_state import AmazonsState
+from py_logic.amazons_state import AmazonsState
 import enum
 
 class ChallengeStatus(enum.Enum):

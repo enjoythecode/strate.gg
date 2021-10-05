@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import flask_socketio as sckt
-from py_logic import user, challenge
+from py_logic.user import User
+from py_logic.challenge import Challenge
 import random, os, string, json
  
 # Returns a random string of the required size.
@@ -65,15 +66,9 @@ def create_game(payload):
     while cid in games:
         cid = generate_ID(8)
         
-    g = amzn_state.create_from_size(payload["size"], payload["config"])
+    c = Challenge(payload["game_name"], cid, payload["config"])
 
-    games[cid] = {
-        "cid": cid,
-        "board": g,
-        "players": [],
-        "in_progress": False,
-        "is_started": False
-    }
+    games[cid] = c
     return {"result": "success", "cid": cid}
 
 @socketio.on('game-join')

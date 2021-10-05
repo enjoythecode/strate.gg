@@ -34,12 +34,12 @@ function ready(callbackFunction){
 
 ///////////////////// END jQuery IDIOMS ///////////////////////
 
-function poll_create_game(game, size, config){
+function poll_create_game(game, size, variation){
     
     status_el = document.getElementById("amazons-create-game-status");
     status_el.textContent = "Loading";
 
-    socket.emit('game-create', {"size": size, "config": config}, (data) =>{
+    socket.emit('game-create', {"game_name": "amazons" , "config": {"size": size, "variation": variation}}, (data) =>{
         if(data.result && data.result === "success"){
             status_el.textContent = "Success, redirecting..."
             window.location.href = "/play/" + game + "?cid=" + data.cid;
