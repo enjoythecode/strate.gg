@@ -36,11 +36,13 @@ Windows PowerShell
 
 ## TODOs
 In rough order of priority;
-1. FE: Find a VDOM library to use
-    - Should be able to define an "abstract" class for the game structure and override it for specific games (i.e. OOP)
-    - Should be fast, open source, and scalable.
-1. FE: Migrate existing Amazons board logic to the VDOM library
-    - We should be able to inject a smaller board into index.html, and watch the game play out, as a test.
+1. Front-end refactor to MobX + React
+    - Create basic setup for socket communication, state modification, and resulting UI side-effect (Milestone: Active user count reimplemented)
+    - Flesh out the logic of a challenge (Milestone: Initialize board and display it after creating a new game, the board is not interactive)
+    - Implement Amazons logic to make the board reactive, and hook it up to socket logic. (Milestone: can play the game, features equivalent to `master` branch)
+    - Final milestone: Live game polling in the main page. (Improvement over `master` branch)
+        - BE: Add back-end for polling current games to watch.
+        - FE: Inject a smaller board into index.html that watches any live games play out, using the same component as the one that plays (!)
 1. Add Mancala
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. FE: Display game status, player IDs better
