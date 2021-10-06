@@ -37,7 +37,6 @@ Windows PowerShell
 ## TODOs
 In rough order of priority;
 1. Front-end refactor to MobX + React
-    - Create basic setup for socket communication, state modification, and resulting UI side-effect (Milestone: Active user count reimplemented)
     - Flesh out the logic of a challenge (Milestone: Initialize board and display it after creating a new game, the board is not interactive)
     - Implement Amazons logic to make the board reactive, and hook it up to socket logic. (Milestone: can play the game, features equivalent to `master` branch)
     - Final milestone: Live game polling in the main page. (Improvement over `master` branch)
@@ -62,4 +61,5 @@ In rough order of priority;
     - Script to spawn an AWS EC2 instance
     - Static IP for the website, put that in DNS
 1. Add a game-specific chat
+1. Retry connecting upon disconnect
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance

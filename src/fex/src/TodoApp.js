@@ -1,5 +1,4 @@
 import * as React from "react"
-import { render } from "react-dom"
 import { observer } from "mobx-react-lite"
 import { makeObservable, observable, computed, action } from "mobx"
 
@@ -49,12 +48,13 @@ const TodoListView = observer(({ todoList }) => (
 
 const TodoView = observer(({ todo }) => (
     <li>
-        <input type="checkbox" checked={todo.finished} onClick={() => todo.toggle()} />
+        <input type="checkbox" readOnly={todo.finished} onClick={() => todo.toggle()} />
         {todo.title}
     </li>
 ))
 
+
 const store = new TodoList([new Todo("Get Coffee"), new Todo("Write simpler code")])
 const TodoApp = () => (<TodoListView todoList={store} />)
 
-export default TodoApp
+export default TodoListView

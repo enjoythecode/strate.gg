@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import { observer } from "mobx-react"
+import React from "react"
+//import { AbstractGameState } from "./AbstractGameState"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello, world!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App = observer(({ state }) =>(
+    <div>
+        <h1>Hello, world!</h1>
+        <div style={{position:'absolute', top:'0', right:'0'}}>
+            You're {state.connection_status}. 
+            <b> {state.active_users}</b> online users!
+        </div>
     </div>
-  );
-}
+))
 
-export default App;
+export default App

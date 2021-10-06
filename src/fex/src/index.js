@@ -1,18 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import './index.css';
-import App from './App';
-import TodoApp from './TodoApp';
-import reportWebVitals from './reportWebVitals';
+
+import TodoListView from './TodoApp';
+import App from './App.js'
+
+import State from './State.js'
+import Socket from './Socket.js'
+
+const state = new State()
+const socket = new Socket(state)
+state.set_socket(socket)
+socket.connect()
 
 ReactDOM.render(
   <React.StrictMode>
-    <TodoApp />
+    <App state={state}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
