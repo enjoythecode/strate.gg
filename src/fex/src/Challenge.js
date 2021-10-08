@@ -1,11 +1,10 @@
 import { makeObservable, observable, computed, action, flow } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
-//import { AbstractGameState } from "./AbstractGameState"
 
 class Challenge {
     game_name = ""
-    game_state = ""
+    game_state = null
     players = []
     turn = 0
     status = ""
@@ -27,14 +26,12 @@ class Challenge {
     }
 }
 
-const ChallengeView = observer(({ state }) =>(
+const ChallengeView = observer(({ challenge }) =>(
     <div>
-        <h1>Hello, world!</h1>
-        <div style={{position:'absolute', top:'0', right:'0'}}>{state.active_users} online users!</div>
+        <h1>Hello, challenge view!</h1>
+        <div>{challenge != null ? "game of" + challenge.game_name : "Loading game!"}</div>
+
     </div>
 ))
 
-const chall = new Challenge("amazons") 
-//const ChallengeApp = () => (<ChallengeView Challenge={chall} />)
-
-export default ChallengeView
+export {Challenge, ChallengeView}

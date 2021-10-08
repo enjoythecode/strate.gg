@@ -64,8 +64,10 @@ class AmazonsState(game_state.GameState):
     @classmethod
     def create_from_config(self, config):
 
-        b = (config["size"], config["variation"])
+        print(config)
 
+        b = (config["size"], config["variation"])
+        print(b)
         if b == (10, 0):
             starting_board = starting_board_10x0
         elif b == (6, 0):

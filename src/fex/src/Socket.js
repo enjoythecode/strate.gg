@@ -30,6 +30,24 @@ class Socket {
             this.state.set_active_users(payload.users)
         });
     }
+
+    create_new_game = (payload) => {
+        this.io.emit('game-create', payload, (data) =>{
+            if(data.result && data.result === "success"){
+                this.state.update_challenge_information(data)
+                window.location.replace("/play/" + data.game_name + "?cid=" + data.cid)
+            }
+        })
+    }
+
+    get_challenge_information = (cid) => {
+        this.io.emit('game-join', {"cid": cid}, (data) =>{
+            if(data.result && data.result === "success"){
+                this.state.update_challenge_information(data.info)
+            }
+        })
+    }
+
 }
 
 export default Socket

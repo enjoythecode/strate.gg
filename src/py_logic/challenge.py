@@ -43,7 +43,11 @@ class Challenge:
 
         response = {
             "result" : "success",
-            "cid": cid
+            "game_name": game_name,
+            "cid": cid,
+            "players": self.players,
+            "status": self.status.name,
+            "game": self.state.game_data()
         }
         return response
 
@@ -60,7 +64,8 @@ class Challenge:
         response = {
             "game": self.state.game_data(),
             "players": self.players,
-            "status": self.status.name
+            "status": self.status.name,
+            "cid": self.cid
         }
         return response
 
