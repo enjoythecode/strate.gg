@@ -1,6 +1,6 @@
 import { observer } from "mobx-react"
 import React from "react"
-import {Challenge, ChallengeView} from "./Challenge.js"
+import { ChallengeView } from "./Challenge.js"
 
 function get_game_id(){
     let params = new URLSearchParams(window.location.search);

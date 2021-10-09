@@ -70,21 +70,23 @@ const getCellImage = (id) => {
         case 3:
             return "Burnt off"
     }
-}
+} 
 
 class Amazons {
 
-    constructor(config){
+    constructor(challenge, config){
         makeObservable(this,{
             board: observable,
             selection: observable,
             clickCell: action,
+            process_new_move: action,
             selectionFrom:  computed,
             selectionTo: computed,
             selectionShoot: computed
         })
-
+        this.turn = 1
         this.config = config
+        this.challenge = challenge
         this.board = initializeBoard(config)
         if(this.board === false){
             console.log("invalid board config!")
@@ -95,16 +97,14 @@ class Amazons {
     selection = [null, null, null]; // selected cells; [from, to, shoot]
 
     clickCell = (c) => {
-        console.log("notvalud")
         if(this.isValidClick(c)){
-            console.log('valid')
             if(this.selectionFrom === null){
                 this.selection[0] = c
             }else if(this.selectionTo === null){
                 this.selection[1] = c
             }else{
                 this.selection[2] = c
-                this.sendMove(this.selection)
+                this.challenge.send_move(this.formatMoveForSend())
                 this.selection = [null, null, null]
             }
         }
@@ -119,8 +119,26 @@ class Amazons {
         return true
     }
 
-    sendMove(sel) {
-        console.log("implement sending moves!")
+    formatMoveForSend(){
+        return {"from": this.selectionFrom,
+                "to": this.selectionTo,
+                "shoot": this.selectionShoot
+            }
+    }
+
+    process_new_move(move){
+        let from_x = move.from[0]
+        let from_y = move.from[1]
+        let to_x = move.to[0]
+        let to_y = move.to[1]
+        let shoot_x = move.shoot[0]
+        let shoot_y = move.shoot[1]
+
+        this.board[from_x][from_y] = 0
+        this.board[to_x][to_y] = this.turn
+        this.board[shoot_x][shoot_y] = 3
+
+        this.turn = 3 - this.turn
     }
 
 }
@@ -138,7 +156,7 @@ const AmazonsView = observer(class _ extends React.Component{
                     boardCells.push(<div   
                                         style={{...cellCss, ...colorCss}}
                                         key={counter}
-                                        onClick={this.props.challenge.game_state.clickCell.bind(null,counter)}>
+                                        onClick={this.props.challenge.game_state.clickCell.bind(null,rowCounter.toString() + (counter % this.props.challenge.game_state.board.length).toString())}>
                                             {getCellImage(cell)}
                                     </div>)
                     counter += 1;

@@ -1,3 +1,5 @@
+# 2021-10-08
+- `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
 - Made the decision to write the front-end with MobX + React.
 - Started working on a front-end refactor for MobX + React under `src/fex`

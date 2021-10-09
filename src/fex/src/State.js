@@ -1,5 +1,8 @@
 import { makeObservable, observable, computed, action } from "mobx"
 import { Challenge } from "./Challenge.js"
+import Socket from './Socket.js'
+
+
 class State {
     active_users = 0
     connection_status = "offline"
@@ -23,16 +26,28 @@ class State {
     set_connection_status = (new_connection_status) => {this.connection_status = new_connection_status}
     update_challenge_information = (data) => {
         let cid = data.cid
-        console.log("cid", cid)
         if(this.challenges.has(cid)){
             console.log("UPDATING NOT IMPLEMENTED YET!")
         }else{
-            console.log("adding!", cid)
-            this.challenges.set(cid, new Challenge("amazons"))
+            this.challenges.set(cid, new Challenge(cid,"amazons"))
             console.log(this.challenges.get(cid))
+        }
+    }
+
+    update_challenge_new_move = (data) => {
+        let cid = data.cid
+        if(this.challenges.has(cid)){
+            this.challenges.get(cid).process_new_move(data.move)
         }
     }
 
 }
 
-export default State;
+// we create all of our stores, socket IO class
+// and export them from this module to make it available to access
+// from every file without using React Contexts
+const RootState = new State()
+const socket = new Socket()
+RootState.set_socket(socket)
+
+export default RootState;

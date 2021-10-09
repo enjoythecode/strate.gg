@@ -79,6 +79,7 @@ class Challenge:
             return {"result": "error", "error": "not your turn"}
 
         response = {
+            "cid": self.cid,
             "result" : "success",
             "move": move,
             "status": self.status.name
