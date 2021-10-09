@@ -4,6 +4,7 @@ import './index.css';
 import App from './App.js'
 import PlayPage from "./PlayPage.js"
 import RootState from './State.js'
+import ConnectionWidget from "./ConnectionWidget.js"
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,10 +25,8 @@ ReactDOM.render(
         </Route>
       </Switch>
     </Router>
-    <div style={{position:'absolute', top:'0', right:'0'}}>
-      You're {RootState.connection_status}. 
-      <b> {RootState.active_users}</b> online users!
-    </div>
+    <ConnectionWidget/>
+
   </React.StrictMode>,
   document.getElementById('root')
 );

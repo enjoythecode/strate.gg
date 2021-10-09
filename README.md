@@ -38,16 +38,15 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Regressions:
-        - Make the connection status reactive to the state (online players, online/offline status!)
         - Display game status
             - Disconnects are shown in the front end?
         - Show players in the front-end
         - Remove unnecessary elements, console.log() calls
         - Move indicators during click
         - Images instead of text on the Amazons board.
-            - Upgrade current architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
+            - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
+            - Flatten the Amazons board representation using the length of the state to simplify view code.
     - Improvements possible thanks to the new architecture
-        - Flatten the Amazons board representation using the length of the state to simplify view code.
 1. Add Mancala
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. FE: Display game status, player IDs better
