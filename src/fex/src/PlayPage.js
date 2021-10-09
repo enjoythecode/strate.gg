@@ -15,16 +15,9 @@ const PlayPage = observer(class PlayPage extends React.Component{
     }
 
     render(){
-        let ks = []
-        for(let k of this.props.state.challenges.keys()){
-            console.log("KEY: ", k)
-            ks.push(<li key={k}>{k}</li>)
-        }
         return (
             <div>
                 <h1>Play! {this.cid} </h1>
-                <ul>{ks}</ul>
-                <h1>{this.props.state.challenges.size}</h1>
                 <h2>{this.props.state.challenges.get(this.cid) ? "yes" : "no"}</h2>
                 <ChallengeView challenge={this.props.state.challenges.get(this.cid)} />
             </div>
