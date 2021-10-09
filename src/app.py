@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import flask_socketio as sckt
 from py_logic.user import User
-from py_logic.challenge import Challenge
+from py_logic.challenge import Challenge, ChallengeStatus
 import random, os, string, json
  
 # Returns a random string of the required size.
@@ -105,6 +105,16 @@ def handle_game_move(payload):
         sckt.emit("game-update-move", response, to=challenges[cid].get_socket_room_name())
     else:
         return {"result": "error", "error": "Game not found"}
+
+@socketio.on('tv-poll')
+def available_tv_challenges(payload):
+    for key in challenges:
+        if challenges[key].status == ChallengeStatus.IN_PROGRESS:
+            r = {"result": "success", "cid": challenges[key].cid}
+            print(r)
+            return r
+    print("no available games")
+    return {"result": "error", "error": "No games available!"}
 
 def handle_player_disconnect(cid, user):
 

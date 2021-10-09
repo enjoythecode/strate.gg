@@ -11,7 +11,7 @@ const PlayPage = observer(class PlayPage extends React.Component{
 
     componentWillMount(){
         this.cid = get_game_id()
-        this.props.state.socket.get_challenge_information(this.cid)
+        this.props.state.socket.join_challenge(this.cid)
     }
 
     render(){

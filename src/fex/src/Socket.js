@@ -43,9 +43,9 @@ class Socket {
         })
     }
 
-    get_challenge_information = (cid) => {
-        this.io.emit('game-join', {"cid": cid}, (data) =>{
-            if(data.result && data.result === "success"){
+    join_challenge = (cid) => {
+        this.io.emit('game-join', {"cid": cid}, (data) => {
+            if("result" in data && data.result === "success"){
                 RootState.update_challenge_information(data.info)
             }
         })
@@ -53,6 +53,17 @@ class Socket {
 
     send_move = (payload) => {
         this.io.emit('game-move', payload)
+    }
+
+    poll_tv_games(payload, successCallback){
+        console.log("transmitting the poll!")
+        this.io.emit('tv-poll', payload, (data) => {
+            console.log("poll result!")
+            if("result" in data && data.result == "success"){
+                console.log("succesfull receive in socket", data)
+                successCallback(data);
+            }
+        })
     }
 
 }

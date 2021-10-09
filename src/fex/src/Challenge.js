@@ -42,7 +42,7 @@ const ChallengeView = observer(({ challenge }) =>(
     <div>
     <h1>this is challenge view!</h1>
     <div>{challenge != null ? "game of " + challenge.game_name : "Loading game!"}</div>
-    <AmazonsView challenge ={challenge}/>
+    <AmazonsView challenge={challenge}/>
     </div>
 ))
 

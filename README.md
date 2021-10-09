@@ -37,14 +37,15 @@ Windows PowerShell
 ## TODOs
 In rough order of priority;
 1. Front-end refactor to MobX + React
-    - Final milestone: Live game polling in the main page. (Improvement over `master` branch)
-        - BE: Add back-end for polling current games to watch.
-        - FE: Inject a smaller board into index.html that watches any live games play out, using the same component as the one that plays (!)
     - Regressions:
-        - Handle disconnect (display game status)
+        - Make the connection status reactive to the state (online players, online/offline status!)
+        - Display game status
+            - Disconnects are shown in the front end?
+        - Show players in the front-end
         - Remove unnecessary elements, console.log() calls
         - Move indicators during click
         - Images instead of text on the Amazons board.
+            - Upgrade current architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
     - Improvements possible thanks to the new architecture
         - Flatten the Amazons board representation using the length of the state to simplify view code.
 1. Add Mancala

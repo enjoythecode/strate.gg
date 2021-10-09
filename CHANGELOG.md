@@ -1,3 +1,7 @@
+# 2021-10-09
+- Major `fex` refactor progress: TV prototype works!
+    - Back-end API for polling for active games to watch
+    - Front-end `Tv` component that polls for active games and displays them!
 # 2021-10-08
 - `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
