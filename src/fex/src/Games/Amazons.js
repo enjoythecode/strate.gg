@@ -2,6 +2,29 @@ import { makeObservable, observable, computed, action, flow } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 
+const makeCellCss = (x) => {
+    const cell = {
+        "float": "left",
+        "display": "inline-block",
+        "width": (1/x * 100).toString() + "%",
+        "height": (1/x * 100).toString() + "%"
+    }
+    return cell
+}
+
+const boardCss = {
+    "aspectRatio": "1 / 1",
+    "height": "100%"
+}
+
+const blackCell = {
+    "backgroundColor": "#946F51"
+}
+
+const whiteCell = {
+    "backgroundColor": "#F0D9B5"
+}
+
 let startingBoards = {
     "10_0": [[0, 0, 0, 2, 0, 0, 2, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -38,7 +61,6 @@ let initializeBoard = (config) => {
 }
 
 class Amazons {
-
     constructor(config){
         this.config = config
         this.sss = "ssdsf"
@@ -54,16 +76,20 @@ const AmazonsView = observer(class _ extends React.Component{
         if(this.props.challenge != null){
             let boardCells = []
             let counter = 0
+            let rowCounter = 0;
+            let cellCss = makeCellCss(this.props.challenge.game_state.board.length)
             for(let row of this.props.challenge.game_state.board){
                 for(let cell of row){
-                    boardCells.push(<p key={counter}>{counter}</p>)
+                    let colorCss = (counter + rowCounter) % 2 == 0 ? blackCell : whiteCell;
+                    boardCells.push(<div style={{...cellCss, ...colorCss}} key={counter}>{counter}</div>)
                     counter++
                 }
+                rowCounter++
             }
             return (
-                <div>
+                <div style={{"height": "300px"}}>
                     <h3>inheritance! {this.props.challenge.game_state.sss} {this.props.challenge.game_state.board === false}</h3>
-                    <div>
+                    <div style={boardCss}>
                         {boardCells}
                     </div>
                 </div>
