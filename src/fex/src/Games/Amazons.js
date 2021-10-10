@@ -91,15 +91,19 @@ const initializeBoard = (config) => {
 }
 
 const getCellImage = (id) => {
+    let imgStyle = {
+        width: "100%",
+        height: "100%"
+    }
     switch (id) {
         case 0:
             return null
         case 1:
-            return "White"
+            return <img src="/images/wqueen.png" style ={imgStyle} alt="White Queen"/>
         case 2:
-            return "Black"
+            return <img src="/images/bqueen.png" style ={imgStyle} alt="Black Queen"/>
         case 3:
-            return "Burnt off"
+            return <img src="/images/fire.png" style ={imgStyle} alt="Burnt Off Square"/>
         default:
             return "?"
     }

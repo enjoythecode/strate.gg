@@ -2,7 +2,7 @@
 - Major `fex` refactor progress: TV prototype works!
     - Back-end API for polling for active games to watch
     - Front-end `Tv` component that polls for active games and displays them!
-- Fixed multiple `fex` regressions:
+- Fixed all `fex` regressions:
     - Connection status is now responsive
     - Game status is correctly synced
     - Players are now correctly displayed
@@ -10,6 +10,7 @@
     - Addressed most compile warnings
     - Amazons: is_valid_move() implemented
     - Amazons: valid move indicators implemented
+    - Amazons: pieces (queens) are now proper images, instead of text!
 # 2021-10-08
 - `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
