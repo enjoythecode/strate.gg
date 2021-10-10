@@ -38,8 +38,8 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Bugs:
-        - Observer board is not updated correctly
-    - Upgrades:
+        - Do not allow clicking for moves when it is not the players turn or they are not playing!
+    - Structural Changes:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
     - Merge fex into the main branch
         - Move fex to a temporary folder, replacing old static files
