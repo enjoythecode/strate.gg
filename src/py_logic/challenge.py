@@ -52,7 +52,7 @@ class Challenge:
         return response
 
     def join_player(self, user):
-        if len(self.players) < self.state.get_max_no_players():
+        if len(self.players) < self.state.get_max_no_players() and not user.sid in self.players:
             self.players.append(user.sid)
             user.games_playing.append(self.cid)
         else:
