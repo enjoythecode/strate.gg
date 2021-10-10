@@ -32,6 +32,12 @@ class Socket {
             console.log(data)
             RootState.update_challenge_new_move(data)
         })
+
+        this.io.on("game-update-meta", (data) => {
+            if("result" in data && data.result === "success"){
+                RootState.update_challenge_information(data.info)
+            }
+        })
     }
 
     create_new_game = (payload) => {

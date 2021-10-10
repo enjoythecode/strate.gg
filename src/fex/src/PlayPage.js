@@ -18,7 +18,6 @@ const PlayPage = observer(class PlayPage extends React.Component{
         return (
             <div>
                 <h1>Play! {this.cid} </h1>
-                <h2>{this.props.state.challenges.get(this.cid) ? "yes" : "no"}</h2>
                 <ChallengeView challenge={this.props.state.challenges.get(this.cid)} />
             </div>
         );

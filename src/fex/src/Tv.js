@@ -24,15 +24,12 @@ const Tv = observer(class Tv extends React.Component{
         this.cid = cid
     }
 
-    poll_for_games(){
-        console.log(this.cid)
-        
+    poll_for_games(){        
         let noChallenge = this.cid === null
         let challengeNotPlaying = !noChallenge && (
             RootState.challenges.has(this.cid) &&
-            RootState.challenges.get(this.cid).status == "IN_PROGRESS"
+            RootState.challenges.get(this.cid).status !== "IN_PROGRESS"
             )
-        
         if( noChallenge || challengeNotPlaying){
             console.log("polling", this.cid)
             RootState.socket.poll_tv_games({}, (data) => {
@@ -44,6 +41,7 @@ const Tv = observer(class Tv extends React.Component{
     }
 
     componentWillUnmount(){
+        console.log("clearing Tv!")
         clearInterval(this.poller)
         this.poller = null;
     }

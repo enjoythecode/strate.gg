@@ -93,6 +93,7 @@ class Challenge:
         self.status = ChallengeStatus.OVER_DISCONNECT
 
         response = {
+            "cid": self.cid,
             "status": self.status.name
         }
 

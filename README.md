@@ -38,8 +38,6 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Regressions:
-        - Display game status
-            - Disconnects are shown in the front end?
         - Show players in the front-end
         - Remove unnecessary elements, console.log() calls
         - Move indicators during click

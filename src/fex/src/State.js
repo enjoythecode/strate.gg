@@ -24,14 +24,15 @@ class State {
     set_socket = (sckt) => {this.socket = sckt}
     set_active_users = (new_active_users) => {this.active_users = new_active_users}
     set_connection_status = (new_connection_status) => {this.connection_status = new_connection_status}
+    
     update_challenge_information = (data) => {
         let cid = data.cid
-        if(this.challenges.has(cid)){
-            console.log("UPDATING NOT IMPLEMENTED YET!")
-        }else{
-            this.challenges.set(cid, new Challenge(cid,"amazons"))
-            console.log(this.challenges.get(cid))
-        }
+        let chs = this.challenges
+
+        console.log(data, data.cid)
+
+        if(!chs.has(cid)){chs.set(cid, new Challenge(cid,"amazons"))}
+        chs.get(cid).update_challenge_information(data)
     }
 
     update_challenge_new_move = (data) => {

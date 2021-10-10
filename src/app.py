@@ -84,13 +84,11 @@ def game_join(payload):
     if cid and cid in challenges:
         c = challenges[cid]
         response = c.join_player(user)
-
+        payload = {"result": "success", "info": response}
+        # avoid sending twice by first emitting, and then sending the room
+        sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
         sckt.join_room(c.get_socket_room_name())
-
-        # we want to emit these without emitting player specific data!
-        sckt.emit("game-update-meta", response, to=challenges[cid].get_socket_room_name())
-        print(response)
-        return {"result": "success", "info": response}
+        return payload
     else:
         return {"result": "error", "error": "Game not found."}
 
@@ -111,15 +109,14 @@ def available_tv_challenges(payload):
     for key in challenges:
         if challenges[key].status == ChallengeStatus.IN_PROGRESS:
             r = {"result": "success", "cid": challenges[key].cid}
-            print(r)
             return r
-    print("no available games")
     return {"result": "error", "error": "No games available!"}
 
 def handle_player_disconnect(cid, user):
 
     response = challenges[cid].handle_disconnect(user)
-    sckt.emit("game-update-meta", response, to=challenges[cid].get_socket_room_name())
+    payload = {"result": "success", "info": response}
+    sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
 
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port='8080')
