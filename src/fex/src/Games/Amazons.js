@@ -4,14 +4,14 @@ import React from "react"
 
 const baseCellCss = (x) => {
     return {
-        "float": "left",
-        "display": "inline-block",
-        "width": (1/x * 100).toString() + "%",
-        "height": (1/x * 100).toString() + "%"
+        float: "left",
+        display: "inline-block",
+        width: (1/x * 100).toString() + "%",
+        height: (1/x * 100).toString() + "%"
     }
 }
 
-const backgroundCellCss = (color, indicatorContent) => {
+const backgroundCellCss = (color, indicatorContent, queenOver) => {
     /*
     color:
         dark -> 0
@@ -26,22 +26,29 @@ const backgroundCellCss = (color, indicatorContent) => {
     */
 
     let backgroundColor = color === 0 ? "#946F51" : "#F0D9B5";
-    let background = null;
-    switch (indicatorContent) {
-        case -2:
-            backgroundColor = "lightcoral"
-            break
-        case -1:
-            backgroundColor = "lightblue"
-            break
-        case 1:
-            background = "radial-gradient(circle at 50% 50%,rgba(125, 131, 206, 0.87) 20%," + backgroundColor + " 20%)"
-            break
-        case 2:
-            background = "radial-gradient(circle at 50% 50%,rgba(206, 125, 125, 0.6) 20%," + backgroundColor + " 20%)"
-            break
+    if(indicatorContent === -2) backgroundColor = "lightcoral"
+    if(indicatorContent === -1) backgroundColor = "lightblue"
+
+    let indicatorColor = null
+    if(indicatorContent === 1) indicatorColor = "rgba(125, 131, 206, 0.87)"
+    if(indicatorContent === 2 || queenOver) indicatorColor = "rgba(206, 125, 125, 0.87)"
+
+    if(indicatorContent > 0 || (indicatorContent === -1 && queenOver)){
+        if(queenOver){
+            console.log("radial-gradient(circle at 50% 50%," + backgroundColor + " 80%," + indicatorColor + " 80%)")
+            return {
+                background: "radial-gradient(circle at 50% 50%," + backgroundColor + " 80%," + indicatorColor + " 80%)"
+            }
+        }else{
+            return {
+                background: "radial-gradient(circle at 50% 50%," + indicatorColor + " 20%," + backgroundColor + " 20%)"
+            }
+        }
+    }else{
+        return {
+            backgroundColor: backgroundColor
+        }
     }
-    return 
 }
 
 const boardCss = {
@@ -129,7 +136,7 @@ class Amazons {
     clickCell = (c) => {
         switch (this.currentSelectionStep) {
             case "from":
-                if(this.board[Number(c[0])][Number(c[1])] == this.turn){
+                if(this.board[Number(c[0])][Number(c[1])] === this.turn){
                     this.selection[0] = c
                 }
                 break;
@@ -149,6 +156,8 @@ class Amazons {
                     this.resetSelection()
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -160,20 +169,20 @@ class Amazons {
         let d_x = to_x - from_x
         let d_y = to_y - from_y
     
-        if(d_x == 0 && d_y == 0) return false;
-        if(d_x != 0 && d_y != 0 && Math.abs(d_x) != Math.abs(d_y)) return false // on the diagonal, |x| must == |y|
+        if(d_x === 0 && d_y === 0) return false;
+        if(d_x !== 0 && d_y !== 0 && Math.abs(d_x) !== Math.abs(d_y)) return false // on the diagonal, |x| must == |y|
         
         // normalize d_x, d_y to 1, 0, or -1. 
-        let step_x = d_x == 0 ? 0 : d_x / Math.abs(d_x) //the short-hand if prevents division by 0
-        let step_y = d_y == 0 ? 0 : d_y / Math.abs(d_y) //the short-hand if prevents division by 0
+        let step_x = d_x === 0 ? 0 : d_x / Math.abs(d_x) //the short-hand if prevents division by 0
+        let step_y = d_y === 0 ? 0 : d_y / Math.abs(d_y) //the short-hand if prevents division by 0
         
         let steps = Math.max(Math.abs(d_x), Math.abs(d_y)) // how many squares is between from and to?
         
         for (let i = 1; i <=steps; i++) {
             let new_x = from_x + step_x * i
             let new_y =from_y + step_y * i
-            if(this.board[new_x][new_y] != 0){
-                if (new_x.toString() + new_y.toString() != ignore){
+            if(this.board[new_x][new_y] !== 0){
+                if (new_x.toString() + new_y.toString() !== ignore){
                     return false
                 }
     
@@ -212,6 +221,7 @@ class Amazons {
         if(this.selectionFrom === null) return "from"
         if(this.selectionTo === null) return "to"
         if(this.selectionShoot === null) return "shoot"
+        return null
     }
     get boardBackground(){
         let result = []
@@ -221,10 +231,14 @@ class Amazons {
                 let cell = x.toString() + y.toString()
                 let value = 0;
 
-                if (this.currentSelectionStep == "to" && this.cell_can_reach(this.selectionFrom, cell)) {
-                    value = 1;}
-                if (this.currentSelectionStep == "shoot" && this.cell_can_reach(this.selectionTo, cell, this.selectionFrom)) {
-                    value = 2;}
+                if (this.currentSelectionStep === "to" && this.cell_can_reach(this.selectionFrom, cell)) {
+                    value = 1}
+                if (this.currentSelectionStep === "shoot" && this.cell_can_reach(this.selectionTo, cell, this.selectionFrom)) {
+                    value = 2}
+                if (cell === this.selectionFrom){
+                    value = -1}
+                if (cell === this.selectionTo){
+                    value = -2}
 
                 row.push(value)
             }
@@ -239,22 +253,24 @@ const AmazonsView = observer(class _ extends React.Component{
     render() {
         if(this.props.challenge != null){
             let boardCells = []
-            let counter = 0
             let size = this.props.challenge.game_state.board.length
             let cellStyleBase = baseCellCss(size);
 
             for(let x = 0; x < size; x++){
                 for(let y = 0; y < size; y++){
-                    let colorCss = (y % size + x) % 2 ;
                     let cellStringId = x.toString() + (y % size).toString();
+                    let cellStyleIndicator = backgroundCellCss(
+                        (y % size + x) % 2,
+                        this.props.challenge.game_state.boardBackground[x][y],
+                        this.props.challenge.game_state.selectionFrom === cellStringId && this.props.challenge.game_state.currentSelectionStep === "shoot"
+                    );
                     let content = this.props.challenge.game_state.board[x][y]
                     boardCells.push(
                         <div   
-                            style={{...cellCss, ...colorCss}}
+                            style={{...cellStyleBase, ...cellStyleIndicator}}
                             key={x * size + y}
                             onClick={this.props.challenge.game_state.clickCell.bind(null, cellStringId)}>
                                 {getCellImage(content)}
-                                {this.props.challenge.game_state.boardBackground[x][y]}
                         </div>)
                 }
             }

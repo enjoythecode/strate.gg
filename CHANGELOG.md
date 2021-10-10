@@ -9,6 +9,7 @@
     - Removed debug elements, console.log()s
     - Addressed most compile warnings
     - Amazons: is_valid_move() implemented
+    - Amazons: valid move indicators implemented
 # 2021-10-08
 - `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
