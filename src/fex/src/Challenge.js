@@ -47,7 +47,7 @@ const ChallengeView = observer(({ challenge }) =>(
                 "Loading the game!" :
                 <div>
                     <p>{challenge.status}</p>
-                    <p>Players: {challenge.players.join(" ,")}</p>
+                    <p>Players: {challenge.players.join(", ")}</p>
                     <AmazonsView challenge={challenge}/>
                 </div>
         }

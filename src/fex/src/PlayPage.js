@@ -9,7 +9,7 @@ function get_game_id(){
 
 const PlayPage = observer(class PlayPage extends React.Component{
 
-    componentWillMount(){
+    componentDidMount(){
         this.cid = get_game_id()
         this.props.state.socket.join_challenge(this.cid)
     }
