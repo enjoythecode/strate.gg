@@ -68,3 +68,4 @@ In rough order of priority;
 1. Add a game-specific chat
 1. Retry connecting upon disconnect
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance
+1. FE-TV: Add delay to disposing of games when the game is over

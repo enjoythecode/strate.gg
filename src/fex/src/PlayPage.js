@@ -1,5 +1,6 @@
 import { observer } from "mobx-react"
 import React from "react"
+import RootState from "./State.js"
 import { ChallengeView } from "./Challenge.js"
 
 function get_game_id(){
@@ -9,16 +10,17 @@ function get_game_id(){
 
 const PlayPage = observer(class PlayPage extends React.Component{
 
-    componentDidMount(){
+    constructor() {
+        super()
         this.cid = get_game_id()
-        this.props.state.socket.join_challenge(this.cid)
+        RootState.socket.join_challenge(this.cid)
     }
 
     render(){
         return (
             <div>
-                <h1>Play! {this.props.state.challenges.has(this.cid) ? this.props.state.challenges.has(this.cid).game_name : "..."} </h1>
-                <ChallengeView challenge={this.props.state.challenges.get(this.cid)} />
+                <h1>Play! {RootState.challenges.has(this.cid) ? RootState.challenges.has(this.cid).game_name : "..."} </h1>
+                <ChallengeView challenge={RootState.challenges.get(this.cid)} />
             </div>
         );
     }
