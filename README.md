@@ -38,10 +38,9 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Bugs:
-        - Join game starts a game against oneself!
+        - Observer board is not updated correctly
     - Upgrades:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
-        - Flatten the Amazons board representation using the length of the state to simplify view code.
     - Merge fex into the main branch
         - Move fex to a temporary folder, replacing old static files
         - update dev server script to launch the FE server as well
@@ -52,6 +51,7 @@ In rough order of priority;
     - BE: Planning-- how do we architecture things? How do we account for network latency?
     - FE: Display time, add configuration of time controls when creating a game
 1. Add option to resign
+1. Bug: Why is front-end sending two join requests when `PlayPage` is loaded?
 1. FE: Add option to request/suggest undo of the last move
 1. Find a good name for the project
     - Update GitHub project name
