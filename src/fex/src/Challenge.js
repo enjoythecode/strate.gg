@@ -53,6 +53,7 @@ const ChallengeView = observer(({ challenge }) =>(
                 "Loading the game!" :
                 <div>
                     <h1>{challenge.status}</h1>
+                    <h3>Players: {challenge.players.join(" ,")}</h3>
                     <div>{"game of " + challenge.game_name}</div>
                     <AmazonsView challenge={challenge}/>
                 </div>

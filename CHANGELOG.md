@@ -5,6 +5,7 @@
 - Fixed multiple `fex` regressions:
     - Connection status is now responsive
     - Game status is correctly synced
+    - Players are now correctly displayed
 # 2021-10-08
 - `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
