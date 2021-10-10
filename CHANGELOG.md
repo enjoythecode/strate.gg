@@ -6,6 +6,9 @@
     - Connection status is now responsive
     - Game status is correctly synced
     - Players are now correctly displayed
+    - Removed debug elements, console.log()s
+    - Addressed most compile warnings
+    - Amazons: is_valid_move() implemented
 # 2021-10-08
 - `fex` refactor progress: basic play with move syncing!
 # 2021-10-05
