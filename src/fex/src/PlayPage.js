@@ -17,7 +17,7 @@ const PlayPage = observer(class PlayPage extends React.Component{
     render(){
         return (
             <div>
-                <h1>Play! {this.cid} </h1>
+                <h1>Play! {this.props.state.challenges.has(this.cid) ? this.props.state.challenges.has(this.cid).game_name : "..."} </h1>
                 <ChallengeView challenge={this.props.state.challenges.get(this.cid)} />
             </div>
         );

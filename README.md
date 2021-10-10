@@ -38,8 +38,9 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Regressions:
-        - Remove unnecessary elements, console.log() calls
-        - Move indicators during click
+        - Move indicators during click for Amazons
+            - Implement is_valid_move()
+        - TV games not refreshing upon games ending with DISCONNECT (or otherwise)
         - Images instead of text on the Amazons board.
     - Upgrades:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)

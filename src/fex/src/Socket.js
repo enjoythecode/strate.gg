@@ -29,7 +29,6 @@ class Socket {
         });
 
         this.io.on("game-update-move", (data) => {
-            console.log(data)
             RootState.update_challenge_new_move(data)
         })
 
@@ -62,11 +61,8 @@ class Socket {
     }
 
     poll_tv_games(payload, successCallback){
-        console.log("transmitting the poll!")
         this.io.emit('tv-poll', payload, (data) => {
-            console.log("poll result!")
-            if("result" in data && data.result == "success"){
-                console.log("succesfull receive in socket", data)
+            if("result" in data && data.result === "success"){
                 successCallback(data);
             }
         })

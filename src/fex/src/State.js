@@ -1,4 +1,4 @@
-import { makeObservable, observable, computed, action } from "mobx"
+import { makeObservable, observable, action } from "mobx"
 import { Challenge } from "./Challenge.js"
 import Socket from './Socket.js'
 
@@ -28,8 +28,6 @@ class State {
     update_challenge_information = (data) => {
         let cid = data.cid
         let chs = this.challenges
-
-        console.log(data, data.cid)
 
         if(!chs.has(cid)){chs.set(cid, new Challenge(cid,"amazons"))}
         chs.get(cid).update_challenge_information(data)

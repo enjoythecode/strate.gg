@@ -53,9 +53,9 @@ const initializeBoard = (config) => {
         ]
     
     }
-    if(!("size" in config && "variation" in config)){console.log("-1-", config); return false;}
+    if(!("size" in config && "variation" in config)){return false;}
     let key = config["size"].toString() + "_" + config["variation"].toString()
-    if(! key in startingBoards) return false;
+    if(! (key in startingBoards)) return false;
     return startingBoards[key]
 }
 
@@ -69,6 +69,8 @@ const getCellImage = (id) => {
             return "Black"
         case 3:
             return "Burnt off"
+        default:
+            return "?"
     }
 } 
 
@@ -88,9 +90,6 @@ class Amazons {
         this.config = config
         this.challenge = challenge
         this.board = initializeBoard(config)
-        if(this.board === false){
-            console.log("invalid board config!")
-        }
     }
 
     board = null
@@ -152,7 +151,7 @@ const AmazonsView = observer(class _ extends React.Component{
             let cellCss = makeCellCss(this.props.challenge.game_state.board.length)
             for(let row of this.props.challenge.game_state.board){
                 for(let cell of row){
-                    let colorCss = (counter + rowCounter) % 2 == 0 ? blackCell : whiteCell;
+                    let colorCss = (counter + rowCounter) % 2 === 0 ? blackCell : whiteCell;
                     boardCells.push(<div   
                                         style={{...cellCss, ...colorCss}}
                                         key={counter}
@@ -164,15 +163,16 @@ const AmazonsView = observer(class _ extends React.Component{
                 rowCounter++
             }
             return (
-                <div style={{"height": "300px"}}>
-                    <h3>inheritance!{this.props.challenge.game_state.board === false}</h3>
+                <div>
                     <h4>
-                        from {this.props.challenge.game_state.selectionFrom}
-                        to {this.props.challenge.game_state.selectionTo}
-                        shoot {this.props.challenge.game_state.selectionShoot}
+                        F:{this.props.challenge.game_state.selectionFrom} 
+                        T:{this.props.challenge.game_state.selectionTo} 
+                        S:{this.props.challenge.game_state.selectionShoot} 
                     </h4>
-                    <div style={boardCss}>
-                        {boardCells}
+                    <div style={{"height": "300px"}}>
+                        <div style={boardCss}>
+                            {boardCells}
+                        </div>
                     </div>
                 </div>
             )

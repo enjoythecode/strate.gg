@@ -1,4 +1,4 @@
-import { makeObservable, computed, observable, action } from "mobx"
+import { makeObservable, observable, action } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 import RootState  from "./State.js"
@@ -31,9 +31,7 @@ const Tv = observer(class Tv extends React.Component{
             RootState.challenges.get(this.cid).status !== "IN_PROGRESS"
             )
         if( noChallenge || challengeNotPlaying){
-            console.log("polling", this.cid)
             RootState.socket.poll_tv_games({}, (data) => {
-                console.log("poll received: ", data)
                 this.update_cid(data.cid)
                 RootState.socket.join_challenge(data.cid)
             })
@@ -41,7 +39,6 @@ const Tv = observer(class Tv extends React.Component{
     }
 
     componentWillUnmount(){
-        console.log("clearing Tv!")
         clearInterval(this.poller)
         this.poller = null;
     }
@@ -49,9 +46,14 @@ const Tv = observer(class Tv extends React.Component{
     render(){
         return (
             <div style={{"border":"solid"}}>
-                <h1>Observe! {this.cid} </h1>
-                <h2>{RootState.challenges.get(this.cid) ? "found game to watch!" : "no games yet"}</h2>
-                <ChallengeView challenge={RootState.challenges.get(this.cid)} />
+                <h1>TV! {this.cid} </h1>
+                {
+                    this.cid !== null ?
+                        <ChallengeView challenge={RootState.challenges.get(this.cid)} />
+                         :
+                        "Looking for a game to watch!"
+                }
+                
             </div>
         );
     }

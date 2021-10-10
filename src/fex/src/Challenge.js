@@ -1,4 +1,4 @@
-import { makeObservable, observable, autorun, action } from "mobx"
+import { makeObservable, observable, action } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 import {Amazons, AmazonsView} from "./Games/Amazons"
@@ -22,10 +22,7 @@ class Challenge {
         this.cid = cid
         this.game_name = game_name
         this.game_state = new Amazons(this, {"size": 6, "variation":0})
-        console.log("testing", game_name)
     }
-
-    _ = autorun(() => {console.log("status: ", this.status)})
 
     send_move(move){
         RootState.socket.send_move({"cid": this.cid, "move": move})
@@ -37,12 +34,9 @@ class Challenge {
     }
 
     update_challenge_information(data){
-        console.log("chall-update: ", data)
         if("status" in data){this.status = data.status}
         if("players" in data){this.players = data.players}
         if("cid" in data){this.cid = data.cid}
-        //if("status" in data){this.status = data.status}
-        //if("status" in data){this.status = data.status}
     }
 }
 
@@ -52,9 +46,8 @@ const ChallengeView = observer(({ challenge }) =>(
             challenge == null ? 
                 "Loading the game!" :
                 <div>
-                    <h1>{challenge.status}</h1>
-                    <h3>Players: {challenge.players.join(" ,")}</h3>
-                    <div>{"game of " + challenge.game_name}</div>
+                    <p>{challenge.status}</p>
+                    <p>Players: {challenge.players.join(" ,")}</p>
                     <AmazonsView challenge={challenge}/>
                 </div>
         }
