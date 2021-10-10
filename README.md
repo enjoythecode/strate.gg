@@ -39,7 +39,6 @@ In rough order of priority;
 1. Front-end refactor to MobX + React
     - Regressions:
         - Move indicators during click for Amazons
-            - Implement is_valid_move()
         - Images instead of text on the Amazons board.
     - Upgrades:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
