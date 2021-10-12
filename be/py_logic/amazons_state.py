@@ -103,7 +103,7 @@ class AmazonsState(game_state.GameState):
 
 
         self.board[int(fr[0])][int(fr[1])] = 0
-        self.board[int(to[0])][int(to[1])] = self.turn
+        self.board[int(to[0])][int(to[1])] = self.turn + 1
         self.board[int(sh[0])][int(sh[1])] = 3
 
         self.turn = (self.turn + 1) % 2

@@ -123,7 +123,7 @@ class Amazons {
             currentSelectionStep: computed,
             boardBackground: computed,
         })
-        this.turn = 1
+        this.turn = 0
         this.config = config
         this.challenge = challenge
         this.board = initializeBoard(config)
@@ -139,10 +139,10 @@ class Amazons {
     clickCell = (c) => {
         // check if it is the players turn before allowing a click
         // also checks for observers because client_turn == -1 if the client is not a player
-        if(this.turn === this.challenge.client_turn + 1 && this.challenge.status === "IN_PROGRESS"){
+        if(this.turn === this.challenge.client_turn && this.challenge.status === "IN_PROGRESS"){
             switch (this.currentSelectionStep) {
                 case "from":
-                    if(this.board[Number(c[0])][Number(c[1])] === this.turn){
+                    if(this.board[Number(c[0])][Number(c[1])] === this.turn + 1){
                         this.selection[0] = c
                     }
                     break;
@@ -215,10 +215,10 @@ class Amazons {
         let shoot_y = move.shoot[1]
 
         this.board[from_x][from_y] = 0
-        this.board[to_x][to_y] = this.turn
+        this.board[to_x][to_y] = this.turn + 1
         this.board[shoot_x][shoot_y] = 3
 
-        this.turn = 3 - this.turn
+        this.turn = (this.turn + 1) % 2
     }
 
     get selectionFrom () {return this.selection[0]}
