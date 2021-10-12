@@ -50,7 +50,6 @@ python app.py
 ## TODOs
 In rough order of priority;
 1. Add Mancala
-    - BE: Implementation
     - FE: Implementation
         - Write UI for it
         - Add a button

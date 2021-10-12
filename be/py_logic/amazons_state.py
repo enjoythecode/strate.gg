@@ -113,9 +113,6 @@ class AmazonsState(game_state.GameState):
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        if not self.status == ChallengeStatus.IN_PROGRESS:
-            return False
-
         move_arr = [v for v in move.values()]
         return move_arr in self.get_possible_moves()
 

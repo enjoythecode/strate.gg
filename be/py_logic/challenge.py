@@ -1,4 +1,5 @@
 from py_logic.amazons_state import AmazonsState
+from py_logic.mancala_state import MancalaState
 import enum
 
 class ChallengeStatus(enum.Enum):
@@ -9,7 +10,8 @@ class ChallengeStatus(enum.Enum):
     OVER_TIME = 5
 
 game_classes = {
-    "amazons": AmazonsState
+    "amazons": AmazonsState,
+    "mancala": MancalaState
 }
 
 class Challenge:
@@ -36,6 +38,7 @@ class Challenge:
 
         self.game_name = game_name
         self.state = game.create_from_config(config)
+        self.state.challenge = self
         self.players = []
         self.moves = []
         self.status = ChallengeStatus.WAITING_FOR_PLAYERS
@@ -73,6 +76,9 @@ class Challenge:
         return response
 
     def make_move(self, move, user):
+        if not self.status == ChallengeStatus.IN_PROGRESS:
+            return {"result": "error", "error": "game is not in progress"}
+
         if not self.state.is_valid_move(move):
             return {"result": "error", "error": "invalid move"}
 
