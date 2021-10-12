@@ -79,6 +79,8 @@ python app.py
 1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 
 ## Bugs!
+1. Fix: FE assumes back-end is sending `pjm` rather than turn.
+1. Fix: TV is not game-agnostic.
 1. Investigate: Why is front-end sending two join requests when `PlayPage` is loaded?
 
 ## Tech Debt!
