@@ -92,4 +92,3 @@ python app.py
 1. Game logic classes should not need to access Challenge!
 1. BE `challenge.py` should not know about what responses are being sent back! It should only return a boolean for success/error, and a potential data bundle!
 1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
-1. BE convention for keeping track of turns should not be `playerJustMoved`, it should be `turn` or similar.

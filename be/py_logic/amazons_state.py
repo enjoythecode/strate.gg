@@ -43,8 +43,8 @@ class AmazonsState(game_state.GameState):
     Assumes a square board.
     """
 
-    def __init__(self, board, pjm=2):
-        self.playerJustMoved = pjm  # At the root pretend the player just moved is player 2 - player 1 moves first
+    def __init__(self, board, turn=0):
+        self.turn = turn
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
         self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
@@ -86,29 +86,27 @@ class AmazonsState(game_state.GameState):
         return {
             "board": self.board,
             "game_size": self.game_size,
-            "turn": 2 - self.playerJustMoved,
+            "turn": self.turn,
             "turns_taken": self.number_of_turns
         }
 
     def clone(self):
         """ Create a deep clone of this game state.
         """
-        st = AmazonsState(copy.deepcopy(self.board), self.playerJustMoved)
+        st = AmazonsState(copy.deepcopy(self.board), self.turn)
         return st
 
     def make_move(self, move):
-        """ Update a state by carrying out the given move.
-            Must update playerJustMoved.
-        """
-
         fr = move["from"]
         to = move["to"]
         sh = move["shoot"]
 
-        self.playerJustMoved = 3 - self.playerJustMoved
+
         self.board[int(fr[0])][int(fr[1])] = 0
-        self.board[int(to[0])][int(to[1])] = self.playerJustMoved
+        self.board[int(to[0])][int(to[1])] = self.turn
         self.board[int(sh[0])][int(sh[1])] = 3
+
+        self.turn = (self.turn + 1) % 2
 
         self.number_of_turns += 1
 
@@ -121,7 +119,7 @@ class AmazonsState(game_state.GameState):
         """
         out = 0
         if player is None:
-            player = 3 - self.playerJustMoved
+            player = self.turn + 1
 
         queen_moves = self.get_possible_queen_moves(player)
 
@@ -144,7 +142,7 @@ class AmazonsState(game_state.GameState):
         """
         out = []
         if player is None:
-            player = 3 - self.playerJustMoved
+            player = self.turn + 1
 
         queen_moves = self.get_possible_queen_moves(player)
         for q in queen_moves:
@@ -154,7 +152,7 @@ class AmazonsState(game_state.GameState):
     def get_possible_queen_moves(self, player=None):
         out = []
         if player is None:
-            player = 3 - self.playerJustMoved
+            player = self.turn + 1
         for q_x in range(self.game_size):
             for q_y in range(self.game_size):
                 if self.board[q_x][q_y] == player:
@@ -165,7 +163,7 @@ class AmazonsState(game_state.GameState):
 
     def count_possible_queen_moves(self, player=None):
         if player is None:
-            player = 3 - self.playerJustMoved
+            player = self.turn + 1
         out = 0
 
         for q_x in range(self.game_size):
@@ -258,7 +256,7 @@ class AmazonsState(game_state.GameState):
         p1 = self.count_possible_queen_moves(1)
         p2 = self.count_possible_queen_moves(2)
         if p1 == 0 and p2 == 0:
-            return self.playerJustMoved  # player who just moved wins
+            return (self.turn - 1) % 2  # player who just moved wins
         elif p1 == 0: # player 2 won
             return 2
         elif p2 == 0: # player 1 won

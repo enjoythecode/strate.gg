@@ -87,7 +87,7 @@ class Challenge:
         if not self.state.is_valid_move(move):
             return {"result": "error", "error": "invalid move"}
 
-        if user.sid in self.players and self.state.playerJustMoved != self.players.index(user.sid) + 1:
+        if user.sid in self.players and self.state.turn == self.players.index(user.sid):
             self.state.make_move(move)
         else:
             return {"result": "error", "error": "not your turn"}
