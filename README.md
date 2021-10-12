@@ -19,26 +19,36 @@ src
 └── app.py        => Flask server lives here
 ```
 
-## Running
+## Running the Development Server
+### Front-end
+Install requirements
+```bash
+cd fe
+npm install
+```
 
-### Start Virtual Environment
-`python -m venv venv`
+```bash
+cd fe # if not already in
+npm run start
+```
 
-### Install requirements
-`pip install -r requirements.txt`
+### Back-end
+Start venv and install requirements
 
-### Run Development Server
-Mac/Linux:
-`dev_server.sh`
+```bash
+python -m venv venv
+source ./venv/bin/activate
+pip install -r requirements.txt
+```
 
-Windows PowerShell
-`dev_server_win.ps1`
+Start the server
+```bash
+cd be
+python app.py
+```
 
 ## TODOs
 In rough order of priority;
-1. Front-end refactor to MobX + React
-    - Merge fex into the main branch
-        - update dev server script to launch the FE server as well
 1. Add Mancala
     - BE: Implementation
     - FE: Implementation
