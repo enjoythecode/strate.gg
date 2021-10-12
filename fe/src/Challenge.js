@@ -1,8 +1,20 @@
 import { makeObservable, observable, action, computed } from "mobx"
-import { observer } from "mobx-react"
-import React from "react"
 import {Amazons, AmazonsView} from "./Games/Amazons"
+import {Mancala, MancalaView} from "./Games/Mancala"
+import { observer } from "mobx-react"
 import RootState  from "./State.js"
+import React from "react"
+
+const game_name_to_state_class = {
+    "amazons": Amazons,
+    "mancala": Mancala
+}
+
+const game_name_to_view_component = {
+    "amazons": AmazonsView,
+    "mancala": MancalaView
+}
+
 
 class Challenge {
     game_name = ""
@@ -12,7 +24,7 @@ class Challenge {
     cid = ""
     moves = []
     
-    constructor(cid, game_name){
+    constructor(data){
         makeObservable(this, {
             game_state: observable,
             players: observable,
@@ -20,9 +32,10 @@ class Challenge {
             update_challenge_information: action,
             client_turn: computed
         })
-        this.cid = cid
-        this.game_name = game_name
-        this.game_state = new Amazons(this, {"size": 6, "variation":0})
+        this.cid = data.cid
+        this.game_name = data.game_name
+        this.game_state = new game_name_to_state_class[this.game_name](this, data.config)
+        this.ViewComponent = game_name_to_view_component[this.game_name]
     }
 
     send_move(move){
@@ -53,7 +66,7 @@ const ChallengeView = observer(({ challenge }) =>(
                 <div>
                     <p>{challenge.status}</p>
                     <p>Players: {challenge.players.join(", ")}</p>
-                    <AmazonsView challenge={challenge}/>
+                    <challenge.ViewComponent challenge={challenge}/>
                 </div>
         }
     </div>

@@ -18,12 +18,12 @@ class State {
 
     set_socket = (sckt) => {this.socket = sckt}
     
-    
+
     update_challenge_information = (data) => {
         let cid = data.cid
         let chs = this.challenges
 
-        if(!chs.has(cid)){chs.set(cid, new Challenge(cid,"amazons"))}
+        if(!chs.has(cid)){chs.set(cid, new Challenge(data))}
         chs.get(cid).update_challenge_information(data)
     }
 

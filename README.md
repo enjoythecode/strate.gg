@@ -53,7 +53,6 @@ python app.py
     - FE: Implementation
         - Write the most rudimentary UI possible
         - Add a button in /index to create a game for it
-        - Ensure that all non-game components are game-agnostic!
         - Write proper UI for the game
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. Add time controls
