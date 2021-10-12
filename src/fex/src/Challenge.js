@@ -1,4 +1,4 @@
-import { makeObservable, observable, action } from "mobx"
+import { makeObservable, observable, action, computed } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 import {Amazons, AmazonsView} from "./Games/Amazons"
@@ -18,6 +18,7 @@ class Challenge {
             players: observable,
             status: observable,
             update_challenge_information: action,
+            client_turn: computed
         })
         this.cid = cid
         this.game_name = game_name
@@ -37,6 +38,10 @@ class Challenge {
         if("status" in data){this.status = data.status}
         if("players" in data){this.players = data.players}
         if("cid" in data){this.cid = data.cid}
+    }
+
+    get client_turn(){ // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...) -1 if not a player
+        return this.players.findIndex((player) => player == RootState.socket.socket_id)
     }
 }
 

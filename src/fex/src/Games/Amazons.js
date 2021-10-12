@@ -138,31 +138,35 @@ class Amazons {
     }
 
     clickCell = (c) => {
-        switch (this.currentSelectionStep) {
-            case "from":
-                if(this.board[Number(c[0])][Number(c[1])] === this.turn){
-                    this.selection[0] = c
-                }
-                break;
-            case "to":
-                if(this.cell_can_reach(this.selectionFrom, c)){
-                    this.selection[1] = c
-                }else{
-                    this.resetSelection()
-                }
-                break;
-            case "shoot":
-                if(this.cell_can_reach(this.selectionTo, c, this.selectionFrom)){
-                    this.selection[2] = c
-                    this.challenge.send_move(this.formatMoveForSend())
-                    this.selection = [null, null, null]
-                }else{
-                    this.resetSelection()
-                }
-                break;
-            default:
-                break;
-        }
+        // check if it is the players turn before allowing a click
+        // also checks for observers because client_turn == -1 if the client is not a player
+        if(this.turn === this.challenge.client_turn + 1){
+            switch (this.currentSelectionStep) {
+                case "from":
+                    if(this.board[Number(c[0])][Number(c[1])] === this.turn){
+                        this.selection[0] = c
+                    }
+                    break;
+                case "to":
+                    if(this.cell_can_reach(this.selectionFrom, c)){
+                        this.selection[1] = c
+                    }else{
+                        this.resetSelection()
+                    }
+                    break;
+                case "shoot":
+                    if(this.cell_can_reach(this.selectionTo, c, this.selectionFrom)){
+                        this.selection[2] = c
+                        this.challenge.send_move(this.formatMoveForSend())
+                        this.selection = [null, null, null]
+                    }else{
+                        this.resetSelection()
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } 
     }
 
     cell_can_reach = (from, to, ignore) => {

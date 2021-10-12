@@ -38,13 +38,18 @@ Windows PowerShell
 In rough order of priority;
 1. Front-end refactor to MobX + React
     - Bugs:
-        - Do not allow clicking for moves when it is not the players turn or they are not playing!
+        - Look into disconnect not being handled correctly.
     - Structural Changes:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
     - Merge fex into the main branch
         - Move fex to a temporary folder, replacing old static files
         - update dev server script to launch the FE server as well
 1. Add Mancala
+    - BE: Implementation
+    - FE: Implementation
+        - Write UI for it
+        - Add a button
+        - Ensure that all non-game elements are game-agnostic!
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. FE: Display game status, player IDs better
 1. Add time control

@@ -4,6 +4,7 @@ import { makeObservable, observable, action } from "mobx"
 
 class Socket {
 
+    socket_id = ""
     active_users = 0
     connection_status = "offline"
 
@@ -21,16 +22,16 @@ class Socket {
         this.io = null
     }
 
-    set_socket_id = (sid) => {this.sid = sid}
+    set_socket_id = (sid) => {this.socket_id = sid}
     set_active_users = (new_active_users) => {this.active_users = new_active_users}
     set_connection_status = (new_connection_status) => {this.connection_status = new_connection_status}
-
+    
     connect = () => {
         this.io = io("127.0.0.1:8080");
         // Pondering: Can this line ever be slow enough (or light travel fast enough) where the "connect" event happens before it is binded?
         // Answer: very, very, very unlikely. It is both light, and one is traveling (at least) hundreds of miles.
         this.bind_socket_listeners() 
-        RootState.set_connection_status("connecting")
+        this.set_connection_status("connecting")
     }
 
     bind_socket_listeners = () => {
