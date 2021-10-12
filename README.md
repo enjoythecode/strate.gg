@@ -47,20 +47,23 @@ cd be
 python app.py
 ```
 
-## TODOs
+## Do-List
 In rough order of priority;
 1. Add Mancala
     - FE: Implementation
-        - Write UI for it
-        - Add a button
-        - Ensure that all non-game elements are game-agnostic!
+        - Write the most rudimentary UI possible
+        - Add a button in /index to create a game for it
+        - Ensure that all non-game components are game-agnostic!
+        - Write proper UI for the game
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
+1. Make lessons learned implementing a new game into roadmap items for FE and BE to improve scalability of adding new games!
 1. FE: Display game status, player IDs better
+    - Current turn indicator (with some sort of combination of background color + bold?)
 1. Add time control
     - BE: Planning-- how do we architecture things? How do we account for network latency?
     - FE: Display time, add configuration of time controls when creating a game
 1. Add option to resign
-1. Bug: Why is front-end sending two join requests when `PlayPage` is loaded?
+1. Investigate bug: Why is front-end sending two join requests when `PlayPage` is loaded?
 1. FE: Add option to request/suggest undo of the last move
 1. Find a good name for the project
     - Update GitHub project name
@@ -72,8 +75,8 @@ In rough order of priority;
 1. Rudimentary DevOps
     - Script to spawn an AWS EC2 instance
     - Static IP for the website, put that in DNS
-1. Add a game-specific chat
-1. Retry connecting upon disconnect
+1. Add a game-lobby chat
+1. FE: Retry connecting upon disconnect
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance
-1. FE-TV: Add delay to disposing of games when the game is over
+1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
