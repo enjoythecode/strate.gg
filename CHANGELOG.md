@@ -1,3 +1,5 @@
+# 2021-10-12
+- BE responses are now better suited for a game-agnostic network interface.
 # 2021-10-11
 - You can no longer click on an Amazons board for a move if it isn't your turn or you are just observing.
 - Fix bug where player could move in a game that was not in progress!

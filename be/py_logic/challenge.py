@@ -43,6 +43,7 @@ class Challenge:
         self.moves = []
         self.status = ChallengeStatus.WAITING_FOR_PLAYERS
         self.cid = cid
+        self.config = config
 
         response = {
             "result" : "success",
@@ -50,13 +51,14 @@ class Challenge:
             "cid": cid,
             "players": self.players,
             "status": self.status.name,
-            "game": self.state.game_data()
+            "game": self.state.game_data(),
+            "config": self.config,
         }
         return response
 
     def join_player(self, user):
         if not self.status == ChallengeStatus.WAITING_FOR_PLAYERS:
-            return {"status": "error", "error": "Game is not accepting players!"}
+            return {"result": "error", "error": "Game is not accepting players!"}
         if len(self.players) < self.state.get_max_no_players() and not user.sid in self.players:
             self.players.append(user.sid)
             user.games_playing.append(self.cid)
@@ -71,7 +73,10 @@ class Challenge:
             "game": self.state.game_data(),
             "players": self.players,
             "status": self.status.name,
-            "cid": self.cid
+            "cid": self.cid,
+            "config": self.config,
+            "game_name": self.game_name,
+            "result": "success"
         }
         return response
 

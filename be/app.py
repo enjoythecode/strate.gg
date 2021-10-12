@@ -84,7 +84,10 @@ def game_join(payload):
     if cid and cid in challenges:
         c = challenges[cid]
         response = c.join_player(user)
-        payload = {"result": "success", "info": response}
+        if response["result"] == "success":
+            payload = {"result": "success", "info": response}
+        else:
+            return response
         # avoid sending twice by first emitting, and then sending the room
         sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
         sckt.join_room(c.get_socket_room_name())
