@@ -37,8 +37,6 @@ Windows PowerShell
 ## TODOs
 In rough order of priority;
 1. Front-end refactor to MobX + React
-    - Bugs:
-        - Look into disconnect not being handled correctly.
     - Structural Changes:
         - Upgrade current game UI architecture for games to be composed of board and pieces on arbitrary locations (that are relative to the container!)
     - Merge fex into the main branch
@@ -72,3 +70,4 @@ In rough order of priority;
 1. Retry connecting upon disconnect
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance
 1. FE-TV: Add delay to disposing of games when the game is over
+1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.

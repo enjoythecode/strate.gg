@@ -52,9 +52,12 @@ class Challenge:
         return response
 
     def join_player(self, user):
+        if not self.status == ChallengeStatus.WAITING_FOR_PLAYERS:
+            return {"status": "error", "error": "Game is not accepting players!"}
         if len(self.players) < self.state.get_max_no_players() and not user.sid in self.players:
             self.players.append(user.sid)
             user.games_playing.append(self.cid)
+            print("\nGAMES PLAYING:", user.sid, user.games_playing)
         else:
             user.games_observing.append(self.cid)
 
