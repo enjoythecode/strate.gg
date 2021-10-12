@@ -1,11 +1,29 @@
 import io from 'socket.io-client'
 import RootState  from "./State.js"
+import { makeObservable, observable, action } from "mobx"
 
 class Socket {
 
+    active_users = 0
+    connection_status = "offline"
+
     constructor() {
+        makeObservable(this, {
+            socket_id: observable,
+            set_socket_id: action,
+
+            active_users: observable,
+            set_active_users: action,
+            
+            connection_status: observable,
+            set_connection_status: action,
+        })
         this.io = null
     }
+
+    set_socket_id = (sid) => {this.sid = sid}
+    set_active_users = (new_active_users) => {this.active_users = new_active_users}
+    set_connection_status = (new_connection_status) => {this.connection_status = new_connection_status}
 
     connect = () => {
         this.io = io("127.0.0.1:8080");
@@ -17,15 +35,16 @@ class Socket {
 
     bind_socket_listeners = () => {
         this.io.on("connect", (data) => {
-            RootState.set_connection_status("online")
+            this.set_connection_status("online")
+            this.set_socket_id(this.io.id)
         })
 
         this.io.on("disconnect", (data) => {
-            RootState.set_connection_status("offline")
+            this.set_connection_status("offline")
         })
 
         this.io.on('connection-info-update', (data) => {
-            RootState.set_active_users(data.users)
+            this.set_active_users(data.users)
         });
 
         this.io.on("game-update-move", (data) => {
