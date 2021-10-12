@@ -11,8 +11,8 @@ starting_board = {
 
 class MancalaState(game_state.GameState):
 
-    def __init__(self, board, pjm = 2):
-        self.playerJustMoved = pjm  # At the root pretend the player just moved is player 2 - player 1 moves first
+    def __init__(self, board, turn = 0):
+        self.turn = 0 
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
         self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
@@ -34,44 +34,50 @@ class MancalaState(game_state.GameState):
         return {
             "board": self.board,
             "game_size": self.game_size,
-            "turn": 3 - self.playerJustMoved,
+            "turn": self.turn,
             "turns_taken": self.number_of_turns
         }
 
     def clone(self):
         """ Create a deep clone of this game state.
         """
-        return MancalaState(copy.deepcopy(self.board), self.playerJustMoved)
+        return MancalaState(copy.deepcopy(self.board), self.turn)
 
     def make_move(self, move):
         pit_no = move["pit"]
-        self.board["pits"][3 - self.playerJustMoved][pit_no] = 0
-
         ptr = pit_no
+
+        seeds = self.board["pits"][self.turn][ptr]
+        self.board["pits"][self.turn][ptr] = 0
+
         while seeds:
+            print(seeds)
             ptr += 1
             if ptr == 6: # self-bank
-                self.board["banks"][3 - self.playerJustMoved] += 1
+                self.board["banks"][self.turn] += 1
             elif ptr == 13: # opponent-bank
                 ptr = 0
                 continue
             else:
-                side = (3 - self.playerJustMoved + (ptr // 6)) % 2
+                side = (self.turn + (ptr // 6)) % 2
                 self.board["pits"][side][ptr%6-(1 if ptr > 6 else 0)] += 1
             seeds -= 1
         
         # if move ended in an empty on our side, capture!
         # TODO: other rule-sets have this at even OR empty
-        if ptr < 6 and self.pits[self.curr_player][ptr] == 1: 
-            captured = self.pits[self.curr_player][ptr]
-            captured += self.pits[self.next_player][5-ptr]
-            self.board["banks"][self.curr_player] += captured
+        if ptr < 6 and self.board["pits"][self.turn][ptr] == 1: 
+            captured = self.board["pits"][self.turn][ptr]
+            captured += self.board["pits"][(self.turn - 1) % 2][5-ptr]
+            self.board["banks"][self.turn] += captured
 
-            self.board["pits"][self.curr_player][ptr] = 0
-            self.board["pits"][self.next_player][5-ptr] = 0
+            self.board["pits"][self.turn][ptr] = 0
+            self.board["pits"][(self.turn - 1) % 2][5-ptr] = 0
 
         if not ptr == 6: # if move didn't end in self-bank, turn moves to the next player
-            self.turn = 3 - self.playerJustMoved
+            self.turn = (self.turn + 1) % 2
+
+        self.number_of_turns += 1
+        print(self)
 
     def is_valid_move(self, move):
         if not "pit" in move:
@@ -80,7 +86,7 @@ class MancalaState(game_state.GameState):
         if not (0 <= pit_no <= 5):
             return False
         
-        seeds = self.board["pits"][3 - self.playerJustMoved][pit_no]
+        seeds = self.board["pits"][self.turn][pit_no]
         if seeds == 0:
             return False
         return True
@@ -93,11 +99,11 @@ class MancalaState(game_state.GameState):
         where game_is_over is a bool representing if the game is over,
         and winner is either None (if game_is_over == False), or the number of the player who won, or -1 if tie.
         '''
-        if sum(self.pits[self.curr_player]) > 0:
+        if sum(self.board["pits"][self.turn]) > 0:
             return False, None
         else:
-            scores = self.banks
-            scores[self.curr_player] += sum(self.pits[self.next_player]) # curr player gets all the seeds in their opponents pits
+            scores = self.board["banks"]
+            scores[self.turn] += sum(self.board["pits"][(self.turn - 1) % 2]) # curr player gets all the seeds in their opponents pits
             winner = -1 # default to a tie
             if scores[0] > scores[1]:
                 winner = 0

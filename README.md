@@ -50,7 +50,6 @@ python app.py
 # Do-List
 ## Additions!
 1. Add Mancala
-    - BE: Fix rudimentary implementation bugs
     - FE: Implementation
         - Write proper UI for the game
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing

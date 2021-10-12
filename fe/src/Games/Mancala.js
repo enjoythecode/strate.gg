@@ -30,6 +30,7 @@ class Mancala {
     clickPit = (p) => {
         // check if it is the players turn before allowing a click
         // also checks for observers because client_turn == -1 if the client is not a player
+        // TODO
         //if(this.turn === this.challenge.client_turn + 1 && this.challenge.status === "IN_PROGRESS"){
             this.challenge.send_move({"pit": p})
         //} 
@@ -39,7 +40,40 @@ class Mancala {
         // TODO: implement
         console.log("TODO: implement processing moves!", move)
 
-        this.turn = 3 - this.turn
+        let ptr = move["pit"]
+        console.log(this.board)
+        let seeds = this.board["pits"][this.turn][ptr]
+
+        this.board["pits"][this.turn][ptr] = 0
+        while(seeds){
+            ptr += 1
+            if(ptr === 6){
+                this.board["banks"][this.turn] += 1
+            }else if(ptr === 13){
+                ptr = 0
+            }else{
+                let side = (this.turn + Math.floor(ptr / 6)) % 2
+                this.board["pits"][side][ptr%6-(ptr > 6 ? 1 : 0)] += 1
+            }
+            seeds -= 1
+        }
+
+        // Capture on landing in an empty pit
+        if(ptr < 6 && this.board["pits"][this.turn][ptr] == 1){
+            let captured = this.board["pits"][this.turn][ptr]
+            
+            captured += this.board["pits"][(this.turn + 1) % 2][5-ptr]
+            this.board["banks"][this.turn] += captured
+
+            this.board["pits"][this.turn][ptr] = 0
+            this.board["pits"][(this.turn + 1) % 2][5-ptr] = 0
+        }
+
+        if (! ptr === 6){ // if move didn't end in self-bank, turn moves to the next player
+            this.turn = (this.turn + 1) % 2
+        }
+
+        this.turn = (this.turn + 1) % 2
     }
 }
 

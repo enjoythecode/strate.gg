@@ -4,6 +4,7 @@
 - You can now create a Mancala game! (with no way to play it)
 - Created rudimentary UI for Mancala for testing.
 - Code style improvement: BE now keeps track of `turn`, rather than `playerJustMoved`
+- Basic Mancala play establish (lacking just a UI)
 # 2021-10-11
 - You can no longer click on an Amazons board for a move if it isn't your turn or you are just observing.
 - Fix bug where player could move in a game that was not in progress!
