@@ -11,8 +11,8 @@ starting_board = {
 
 class MancalaState(game_state.GameState):
 
-    def __init__(self, board, turn = 1):
-        self.turn = turn  # At the root pretend the player just moved is player 2 - player 1 moves first
+    def __init__(self, board, pjm = 2):
+        self.playerJustMoved = pjm  # At the root pretend the player just moved is player 2 - player 1 moves first
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
         self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
@@ -34,7 +34,7 @@ class MancalaState(game_state.GameState):
         return {
             "board": self.board,
             "game_size": self.game_size,
-            "turn": self.turn,
+            "turn": 3 - self.playerJustMoved,
             "turns_taken": self.number_of_turns
         }
 
@@ -44,18 +44,19 @@ class MancalaState(game_state.GameState):
         return MancalaState(copy.deepcopy(self.board), self.playerJustMoved)
 
     def make_move(self, move):
-        self.board["pits"][self.turn][pit_no] = 0
+        pit_no = move["pit"]
+        self.board["pits"][3 - self.playerJustMoved][pit_no] = 0
 
         ptr = pit_no
         while seeds:
             ptr += 1
             if ptr == 6: # self-bank
-                self.board["banks"][self.turn] += 1
+                self.board["banks"][3 - self.playerJustMoved] += 1
             elif ptr == 13: # opponent-bank
                 ptr = 0
                 continue
             else:
-                side = (self.turn + (ptr // 6)) % 2
+                side = (3 - self.playerJustMoved + (ptr // 6)) % 2
                 self.board["pits"][side][ptr%6-(1 if ptr > 6 else 0)] += 1
             seeds -= 1
         
@@ -70,14 +71,16 @@ class MancalaState(game_state.GameState):
             self.board["pits"][self.next_player][5-ptr] = 0
 
         if not ptr == 6: # if move didn't end in self-bank, turn moves to the next player
-            self.turn = 3 - self.turn
+            self.turn = 3 - self.playerJustMoved
 
     def is_valid_move(self, move):
+        if not "pit" in move:
+            return False
         pit_no = move["pit"]
         if not (0 <= pit_no <= 5):
             return False
         
-        seeds = self.board["pits"][self.turn][pit_no]
+        seeds = self.board["pits"][3 - self.playerJustMoved][pit_no]
         if seeds == 0:
             return False
         return True
