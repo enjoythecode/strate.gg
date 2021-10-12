@@ -41,7 +41,7 @@ class Challenge {
     }
 
     get client_turn(){ // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...) -1 if not a player
-        return this.players.findIndex((player) => player == RootState.socket.socket_id)
+        return this.players.findIndex((player) => player === RootState.socket.socket_id)
     }
 }
 

@@ -35,7 +35,6 @@ const backgroundCellCss = (color, indicatorContent, queenOver) => {
 
     if(indicatorContent > 0 || (indicatorContent === -1 && queenOver)){
         if(queenOver){
-            console.log("radial-gradient(circle at 50% 50%," + backgroundColor + " 80%," + indicatorColor + " 80%)")
             return {
                 background: "radial-gradient(circle at 50% 50%," + backgroundColor + " 80%," + indicatorColor + " 80%)"
             }
@@ -140,7 +139,7 @@ class Amazons {
     clickCell = (c) => {
         // check if it is the players turn before allowing a click
         // also checks for observers because client_turn == -1 if the client is not a player
-        if(this.turn === this.challenge.client_turn + 1){
+        if(this.turn === this.challenge.client_turn + 1 && this.challenge.status === "IN_PROGRESS"){
             switch (this.currentSelectionStep) {
                 case "from":
                     if(this.board[Number(c[0])][Number(c[1])] === this.turn){

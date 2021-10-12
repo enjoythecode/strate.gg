@@ -1,5 +1,6 @@
 # 2021-10-11
 - You can no longer click on an Amazons board for a move if it isn't your turn or you are just observing.
+- Fix bug where player could move in a game that was not in progress!
 # 2021-10-09
 - Major `fex` refactor progress: TV prototype works!
     - Back-end API for polling for active games to watch
