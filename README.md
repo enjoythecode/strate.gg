@@ -90,3 +90,7 @@ python app.py
 1. `AmazonView` should not make any calls to the Challenge store; it should receive the necessary "is-clickable + client player no #" information as a prop and otherwise be de-coupled.
 1. CSS properties should not live in JavaScript/React, they should be in a separate CSS sheet that UI accesses by assigning relevant classes.
 1. camelCase (or some other specific code style) should be determined to be the style to use, and this should be enforced!
+1. Define an interface for game logic classes (?) and view components (definitely)
+1. Game logic classes should not need to access Challenge!
+1. BE `challenge.py` should not know about what responses are being sent back! It should only return a boolean for success/error, and a potential data bundle!
+1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
