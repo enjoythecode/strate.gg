@@ -60,7 +60,7 @@ const Tv = observer(class Tv extends React.Component{
 
     render(){
         return (
-            <div style={{"border":"solid"}}>
+            <div style={{"border":"solid", "display": "block"}}>
                 <h1>TV! {this.cid} </h1>
                 {
                     this.cid !== null ?

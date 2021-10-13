@@ -48,7 +48,7 @@ python app.py
 ```
 
 # Do-List
-## Additions!
+## Adding New Stuff!
 1. Add Mancala
     - FE: Implementation
         - Show pebbles on `MancalaView`
@@ -69,21 +69,35 @@ python app.py
     - Static IP for the website, put that in DNS
 1. Add a game-lobby chat
 
-## Improvements!
+## Improving Existing Stuff!
+1. FE: Make the website somewhat presentable
+    - Create a navigation bar
+    - Make play page width adjust to the window size
+        - Display game status and player IDs better
+        - Current turn indicator + an indicator for what side the client is playing
+    - TV should play a game from memory when no live games are available
+        - Design a rudimentary format for storing games
+        - Create example games using AI (or local play)
+        - Serve this information from the BE when no games are available
+        - Create a component that wraps the game board and view and sends moves from this example game at a delay
+            - (this will require that the View component is decoupled from Challenge, see "Tech Debt" section)
+    - Put TV games in create-game boxes
+        - Add a parameter to the TV polling backend for the game type
+        - Make the create-game box a component that is created with a for loop in `App.js`
+        - Glue all of these together!
+    - Create a sticky footer with (c), link to GitHub project, my personal website.
 1. Observe games by default.
     - Add a button to join game, rather than on-load.
-1. FE: Display game status, player IDs better
-    - Current turn indicator (with some sort of combination of background color + bold?)
-    1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
+1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
 1. FE: Retry connecting upon disconnect
 1. FE: Design and use a nice-looking graphic for the Mancala board and pebbles.
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance
 1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 
-## Bugs!
+## Squashing Bugs!
 1. Investigate: Why is front-end sending two join requests when `PlayPage` is loaded?
 
-## Tech Debt!
+## Paying off Tech Debt!
 1. Completely separate Amazons game logic and UI representation in `Amazons.js`
     1. Current clicks should be tracked in the view component, not the game logic class
 1. `AmazonView` should not make any calls to the Challenge store; it should receive the necessary "is-clickable + client player no #" information as a prop and otherwise be de-coupled.

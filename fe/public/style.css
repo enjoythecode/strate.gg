@@ -1,6 +1,37 @@
 body{
-    background-color: lightgray;
+    background-color: #eee;
 }
+
+h2{
+    margin: 5px;
+}
+
+#challenge-create-box-container{
+    margin: 2em auto 2em auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 300px);
+    grid-template-rows: auto;
+    grid-column-gap: 10px;
+}
+
+.challenge-create-box{
+    background-color: #dedede;
+    aspect-ratio: 1 / 1;
+    text-align: center;
+
+    border: #aaa solid 0.5px;
+    border-radius: 3px;
+
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+.challenge-create-box:hover{
+    box-shadow: 0 0 6px #222;
+}
+
 
 .mancala-board{
     aspect-ratio: 3 / 1;
