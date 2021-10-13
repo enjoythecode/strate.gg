@@ -1,0 +1,104 @@
+body{
+    background-color: lightgray;
+}
+
+.mancala-board{
+    aspect-ratio: 3 / 1;
+    /* keeping this ratio symmetric to aspect-ratio allows for the borders to be rounded properly. */
+    border-radius: 5% / 15%; 
+    background-color: #88603D;
+    width: 100%;
+    position: relative;
+}
+
+
+.mancala-bank-l{
+    height: 80%;
+    background-color: #BA8E4A;
+    width: 10%;
+    border-radius: 30% / 10%;
+    position: absolute;
+    left: 3%;
+    top: 10%;
+}
+
+.mancala-bank-r{
+    height: 80%;
+    background-color: #BA8E4A;
+    width: 10%;
+    border-radius: 30% / 10%;
+    position: absolute;
+    right: 3%;
+    top: 10%;
+}
+.mancala-pit{
+    height: 30%;
+    background-color: #BA8E4A;
+    /*box-shadow: 1px 1px green ;*/
+    width: 10%;
+    border-radius: 50%;
+    position: absolute;
+}
+.mancala-pit-d-1{
+    left: 15%;
+    bottom: 10%;
+}
+.mancala-pit-d-2{
+    left: 27%;
+    bottom: 10%;
+}
+.mancala-pit-d-3{
+    left: 39%;
+    bottom: 10%;
+}
+.mancala-pit-d-4{
+    left: 51%;
+    bottom: 10%;
+}
+.mancala-pit-d-5{
+    left: 63%;
+    bottom: 10%;
+}
+.mancala-pit-d-6{
+    left: 75%;
+    bottom: 10%;
+}
+
+.mancala-pit-u-1{
+    left: 15%;
+    top: 10%;
+}
+.mancala-pit-u-2{
+    left: 27%;
+    top: 10%;
+}
+.mancala-pit-u-3{
+    left: 39%;
+    top: 10%;
+}
+.mancala-pit-u-4{
+    left: 51%;
+    top: 10%;
+}
+.mancala-pit-u-5{
+    left: 63%;
+    top: 10%;
+}
+.mancala-pit-u-6{
+    left: 75%;
+    top: 10%;
+}
+
+.mancala-pebble{
+    height: 7.5%;
+    background-color: skyblue;
+    /*box-shadow: 1px 1px green ;*/
+    width: 2.5%;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.mancala-pebble-1{
+    top:50%;
+    left:50%;
+}

@@ -15,6 +15,27 @@ RootState.socket.connect()
 
 ReactDOM.render(
   <React.StrictMode>
+
+  <div class="mancala-board">
+    <div class="mancala-pit mancala-pit-d-1"></div>
+    <div class="mancala-pit mancala-pit-d-2"></div>
+    <div class="mancala-pit mancala-pit-d-3"></div>
+    <div class="mancala-pit mancala-pit-d-4"></div>
+    <div class="mancala-pit mancala-pit-d-5"></div>
+    <div class="mancala-pit mancala-pit-d-6"></div>
+    <div class="mancala-bank-r"></div>
+
+    <div class="mancala-pit mancala-pit-u-1"></div>
+    <div class="mancala-pit mancala-pit-u-2"></div>
+    <div class="mancala-pit mancala-pit-u-3"></div>
+    <div class="mancala-pit mancala-pit-u-4"></div>
+    <div class="mancala-pit mancala-pit-u-5"></div>
+    <div class="mancala-pit mancala-pit-u-6"></div>
+    <div class="mancala-bank-l"></div>
+    <div class="mancala-pebble-container">
+        <div class="mancala-pebble mancala-pebble-1"></div>
+    </div>
+  </div>
     <Router>
       <Switch>
         <Route path="/play/:gameName">
@@ -26,6 +47,7 @@ ReactDOM.render(
       </Switch>
     </Router>
     <ConnectionWidget/>
+
 
   </React.StrictMode>,
   document.getElementById('root')
