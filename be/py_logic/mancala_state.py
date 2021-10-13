@@ -1,13 +1,17 @@
 from py_logic import game_state
 import copy
 
-starting_board = {
-    "pits": [
-        [4, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 4]
-    ],
-    "banks": [0, 0]
-}
+starting_board = [
+    4, 4, 4, 4, 4, 4, 0,
+    4, 4, 4, 4, 4, 4, 0
+]
+
+###### INDICES MAPPING TO BOARD ########
+# P2:  13, 12, 11, 10, 9, 8, 7
+# P1:       0,  1,  2, 3, 4, 5, 6,
+
+
+BANKS = [6, 13] # bank indices
 
 class MancalaState(game_state.GameState):
 
@@ -44,82 +48,58 @@ class MancalaState(game_state.GameState):
         return MancalaState(copy.deepcopy(self.board), self.turn)
 
     def make_move(self, move):
-        pit_no = move["pit"]
-        ptr = pit_no
+        ptr = move["pit"] + self.turn * 7
 
-        seeds = self.board["pits"][self.turn][ptr]
-        self.board["pits"][self.turn][ptr] = 0
+        seeds = self.board[ptr]
+        this_plyr = self.turn
+        next_plyr = (this_plyr + 1) % 2
 
+        self.board[ptr] = 0
         while seeds:
-            print(seeds)
             ptr += 1
-            if ptr == 6: # self-bank
-                self.board["banks"][self.turn] += 1
-            elif ptr == 13: # opponent-bank
-                ptr = 0
+            ptr = ptr % 14 # wrap around the board!
+
+            if ptr == BANKS[next_plyr]: # rival bank
                 continue
             else:
-                side = (self.turn + (ptr // 6)) % 2
-                self.board["pits"][side][ptr%6-(1 if ptr > 6 else 0)] += 1
-            seeds -= 1
+                self.board[ptr] += 1
+                seeds -=1
+
+        # check for capture 
+        # (ruleset: capture happens when landing on empty pit on friendly side)
+        if 0 <= ptr - 7 * self.turn <= 5 and self.board[ptr] == 1:
+            capture = 0
+            for i in [ptr, 12 - ptr]:
+                print("capture i", i)
+                capture += self.board[i]
+                self.board[i] = 0
+            self.board[BANKS[self.turn]] += capture
         
-        # if move ended in an empty on our side, capture!
-        # TODO: other rule-sets have this at even OR empty
-        if ptr < 6 and self.board["pits"][self.turn][ptr] == 1: 
-            captured = self.board["pits"][self.turn][ptr]
-            captured += self.board["pits"][(self.turn - 1) % 2][5-ptr]
-            self.board["banks"][self.turn] += captured
-
-            self.board["pits"][self.turn][ptr] = 0
-            self.board["pits"][(self.turn - 1) % 2][5-ptr] = 0
-
-        if not ptr == 6: # if move didn't end in self-bank, turn moves to the next player
-            self.turn = (self.turn + 1) % 2
+        # advance the round to the next player if landed outside self-bank.
+        if not ptr == BANKS[self.turn]: 
+            self.turn = next_plyr
 
         self.number_of_turns += 1
-        print(self)
 
     def is_valid_move(self, move):
         if not "pit" in move:
             return False
-        pit_no = move["pit"]
-        if not (0 <= pit_no <= 5):
+
+        # it should be a friendly pit
+        if not (0 <= move["pit"] <= 5):
             return False
         
-        seeds = self.board["pits"][self.turn][pit_no]
-        if seeds == 0:
+        # pit must not be empty
+        if self.board[move["pit"] + 7 * self.turn] == 0:
             return False
+
         return True
 
-    # TODO: add the sweeping logic to make_move
-    # TODO: call is_game_over at the end of all moves in all games?!
     def is_game_over(self):
-        '''
-        Return (game_is_over, winner)
-        where game_is_over is a bool representing if the game is over,
-        and winner is either None (if game_is_over == False), or the number of the player who won, or -1 if tie.
-        '''
-        if sum(self.board["pits"][self.turn]) > 0:
-            return False, None
-        else:
-            scores = self.board["banks"]
-            scores[self.turn] += sum(self.board["pits"][(self.turn - 1) % 2]) # curr player gets all the seeds in their opponents pits
-            winner = -1 # default to a tie
-            if scores[0] > scores[1]:
-                winner = 0
-            elif scores[0] < scores[1]:
-                winner = 1
-            return True, winner
+        pass
+        # TODO implement
+        # TODO: add the sweeping logic to make_move
+        # TODO: call is_game_over at the end of all moves in all games?!
 
     def __repr__(self): # string representation of the board from the perspective of P0
-        # TODO improve padding for the banks
-        string = ""
-
-        string += "|" + "|".join([str(x) for x in self.board["pits"][1][::-1]]) + "|"
-        string += "\n"
-        string += str(self.board["banks"][1]) + "-"*11 + str(self.board["banks"][0])
-        string += "\n"
-        string += "|" + "|".join([str(x) for x in self.board["pits"][0]]) + "|"
-        string += "\n"
-
-        return string
+        return(str(self.board) + "turn" + str(self.turn))

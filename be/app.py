@@ -103,6 +103,7 @@ def handle_game_move(payload):
     if cid and cid in challenges:
         c = challenges[cid]
         response = c.make_move(payload["move"], users[sid])
+        print(response)
         sckt.emit("game-update-move", response, to=challenges[cid].get_socket_room_name())
     else:
         return {"result": "error", "error": "Game not found"}

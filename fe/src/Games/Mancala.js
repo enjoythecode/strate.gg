@@ -1,16 +1,20 @@
-import { makeObservable, computed, observable, action } from "mobx"
+import { makeObservable, computed, observable, action, toJS } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 
 const initializeBoard = () => {
-    return {
-        pits: [
-            [4, 4, 4, 4, 4, 4],
-            [4, 4, 4, 4, 4, 4]
-        ],
-        banks: [0, 0]
-    }
+    return [
+            4, 4, 4, 4, 4, 4, 0,
+            4, 4, 4, 4, 4, 4, 0
+        ]
+        
+        /* INDICES MAPPING TO BOARD 
+        *  P2:  13, 12, 11, 10, 9, 8, 7
+        *  P1:       0,  1,  2, 3, 4, 5, 6,
+        */
 }
+
+const BANKS = [6, 13] // Banks[i] == Index of bank of player i
 
 class Mancala {
     constructor(challenge, config){
@@ -19,7 +23,7 @@ class Mancala {
             clickPit: action,
             process_new_move: action,
         })
-        this.turn = 1
+        this.turn = 0
         this.config = config
         this.challenge = challenge
         this.board = initializeBoard(config)
@@ -37,43 +41,40 @@ class Mancala {
     }
 
     process_new_move(move){
-        // TODO: implement
-        console.log("TODO: implement processing moves!", move)
+        let ptr = move["pit"] + this.turn * 7
 
-        let ptr = move["pit"]
-        console.log(this.board)
-        let seeds = this.board["pits"][this.turn][ptr]
+        let seeds = this.board[ptr]
+        let next_plyr = (this.turn + 1) % 2
 
-        this.board["pits"][this.turn][ptr] = 0
-        while(seeds){
+        this.board[ptr] = 0
+        while(seeds > 0){
             ptr += 1
-            if(ptr === 6){
-                this.board["banks"][this.turn] += 1
-            }else if(ptr === 13){
-                ptr = 0
+            ptr = ptr % 14 // wrap around the board!
+
+            if (ptr === BANKS[next_plyr]){ // rival bank
+                continue
             }else{
-                let side = (this.turn + Math.floor(ptr / 6)) % 2
-                this.board["pits"][side][ptr%6-(ptr > 6 ? 1 : 0)] += 1
+                this.board[ptr] += 1
+                seeds -=1
             }
-            seeds -= 1
         }
 
-        // Capture on landing in an empty pit
-        if(ptr < 6 && this.board["pits"][this.turn][ptr] == 1){
-            let captured = this.board["pits"][this.turn][ptr]
-            
-            captured += this.board["pits"][(this.turn + 1) % 2][5-ptr]
-            this.board["banks"][this.turn] += captured
-
-            this.board["pits"][this.turn][ptr] = 0
-            this.board["pits"][(this.turn + 1) % 2][5-ptr] = 0
+        // check for capture 
+        // (ruleset: capture happens when landing on empty pit on friendly side)
+        if (0 <= ptr - 7 * this.turn && ptr - 7 * this.turn <= 5 && this.board[ptr] === 1){
+            let capture = 0
+            for(let i of [ptr, 12 - ptr]){
+                capture += this.board[i]
+                this.board[i] = 0
+            }
+            this.board[BANKS[this.turn]] += capture
         }
 
-        if (! ptr === 6){ // if move didn't end in self-bank, turn moves to the next player
-            this.turn = (this.turn + 1) % 2
-        }
+        // advance the round to the next player if landed outside self-bank.
+        if (ptr !== BANKS[this.turn]){
+            this.turn = next_plyr
+        } 
 
-        this.turn = (this.turn + 1) % 2
     }
 }
 

@@ -7,6 +7,7 @@
 - Basic Mancala play established (lacking just a UI)
 - Fixed bug where BE Amazons was incorrectly removing pieces from the board.
 - Fixed bug with TV where BE would reject observers joining if the game had started.
+- Refactored Mancala board representation and logic to be simpler, squashing many bugs with the previous implementation in the process!
 # 2021-10-11
 - You can no longer click on an Amazons board for a move if it isn't your turn or you are just observing.
 - Fix bug where player could move in a game that was not in progress!
