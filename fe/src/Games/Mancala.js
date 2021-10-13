@@ -80,44 +80,51 @@ class Mancala {
 
 const MancalaView = observer(class _ extends React.Component{
     render() {
-        let pits = []
+        let downPits = []
+        let upPits = []
+        let downBank // right bank, belongs to player down
+        let upBank // left bank, belongs to player up
 
+        // build the pit components
         for(let k = 0; k < 6; k ++){
-            pits.push(<div   
+            downPits.push(<div  
+                className={"mancala-pit mancala-pit-d-" + (k+1).toString()}
                 key={k}
                 onClick={this.props.challenge.game_state.clickPit.bind(null, k)}>
-                    Pit {k}
+                    {this.props.challenge.game_state.board[k]}
             </div>)
+
+            upPits.push(
+                <div  
+                className={"mancala-pit mancala-pit-u-" + (6-k).toString()}
+                key={k}
+                onClick={this.props.challenge.game_state.clickPit.bind(null, k)}>
+                    {this.props.challenge.game_state.board[k + 7]}
+            </div>
+            )
         }
+
+        // build the banks
+        downBank = <div className="mancala-bank mancala-bank-r">
+            {this.props.challenge.game_state.board[6]}
+        </div>
+
+        upBank = <div className="mancala-bank mancala-bank-l">
+            {this.props.challenge.game_state.board[13]}
+        </div>
 
         if(this.props.challenge != null){
             return (
                 <div>
-                    <h4>
-                        Mancala!
-                    </h4>
-                    <div>
-                            {JSON.stringify(this.props.challenge.game_state.board)}
-                            <hr/>
-                            {pits}
-                    </div>
-                    <div style={{"width": "500px", "height":"500px"}}>
+                    <div style={{"width": "400px", "height":"400px"}}>
                         <div class="mancala-board">
-                            <div class="mancala-pit mancala-pit-d-1"></div>
-                            <div class="mancala-pit mancala-pit-d-2"></div>
-                            <div class="mancala-pit mancala-pit-d-3"></div>
-                            <div class="mancala-pit mancala-pit-d-4"></div>
-                            <div class="mancala-pit mancala-pit-d-5"></div>
-                            <div class="mancala-pit mancala-pit-d-6"></div>
-                            <div class="mancala-bank-r"></div>
 
-                            <div class="mancala-pit mancala-pit-u-1"></div>
-                            <div class="mancala-pit mancala-pit-u-2"></div>
-                            <div class="mancala-pit mancala-pit-u-3"></div>
-                            <div class="mancala-pit mancala-pit-u-4"></div>
-                            <div class="mancala-pit mancala-pit-u-5"></div>
-                            <div class="mancala-pit mancala-pit-u-6"></div>
-                            <div class="mancala-bank-l"></div>
+                            {downPits}
+                            {downBank}
+
+                            {upPits}
+                            {upBank}
+
                             <div class="mancala-pebble-container">
                                 <div class="mancala-pebble mancala-pebble-1"></div>
                             </div>

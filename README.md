@@ -51,7 +51,8 @@ python app.py
 ## Additions!
 1. Add Mancala
     - FE: Implementation
-        - Write proper UI for the game
+        - Show pebbles on `MancalaView`
+        - Animate the pebbles on `MancalaView` using react-spring or similar
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. Add time controls
     - BE: Planning-- how do we architecture things? How do we account for network latency?
@@ -75,6 +76,7 @@ python app.py
     - Current turn indicator (with some sort of combination of background color + bold?)
     1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
 1. FE: Retry connecting upon disconnect
+1. FE: Design and use a nice-looking graphic for the Mancala board and pebbles.
 1. BE-Amazons: Improve amazons_state.is_valid_move() performance
 1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 

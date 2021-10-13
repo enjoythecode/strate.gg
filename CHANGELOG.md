@@ -1,3 +1,6 @@
+# 2021-10-13
+- Simple Mancala board using CSS (pending graphic design later)
+- Clean up Mancala and Amazons views further.
 # 2021-10-12
 - BE responses are now better suited for a game-agnostic network interface.
 - FE components are now more game-agnostic, allowing for easy scaling up in the number of games!

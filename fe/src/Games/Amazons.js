@@ -284,11 +284,6 @@ const AmazonsView = observer(class _ extends React.Component{
 
             return (
                 <div>
-                    <h4>
-                        F:{this.props.challenge.game_state.selectionFrom} 
-                        T:{this.props.challenge.game_state.selectionTo} 
-                        S:{this.props.challenge.game_state.selectionShoot} 
-                    </h4>
                     <div style={{"height": "300px"}}>
                         <div style={boardCss}>
                             {boardCells}
