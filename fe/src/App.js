@@ -28,8 +28,6 @@ const App = observer(({ state }) =>(
                 </div>
             </div>
         </div>
-        
-        <Tv/>
     </div>
 ))
 

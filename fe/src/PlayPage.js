@@ -18,10 +18,7 @@ const PlayPage = observer(class PlayPage extends React.Component{
 
     render(){
         return (
-            <div>
-                <h3>Play! {RootState.challenges.has(this.cid) ? RootState.challenges.has(this.cid).game_name : "..."} </h3>
-                <ChallengeView challenge={RootState.challenges.get(this.cid)} />
-            </div>
+            <ChallengeView challenge={RootState.challenges.get(this.cid)} />
         );
     }
 }) 

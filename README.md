@@ -74,6 +74,10 @@ python app.py
     - Create a navigation bar
     - Display game status and player IDs better
     - Current turn indicator + an indicator for what side the client is playing
+    - Create a sticky footer with (c), link to GitHub project, my personal website.
+    - Change `Amazons` to board + `absolute` located pieces
+        - Restore original functionality
+        - Implement animations
     - TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)
@@ -84,7 +88,6 @@ python app.py
         - Add a parameter to the TV polling backend for the game type
         - Make the create-game box a component that is created with a for loop in `App.js`
         - Glue all of these together!
-    - Create a sticky footer with (c), link to GitHub project, my personal website.
 1. Observe games by default.
     - Add a button to join game, rather than on-load.
 1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
@@ -94,7 +97,9 @@ python app.py
 1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 
 ## Squashing Bugs!
+1. FE TV: load the component of the game only, not the whole challenge view (i.e. exclude the toolbar etc.)
 1. Investigate: Why is front-end sending two join requests when `PlayPage` is loaded?
+1. FE: Push challenge-create boxes downwards when the screen is not wide enough for them, and load more in as necessary!
 
 ## Paying off Tech Debt!
 1. Completely separate Amazons game logic and UI representation in `Amazons.js`
