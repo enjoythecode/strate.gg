@@ -72,9 +72,8 @@ python app.py
 ## Improving Existing Stuff!
 1. FE: Make the website somewhat presentable
     - Create a navigation bar
-    - Make play page width adjust to the window size
-        - Display game status and player IDs better
-        - Current turn indicator + an indicator for what side the client is playing
+    - Display game status and player IDs better
+    - Current turn indicator + an indicator for what side the client is playing
     - TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)

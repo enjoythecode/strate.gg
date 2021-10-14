@@ -1,5 +1,5 @@
 body{
-    background-color: #eee;
+    background-color: #dfdfdf;
 }
 
 h2{
@@ -16,7 +16,7 @@ h2{
 }
 
 .challenge-create-box{
-    background-color: #dedede;
+    background-color: #d8d8d8;
     aspect-ratio: 1 / 1;
     text-align: center;
 
@@ -32,9 +32,18 @@ h2{
     box-shadow: 0 0 6px #222;
 }
 
+.challenge-board, .challenge-dashboard{
+    float:left;
+}
+
+.challenge-wrapper{
+    margin: auto;
+    width: 80%;
+}
 
 .mancala-board{
     aspect-ratio: 3 / 1;
+    max-width: 900px;
     /* keeping this ratio symmetric to aspect-ratio allows for the borders to be rounded properly. */
     border-radius: 5% / 15%; 
     background-color: #88603D;

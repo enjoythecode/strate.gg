@@ -2,15 +2,6 @@ import { makeObservable, computed, observable, action } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
 
-const baseCellCss = (x) => {
-    return {
-        float: "left",
-        display: "inline-block",
-        width: (1/x * 100).toString() + "%",
-        height: (1/x * 100).toString() + "%"
-    }
-}
-
 const backgroundCellCss = (color, indicatorContent, queenOver) => {
     /*
     color:
@@ -50,9 +41,13 @@ const backgroundCellCss = (color, indicatorContent, queenOver) => {
     }
 }
 
-const boardCss = {
-    "aspectRatio": "1 / 1",
-    "height": "100%"
+const boardCss = (x) => { return {
+        "aspectRatio": "1 / 1",
+        "height": "80vmin",
+        "display": "grid",
+        "gridTemplateColumns": "repeat("+x+", 1fr)",
+        "gridTemplateRows": "repeat("+x+", 1fr)",
+    }
 }
 
 const initializeBoard = (config) => {
@@ -261,7 +256,6 @@ const AmazonsView = observer(class _ extends React.Component{
         if(this.props.challenge != null){
             let boardCells = []
             let size = this.props.challenge.game_state.board.length
-            let cellStyleBase = baseCellCss(size);
 
             for(let x = 0; x < size; x++){
                 for(let y = 0; y < size; y++){
@@ -274,7 +268,7 @@ const AmazonsView = observer(class _ extends React.Component{
                     let content = this.props.challenge.game_state.board[x][y]
                     boardCells.push(
                         <div   
-                            style={{...cellStyleBase, ...cellStyleIndicator}}
+                            style={cellStyleIndicator}
                             key={x * size + y}
                             onClick={this.props.challenge.game_state.clickCell.bind(null, cellStringId)}>
                                 {getCellImage(content)}
@@ -283,12 +277,8 @@ const AmazonsView = observer(class _ extends React.Component{
             }
 
             return (
-                <div>
-                    <div style={{"height": "300px"}}>
-                        <div style={boardCss}>
-                            {boardCells}
-                        </div>
-                    </div>
+                <div style={boardCss(this.props.challenge.game_state.board.length)}>
+                    {boardCells}
                 </div>
             )
         }else{

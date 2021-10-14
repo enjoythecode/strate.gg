@@ -2,6 +2,8 @@
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.
 - Started cleaning up index.js, mapped out tasks for making the website look presentable.
+- Play page now adjusts to the viewport size (in a rudimentary way)
+- Simplified Amazons CSS computation
 # 2021-10-12
 - BE responses are now better suited for a game-agnostic network interface.
 - FE components are now more game-agnostic, allowing for easy scaling up in the number of games!

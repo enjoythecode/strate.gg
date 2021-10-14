@@ -64,9 +64,17 @@ const ChallengeView = observer(({ challenge }) =>(
             challenge == null ? 
                 "Loading the game!" :
                 <div>
-                    <p>{challenge.status}</p>
-                    <p>Players: {challenge.players.join(", ")}</p>
-                    <challenge.ViewComponent challenge={challenge}/>
+                    
+                    <div className="challenge-wrapper">
+                        <div className="challenge-board">
+                            <challenge.ViewComponent challenge={challenge}/>
+                        </div>
+                        <div className="challenge-dashboard">
+                            <p>{challenge.status}</p>
+                            <p>Players: {challenge.players.join(", ")}</p>
+                        </div>
+                    </div>
+                    
                 </div>
         }
     </div>
