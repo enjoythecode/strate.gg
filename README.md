@@ -21,7 +21,6 @@ My ambition is to build a website for real-time and correspondence matches of th
 # Do-List
 ## Adding New Stuff!
 1. Get a static IP for the production instance
-1. Rename GitHub project to strate.gg
 1. README: Explain project structure with `tree`
 1. Add Mancala
     - FE: Implementation
