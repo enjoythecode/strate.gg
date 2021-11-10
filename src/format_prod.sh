@@ -15,4 +15,4 @@ npm install
 
 cd ..
 # Common Format
-. ./format_common.sh
+. ./src/format_common.sh
