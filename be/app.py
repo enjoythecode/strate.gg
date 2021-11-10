@@ -21,8 +21,7 @@ socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 ############ SERVE REACT APP ################################################
 @app.route('/', defaults={'path': ''})                                      #
 @app.route('/<path:path>')                                                  #
-def serve(path):                                                            #
-    print(os.listdir(app.static_folder))                                    #
+def serve(path):                                                            #                          #
     if path != "" and os.path.exists(app.static_folder + '/' + path):       #
         return send_from_directory(app.static_folder, path)                 #
     else:                                                                   #
