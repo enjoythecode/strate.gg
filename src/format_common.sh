@@ -16,6 +16,6 @@ pip install -r requirements.txt
 
 ## create secret key
 scrt=$(python -c 'import secrets; print(secrets.token_hex())')
-echo {"SECRET_KEY":"$scrt"} > config.json
+echo {\"SECRET_KEY\":\"$scrt\"} > config.json
 
 cd ..
