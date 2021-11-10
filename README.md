@@ -20,6 +20,7 @@ My ambition is to build a website for real-time and correspondence matches of th
 
 # Do-List
 ## Adding New Stuff!
+1. Fix the socketio domain in `Socket.js`
 1. Get a static IP for the production instance
 1. README: Explain project structure with `tree`
 1. Add Mancala
