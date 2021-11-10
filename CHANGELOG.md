@@ -1,3 +1,9 @@
+# 2021-11-08
+- Found a name and domain for the project that I'm really happy with: strate.gg!
+- Wrote scripts for installing dependencies, preparing configurations and running servers
+- Updated README with project overview
+- Set up DNS records for new domain
+- Set up Cloudflare for new domain
 # 2021-10-13
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.
