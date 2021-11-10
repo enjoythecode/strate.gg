@@ -15,7 +15,7 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 
 ## create secret key
-scrt=$(python -c 'import secrets; print(secrets.token_hex())')
+scrt=$(python -c 'import random; print(hex(random.SystemRandom().getrandbits(1024)))') # SystemRandom is secure, 2^1024 is almost INF!
 echo {\"SECRET_KEY\":\"$scrt\"} > config.json
 
 cd ..
