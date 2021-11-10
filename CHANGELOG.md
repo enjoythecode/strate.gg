@@ -4,6 +4,7 @@
 - Updated README with project overview
 - Set up DNS records for new domain
 - Set up Cloudflare for new domain
+- Fix secrets issue in `./src/format_common.sh`
 # 2021-10-13
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.
