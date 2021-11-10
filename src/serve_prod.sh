@@ -12,4 +12,4 @@ source ./venv/bin/activate
 
 ## Start gunicorn
 export FLASK_ENV=production
-gunicorn "app:app"
+gunicorn "app:app" &
