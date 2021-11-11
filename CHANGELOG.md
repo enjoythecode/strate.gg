@@ -8,6 +8,7 @@
 - Removed problematic `secrets` dependency with `random.SystemRandom`
 - Fixed nginx configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
 - Updated website title and description
+- Production server is now started in a tmux session, therefore it persists beyond the SSH connection to the server.
 # 2021-10-13
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.
