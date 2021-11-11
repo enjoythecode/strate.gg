@@ -13,7 +13,8 @@ users = {}
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=False, static_folder = "../fe/build")
-app.config.from_file("config.json", load = json.load) # load secret key
+with open('config.json') as config_file:
+    app.config.update(json.load(config_file)) # load secret key
 
 socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 
@@ -21,7 +22,7 @@ socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 ############ SERVE REACT APP ################################################
 @app.route('/', defaults={'path': ''})                                      #
 @app.route('/<path:path>')                                                  #
-def serve(path):                                                            #                          #
+def serve(path):                                                            #
     if path != "" and os.path.exists(app.static_folder + '/' + path):       #
         return send_from_directory(app.static_folder, path)                 #
     else:                                                                   #

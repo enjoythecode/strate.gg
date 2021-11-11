@@ -27,7 +27,9 @@ class Socket {
     set_connection_status = (new_connection_status) => {this.connection_status = new_connection_status}
     
     connect = () => {
-        this.io = io("127.0.0.1:8080");
+        let host_is_development = window.location.hostname == "127.0.0.1" | window.location.hostname == "localhost";
+        console.log(host_is_development);
+        this.io = io(host_is_development ? "127.0.0.1:8080" : "strate.gg");
         // Pondering: Can this line ever be slow enough (or light travel fast enough) where the "connect" event happens before it is binded?
         // Answer: very, very, very unlikely. It is both light, and one is traveling (at least) hundreds of miles.
         this.bind_socket_listeners() 
