@@ -1,62 +1,30 @@
 **State:** Currently under development (expect major changes)
 
-# Game of Amazons
-This is a hobby project of mine, which consists of a website for playing the game and a collection of AI agents written in Python that play the game.
-This is also my sandbox for testing out different reinforcement learning techniques.
+# Strate.gg
+A hobby project dedicated to the play and exploration of various abstract strategy board games.
 
-## Code Structure
-```
-src
-├── ai            => AI opponents
-│   ├── bots      
-│   └── matches   => Record of games between bots, for archival and research purposes
-├── py_logic      => Python representation of games and boards for the back-end server
-├── static        => Front-end assets
-│   ├── images    
-│   ├── view      => HTML templates
-│   ├── script    
-│   └── style     
-└── app.py        => Flask server lives here
-```
+My ambition is to build a website for real-time and correspondence matches of these games, as well as AI analysis and practice.
 
-## Running the Development Server
-### Front-end
-Install requirements
-```bash
-cd fe
-npm install
-```
+# Building
+`src` includes all scripts for installing dependencies and running development or production environments.
 
-```bash
-cd fe # if not already in
-npm run start
-```
+## Installing Dependencies
+`. ./src/format_dev.sh` for developing on your local device.
+`. ./src/format_prod.sh` for deploying to a server for production (I use AWS EC2)
 
-### Back-end
-Start venv and install requirements
+## Running Development Server
+`./src/serve_dev.sh`
 
-```bash
-python -m venv venv
-source ./venv/bin/activate
-pip install -r requirements.txt
-```
+## Running Production Server
+`./src/serve_prod.sh`
 
-Start the server
-```bash
-cd be
-python app.py
-```
+## Further Notes
+See `BUILDING.md`
 
 # Do-List
-*In rough order of planned implementation.*
-
-1. Split `AmazonsView` inner components to 1) board + 2) `absolute` located pieces
-    - Refactor the component
-    - Implement animations
-1. Completely separate Amazons game logic and UI representation in `Amazons.js`
-    1. Current clicks should be tracked in the view component, not the game logic class
-1. Game logic classes should not need to access Challenge!
-1. `AmazonView` should not make any calls to the Challenge store; it should receive the necessary "is-clickable + client player no #" information as a prop and otherwise be de-coupled.
+## Adding New Stuff!
+1. Get a static IP for the production instance
+1. README: Explain project structure with `tree`
 1. Add Mancala
     - FE: Implementation
         - Show pebbles on `MancalaView`
@@ -73,16 +41,7 @@ python app.py
     - FE: Display time, add configuration of time controls when creating a game
 1. Add option to resign
 1. FE: Add option to request/suggest undo of the last move
-1. Find a good name for the project
-    - Update GitHub project name
-    - Explain project goals and mission in README
-    - Include libre license, attribute inspiration to Lichess
-    - Get a domain
-1. Rudimentary DevOps
-    - Script to spawn an AWS EC2 instance
-    - Static IP for the website, put that in DNS
-1. Observe games by default.
-    - Add a button to join game, rather than on-load.
+1. Add a game-lobby chat
 
 ## Unordered/Wish-List
 1. Add a game-lobby chat
@@ -107,4 +66,3 @@ python app.py
 1. camelCase (or some other specific code style) should be determined to be the style to use, and this should be enforced!
 1. BE `challenge.py` should not know about what responses are being sent back! It should only return a boolean for success/error, and a potential data bundle!
 1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
-1. Proper responsive design

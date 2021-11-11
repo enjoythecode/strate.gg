@@ -1,3 +1,14 @@
+# 2021-11-08
+- Found a name and domain for the project that I'm really happy with: strate.gg!
+- Wrote scripts for installing dependencies, preparing configurations and running servers
+- Updated README with project overview
+- Set up DNS records for new domain
+- Set up Cloudflare for new domain
+- Fix secrets issue in `./src/format_common.sh`
+- Removed problematic `secrets` dependency with `random.SystemRandom`
+- Fixed nginx configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
+- Updated website title and description
+- Production server is now started in a tmux session, therefore it persists beyond the SSH connection to the server.
 # 2021-10-13
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.

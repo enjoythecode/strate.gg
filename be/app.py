@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, send_from_directory, request
 import flask_socketio as sckt
 from py_logic.user import User
 from py_logic.challenge import Challenge, ChallengeStatus
@@ -12,24 +12,23 @@ challenges = {}
 users = {}
 
 # create and configure the app
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_mapping(
-    SECRET_KEY = 'dev',
-    DEBUG = True
-)
+app = Flask(__name__, instance_relative_config=False, static_folder = "../fe/build")
+with open('config.json') as config_file:
+    app.config.update(json.load(config_file)) # load secret key
+
 socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 
-############ ROUTES ###############
-@app.route('/')
-def serve_index():
-    return app.send_static_file('view/index.html')
 
-@app.route('/play/<game>')
-def serve_play(game):
-    if game == "amazons":
-        return app.send_static_file('view/play/amazons.html')
-    else:
-        return "False"
+############ SERVE REACT APP ################################################
+@app.route('/', defaults={'path': ''})                                      #
+@app.route('/<path:path>')                                                  #
+def serve(path):                                                            #
+    if path != "" and os.path.exists(app.static_folder + '/' + path):       #
+        return send_from_directory(app.static_folder, path)                 #
+    else:                                                                   #
+        return send_from_directory(app.static_folder, 'index.html')         #
+#############################################################################
+
 
 ############# SOCKETS #############
 ### Generic

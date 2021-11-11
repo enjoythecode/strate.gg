@@ -5,3 +5,4 @@ papers/
 *__pycache__*
 venv/
 *node_modules/
+be/config.json
