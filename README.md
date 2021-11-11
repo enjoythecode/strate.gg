@@ -22,29 +22,17 @@ My ambition is to build a website for real-time and correspondence matches of th
 See `BUILDING.md`
 
 # Do-List
-## Adding New Stuff!
-1. Get a static IP for the production instance
-1. README: Explain project structure with `tree`
-1. Add Mancala
-    - FE: Implementation
-        - Show pebbles on `MancalaView`
-        - Animate the pebbles on `MancalaView` using react-spring or similar
-    - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
+1. Add last-move indicators to Amazons
+1. Remove 6x6 board configuration from Amazons.
 1. FE: Make the website somewhat presentable
     - Create a navigation bar
-    - Display game status and player IDs better
-    - Current turn indicator + an indicator for what side the client is playing
     - Create a sticky footer with (c), link to GitHub project, my personal website.
-1. Minimize the use of CSS-in-JS, especially in `Amazons`, to the bare minimum, preferably 0
-1. Add time controls
-    - BE: Planning-- how do we architecture things? How do we account for network latency?
-    - FE: Display time, add configuration of time controls when creating a game
-1. Add option to resign
-1. FE: Add option to request/suggest undo of the last move
-1. Add a game-lobby chat
+    - Display game status and player IDs neatly
+        - Anonymous user ID should be shown with less characters
+    - Current turn indicator + an indicator for what side the client is playing
+1. Get a static IP for the production instance
 
-## Unordered/Wish-List
-1. Add a game-lobby chat
+## Unordered/Wish-List/Future
 1. TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)
@@ -55,6 +43,19 @@ See `BUILDING.md`
         - Add a parameter to the TV polling backend for the game type
         - Make the create-game box a component that is created with a for loop in `App.js`
         - Glue all of these together!
+1. Add Mancala
+    - FE: Implementation
+        - Show pebbles on `MancalaView`
+        - Animate the pebbles on `MancalaView` using react-spring or similar
+    - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
+1. Add time controls
+    - BE: Planning-- how do we architecture things? How do we account for network latency?
+    - FE: Display time, add configuration of time controls when creating a game
+1. FE: Add option to request/suggest undo of the last move
+1. Add a game-lobby chat
+1. README: Explain project structure with `tree`
+1. Minimize the use of CSS-in-JS, especially in `Amazons`, to the bare minimum, preferably 0
+1. Add option to resign
 1. Display user-friendly error for trying to go to a play page for a challenge that does not exist.
 1. FE: Retry connecting upon disconnect
 1. FE: Design and use a nice-looking graphic for the Mancala board and pebbles.

@@ -1,6 +1,5 @@
 import { observer } from "mobx-react"
 import React from "react"
-import Tv from "./Tv.js"
 
 const App = observer(({ state }) =>(
     <div>

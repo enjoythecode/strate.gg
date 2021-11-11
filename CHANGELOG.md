@@ -1,4 +1,8 @@
-# 2021-11-08
+# 2021-11-11
+- Amazons grid pieces are now positioned in relation to the parent board grid
+- Moved indicator style classes from JS to CSS
+- Re-organized the Do-list for progress
+# 2021-11-10
 - Found a name and domain for the project that I'm really happy with: strate.gg!
 - Wrote scripts for installing dependencies, preparing configurations and running servers
 - Updated README with project overview

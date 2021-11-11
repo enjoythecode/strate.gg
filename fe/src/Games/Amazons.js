@@ -1,45 +1,7 @@
 import { makeObservable, computed, observable, action } from "mobx"
 import { observer } from "mobx-react"
 import React from "react"
-
-const backgroundCellCss = (color, indicatorContent, queenOver) => {
-    /*
-    color:
-        dark -> 0
-        light -> 1
-
-    indicatorContent:
-        nothing -> 0
-        moveSliding -> 1
-        shootSliding -> 2
-        moveSource -> -1
-        shootSource -> -2
-    */
-
-    let backgroundColor = color === 0 ? "#946F51" : "#F0D9B5";
-    if(indicatorContent === -2) backgroundColor = "lightcoral"
-    if(indicatorContent === -1) backgroundColor = "lightblue"
-
-    let indicatorColor = null
-    if(indicatorContent === 1) indicatorColor = "rgba(125, 131, 206, 0.87)"
-    if(indicatorContent === 2 || queenOver) indicatorColor = "rgba(206, 125, 125, 0.87)"
-
-    if(indicatorContent > 0 || (indicatorContent === -1 && queenOver)){
-        if(queenOver){
-            return {
-                background: "radial-gradient(circle at 50% 50%," + backgroundColor + " 80%," + indicatorColor + " 80%)"
-            }
-        }else{
-            return {
-                background: "radial-gradient(circle at 50% 50%," + indicatorColor + " 20%," + backgroundColor + " 20%)"
-            }
-        }
-    }else{
-        return {
-            backgroundColor: backgroundColor
-        }
-    }
-}
+import './grid.css'
 
 const boardCss = (x) => { return {
         "aspectRatio": "1 / 1",
@@ -47,7 +9,14 @@ const boardCss = (x) => { return {
         "display": "grid",
         "gridTemplateColumns": "repeat("+x+", 1fr)",
         "gridTemplateRows": "repeat("+x+", 1fr)",
+        "position": "relative"
     }
+}
+
+const pieceCss = {
+    position:"absolute",
+    width:"10%",
+    height:"10%" 
 }
 
 const initializeBoard = (config) => {
@@ -70,13 +39,6 @@ const initializeBoard = (config) => {
             [0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0, 0]
         ],
-        "4_0": [
-            [0, 1, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 0, 0],
-            [0, 0, 2, 0]
-        ]
-    
     }
     if(!("size" in config && "variation" in config)){return false;}
     let key = config["size"].toString() + "_" + config["variation"].toString()
@@ -84,27 +46,7 @@ const initializeBoard = (config) => {
     return startingBoards[key]
 }
 
-const getCellImage = (id) => {
-    let imgStyle = {
-        width: "100%",
-        height: "100%"
-    }
-    switch (id) {
-        case 0:
-            return null
-        case 1:
-            return <img src="/images/wqueen.png" style ={imgStyle} alt="White Queen"/>
-        case 2:
-            return <img src="/images/bqueen.png" style ={imgStyle} alt="Black Queen"/>
-        case 3:
-            return <img src="/images/fire.png" style ={imgStyle} alt="Burnt Off Square"/>
-        default:
-            return "?"
-    }
-} 
-
 class Amazons {
-
     constructor(challenge, config){
         makeObservable(this,{
             board: observable,
@@ -116,7 +58,8 @@ class Amazons {
             selectionTo: computed,
             selectionShoot: computed,
             currentSelectionStep: computed,
-            boardBackground: computed,
+            boardCssClasses: computed,
+            renderedPieces: computed,
         })
         this.turn = 0
         this.config = config
@@ -152,10 +95,8 @@ class Amazons {
                     if(this.cell_can_reach(this.selectionTo, c, this.selectionFrom)){
                         this.selection[2] = c
                         this.challenge.send_move(this.formatMoveForSend())
-                        this.selection = [null, null, null]
-                    }else{
-                        this.resetSelection()
                     }
+                    this.resetSelection()
                     break;
                 default:
                     break;
@@ -187,10 +128,8 @@ class Amazons {
                 if (new_x.toString() + new_y.toString() !== ignore){
                     return false
                 }
-    
             }
         }
-    
         return true
     }
 
@@ -225,30 +164,69 @@ class Amazons {
         if(this.selectionShoot === null) return "shoot"
         return null
     }
-    get boardBackground(){
+
+    get renderedPieces(){
+        let pieces = [];
+
+        for(let x = 0; x < this.config.size; x++){
+            for(let y = 0; y < this.config.size; y++){
+
+                if(this.board[x][y] !== 0){
+
+                    let img_src = ["/images/wqueen.png", "/images/bqueen.png", "/images/fire.png"][this.board[x][y] - 1];
+                    let img_alt = ["White Queen", "Black Queen", "Burnt Off Square"][this.board[x][y] - 1];
+                    
+                    let positionCss = {
+                        left: y * 10 + "%", // TODO: FIX: Make this adaptive to board size!
+                        top: x * 10 + "%"
+                    }
+
+                    pieces.push(
+                        <img src={img_src} alt={img_alt} style={{...positionCss, ...pieceCss}} key={pieces.length}
+                            onClick={() => {this.clickCell(x.toString() + y.toString())}}>
+                        </img>
+                    )
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    get boardCssClasses(){
         let result = []
         for(let x = 0; x < this.config.size; x++){
             let row = []
             for(let y = 0; y < this.config.size; y++){
                 let cell = x.toString() + y.toString()
-                let value = 0;
+                let classes = [];
 
-                if (this.currentSelectionStep === "to" && this.cell_can_reach(this.selectionFrom, cell)) {
-                    value = 1}
-                if (this.currentSelectionStep === "shoot" && this.cell_can_reach(this.selectionTo, cell, this.selectionFrom)) {
-                    value = 2}
-                if (cell === this.selectionFrom){
-                    value = -1}
-                if (cell === this.selectionTo){
-                    value = -2}
+                // TODO: separate this because it never changes
+                classes.push((y % this.config.size + x) % 2 ? "cellLight" : "cellDark");
 
-                row.push(value)
+                // TODO: Optimize the speed of this by having the movables put on indication classes to cells instead!
+                if (this.currentSelectionStep === "to" && this.cell_can_reach(this.selectionFrom, cell)) 
+                    classes.push(...["indicator", "indicatorPrimary"])
+                if (this.currentSelectionStep === "shoot" && this.cell_can_reach(this.selectionTo, cell, this.selectionFrom)) 
+                    classes.push(...["indicator", "indicatorSecondary"])
+                if (this.currentSelectionStep === "shoot" && this.selectionTo === cell) 
+                    classes.push(...["indicator", "indicatorSecondary"])
+
+                if (classes.includes("indicator")){
+                    if (this.currentSelectionStep === "shoot" && 
+                    [this.selectionFrom, this.selectionTo].includes(cell)){
+                        classes.push("indicatorOuter")
+                    }else{
+                        classes.push("indicatorInner")
+                    }
+                }
+
+                row.push(classes.join(" "))
             }
             result.push(row)
         }
         return result
     }
-
 }
 
 const AmazonsView = observer(class _ extends React.Component{
@@ -259,26 +237,20 @@ const AmazonsView = observer(class _ extends React.Component{
 
             for(let x = 0; x < size; x++){
                 for(let y = 0; y < size; y++){
-                    let cellStringId = x.toString() + (y % size).toString();
-                    let cellStyleIndicator = backgroundCellCss(
-                        (y % size + x) % 2,
-                        this.props.challenge.game_state.boardBackground[x][y],
-                        this.props.challenge.game_state.selectionFrom === cellStringId && this.props.challenge.game_state.currentSelectionStep === "shoot"
-                    );
-                    let content = this.props.challenge.game_state.board[x][y]
                     boardCells.push(
-                        <div   
-                            style={cellStyleIndicator}
+                        <div
+                            className={this.props.challenge.game_state.boardCssClasses[x][y]}
                             key={x * size + y}
-                            onClick={this.props.challenge.game_state.clickCell.bind(null, cellStringId)}>
-                                {getCellImage(content)}
-                        </div>)
+                            onClick={() => {this.props.challenge.game_state.clickCell(x.toString() + y.toString())}}>
+                        </div>
+                    )
                 }
             }
 
             return (
                 <div style={boardCss(this.props.challenge.game_state.board.length)}>
                     {boardCells}
+                    {this.props.challenge.game_state.renderedPieces}
                 </div>
             )
         }else{
