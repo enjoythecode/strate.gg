@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App.js'
 import PlayPage from "./PlayPage.js"
 import RootState from './State.js'
-import ConnectionWidget from "./ConnectionWidget.js"
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+import Header from './Header';
 
 RootState.socket.connect()
 
 ReactDOM.render(
   <React.StrictMode>
+    <Header/>
     <Router>
       <Switch>
         <Route path="/play/:gameName">
@@ -25,7 +25,7 @@ ReactDOM.render(
         </Route>
       </Switch>
     </Router>
-    <ConnectionWidget/>
+
 
 
   </React.StrictMode>,

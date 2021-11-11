@@ -1,6 +1,7 @@
 import { observer } from "mobx-react"
 import React from "react"
 
+
 const App = observer(({ state }) =>(
     <div>
         <div style={{ "display": "flex","justifyContent": "center"}}>
