@@ -5,6 +5,7 @@ sudo apt install nginx -y
 
 # config nginx
 sudo cat ./src/nginx.conf.txt > /etc/nginx/sites-enabled/default
+sudo systemctl restart nginx
 
 # install npm
 sudo apt -y install npm
