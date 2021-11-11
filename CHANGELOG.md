@@ -6,6 +6,7 @@
 - Set up Cloudflare for new domain
 - Fix secrets issue in `./src/format_common.sh`
 - Removed problematic `secrets` dependency with `random.SystemRandom`
+- Fixed nginx configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
 # 2021-10-13
 - Simple Mancala board using CSS (pending graphic design later)
 - Clean up Mancala and Amazons views further.

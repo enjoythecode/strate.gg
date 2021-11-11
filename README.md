@@ -5,7 +5,7 @@ A hobby project dedicated to the play and exploration of various abstract strate
 
 My ambition is to build a website for real-time and correspondence matches of these games, as well as AI analysis and practice.
 
-# Reproducing
+# Building
 `src` includes all scripts for installing dependencies and running development or production environments.
 
 ## Installing Dependencies
@@ -18,9 +18,11 @@ My ambition is to build a website for real-time and correspondence matches of th
 ## Running Production Server
 `./src/serve_prod.sh`
 
+## Further Notes
+See `BUILDING.md`
+
 # Do-List
 ## Adding New Stuff!
-1. Fix the socketio domain in `Socket.js`
 1. Get a static IP for the production instance
 1. README: Explain project structure with `tree`
 1. Add Mancala
@@ -36,6 +38,7 @@ My ambition is to build a website for real-time and correspondence matches of th
 1. Add a game-lobby chat
 
 ## Improving Existing Stuff!
+1. Update website title and description
 1. FE: Make the website somewhat presentable
     - Create a navigation bar
     - Display game status and player IDs better
