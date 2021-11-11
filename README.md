@@ -38,7 +38,6 @@ See `BUILDING.md`
 1. Add a game-lobby chat
 
 ## Improving Existing Stuff!
-1. Update website title and description
 1. FE: Make the website somewhat presentable
     - Create a navigation bar
     - Display game status and player IDs better
