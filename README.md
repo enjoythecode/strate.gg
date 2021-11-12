@@ -33,6 +33,8 @@ See `BUILDING.md`
 1. Get a static IP for the production instance
 
 ## Unordered/Wish-List/Future
+1. Fix header on mobile
+1. Make sure footer behaves well on pages with long content (scroll)
 1. TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)

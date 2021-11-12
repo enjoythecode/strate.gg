@@ -53,7 +53,7 @@ class Challenge {
         if("cid" in data){this.cid = data.cid}
     }
 
-    get client_turn(){ // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...) -1 if not a player
+    get client_turn(){ // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...), -1 if not a player
         return this.players.findIndex((player) => player === RootState.socket.socket_id)
     }
 }
@@ -65,7 +65,7 @@ const ChallengeView = observer(({ challenge }) =>(
             <div>
                 <div className="challenge-wrapper">
                     <div className="challenge-board">
-                        <challenge.ViewComponent challenge={challenge}/>
+                        <challenge.ViewComponent game_state={challenge.game_state}/>
                     </div>
                     <div className="challenge-dashboard">
                         <div>

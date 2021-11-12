@@ -231,36 +231,29 @@ class Amazons {
 }
 
 const AmazonsView = observer(class _ extends React.Component{
+
     render() {
-        if(this.props.challenge != null){
-            let boardCells = []
-            let size = this.props.challenge.game_state.board.length
+        let boardCells = []
+        let size = this.props.game_state.board.length
 
-            for(let x = 0; x < size; x++){
-                for(let y = 0; y < size; y++){
-                    boardCells.push(
-                        <div
-                            className={this.props.challenge.game_state.boardCssClasses[x][y]}
-                            key={x * size + y}
-                            onClick={() => {this.props.challenge.game_state.clickCell(x.toString() + y.toString())}}>
-                        </div>
-                    )
-                }
+        for(let x = 0; x < size; x++){
+            for(let y = 0; y < size; y++){
+                boardCells.push(
+                    <div
+                        className={this.props.game_state.boardCssClasses[x][y]}
+                        key={x * size + y}
+                        onClick={() => {this.props.game_state.clickCell(x.toString() + y.toString())}}>
+                    </div>
+                )
             }
-
-            return (
-                <div style={boardCss(this.props.challenge.game_state.board.length)}>
-                    {boardCells}
-                    {this.props.challenge.game_state.renderedPieces}
-                </div>
-            )
-        }else{
-            return (
-                <div>
-                    <p>Loading Challenge</p>
-                </div>
-            )
         }
+
+        return (
+            <div style={boardCss(this.props.game_state.board.length)}>
+                {boardCells}
+                {this.props.game_state.renderedPieces}
+            </div>
+        )
     }
 })
 

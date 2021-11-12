@@ -90,51 +90,42 @@ const MancalaView = observer(class _ extends React.Component{
             downPits.push(<div  
                 className={"mancala-pit mancala-pit-d-" + (k+1).toString()}
                 key={k}
-                onClick={this.props.challenge.game_state.clickPit.bind(null, k)}>
-                    {this.props.challenge.game_state.board[k]}
+                onClick={this.props.game_state.clickPit.bind(null, k)}>
+                    {this.props.game_state.board[k]}
             </div>)
 
             upPits.push(
                 <div  
                 className={"mancala-pit mancala-pit-u-" + (6-k).toString()}
                 key={k}
-                onClick={this.props.challenge.game_state.clickPit.bind(null, k)}>
-                    {this.props.challenge.game_state.board[k + 7]}
+                onClick={this.props.game_state.clickPit.bind(null, k)}>
+                    {this.props.game_state.board[k + 7]}
             </div>
             )
         }
 
         // build the banks
         downBank = <div className="mancala-bank mancala-bank-r">
-            {this.props.challenge.game_state.board[6]}
+            {this.props.game_state.board[6]}
         </div>
 
         upBank = <div className="mancala-bank mancala-bank-l">
-            {this.props.challenge.game_state.board[13]}
+            {this.props.game_state.board[13]}
         </div>
 
-        if(this.props.challenge != null){
-            return (
-                <div class="mancala-board">
+        return (
+            <div class="mancala-board">
+                {downPits}
+                {downBank}
 
-                    {downPits}
-                    {downBank}
+                {upPits}
+                {upBank}
 
-                    {upPits}
-                    {upBank}
-
-                    <div class="mancala-pebble-container">
-                        <div class="mancala-pebble mancala-pebble-1"></div>
-                    </div>
+                <div class="mancala-pebble-container">
+                    <div class="mancala-pebble mancala-pebble-1"></div>
                 </div>
-            )
-        }else{
-            return (
-                <div>
-                    <p>Loading Challenge</p>
-                </div>
-            )
-        }
+            </div>
+        )
     }
 })
 
