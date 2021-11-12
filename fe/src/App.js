@@ -9,11 +9,8 @@ const App = observer(({ state }) =>(
                 <div id="challenge-create-box-amazons" className="challenge-create-box">
                     <h2>Amazons</h2>
                     <button onClick={() => {state.socket.create_new_game({game_name: "amazons", config: {"size":10, "variation":0}})}}>
-                        Create Challenge (10x10 board)
+                        Create Challenge
                     </button><br></br>
-                    <button onClick={() => {state.socket.create_new_game({game_name: "amazons", config: {"size":6, "variation":0}})}}>
-                        Create Challenge (6x6 board)
-                    </button>
                 </div>
 
                 <div id="challenge-create-box-mancala" className="challenge-create-box">

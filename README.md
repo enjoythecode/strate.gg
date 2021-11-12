@@ -23,7 +23,6 @@ See `BUILDING.md`
 
 # Do-List
 1. Add last-move indicators to Amazons
-1. Remove 6x6 board configuration from Amazons.
 1. FE: Make the website somewhat presentable
     - Display game status and player IDs neatly
         - Anonymous user ID should be shown with less characters
@@ -46,6 +45,7 @@ See `BUILDING.md`
         - Show pebbles on `MancalaView`
         - Animate the pebbles on `MancalaView` using react-spring or similar
     - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
+1. Look into browser back button working with router.
 1. Add time controls
     - BE: Planning-- how do we architecture things? How do we account for network latency?
     - FE: Display time, add configuration of time controls when creating a game
