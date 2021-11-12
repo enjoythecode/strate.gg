@@ -3,6 +3,7 @@
 - Moved indicator style classes from JS to CSS
 - Re-organized the Do-list for progress
 - Added a header.
+- `<marquee> Added a footer. </marquee>`
 # 2021-11-10
 - Found a name and domain for the project that I'm really happy with: strate.gg!
 - Wrote scripts for installing dependencies, preparing configurations and running servers

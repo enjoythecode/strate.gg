@@ -25,7 +25,6 @@ See `BUILDING.md`
 1. Add last-move indicators to Amazons
 1. Remove 6x6 board configuration from Amazons.
 1. FE: Make the website somewhat presentable
-    - Create a sticky footer with (c), link to GitHub project, my personal website.
     - Display game status and player IDs neatly
         - Anonymous user ID should be shown with less characters
     - Current turn indicator + an indicator for what side the client is playing

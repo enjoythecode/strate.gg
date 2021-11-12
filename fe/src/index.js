@@ -8,13 +8,15 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import Header from './Header';
+import {Header, Footer} from './MainPurposeComponents';
 
 RootState.socket.connect()
 
 ReactDOM.render(
   <React.StrictMode>
+    
     <Header/>
+
     <Router>
       <Switch>
         <Route path="/play/:gameName">
@@ -26,7 +28,7 @@ ReactDOM.render(
       </Switch>
     </Router>
 
-
+    <Footer/>
 
   </React.StrictMode>,
   document.getElementById('root')

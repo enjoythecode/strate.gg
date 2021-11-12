@@ -17,7 +17,17 @@ header{
     position: relative;
     display:flex;
     align-items: center;
-    
+}
+
+footer{
+    color: rgb(100, 100, 100);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+footer a{
+    color: inherit;
 }
 
 h2{
