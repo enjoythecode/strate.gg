@@ -5,7 +5,6 @@ import './grid.css'
 
 const boardCss = (x) => { return {
         "aspectRatio": "1 / 1",
-        "height": "80vmin",
         "display": "grid",
         "gridTemplateColumns": "repeat("+x+", 1fr)",
         "gridTemplateRows": "repeat("+x+", 1fr)",

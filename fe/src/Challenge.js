@@ -68,8 +68,10 @@ const ChallengeView = observer(({ challenge }) =>(
                         <challenge.ViewComponent challenge={challenge}/>
                     </div>
                     <div className="challenge-dashboard">
-                        <p>{challenge.status}</p>
-                        <p>Players: {challenge.players.join(", ")}</p>
+                        <div>
+                            <p>{challenge.status}</p>
+                            <p>Players: {challenge.players.join(", ")}</p>
+                        </div>
                     </div>
                 </div>
             </div>
