@@ -66,28 +66,32 @@ h2{
 
 .challenge-wrapper{
     margin: auto;
+    margin-top: 0.5em;
     width: 80%;
     height: 80vmin;
     display: flex;
-    align-items: center;
+    /* pushes the dashboard below the board on narrow screens so that the board can be seen better */
+    flex-wrap: wrap; 
+    /* center elements */
+    align-items: center; /* vertical */
+    justify-content: center; /* horizontal */
 }
+
 .challenge-board{
-    width: 60%;
 }
+
 .challenge-dashboard{
-    width: 40%;
-    height: 100%;
+    width: 400px;
     display: flex;
     align-items: center;
 }
 
 .mancala-board{
-    aspect-ratio: 3 / 1;
-    max-width: 900px;
+    width: 70vmin;
+    height: 23.333vmin;
     /* keeping this ratio symmetric to aspect-ratio allows for the borders to be rounded properly. */
     border-radius: 5% / 15%; 
     background-color: #88603D;
-    width: 100%;
     position: relative;
 }
 

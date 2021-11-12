@@ -115,21 +115,16 @@ const MancalaView = observer(class _ extends React.Component{
 
         if(this.props.challenge != null){
             return (
-                <div>
-                    <div style={{"width": "400px", "height":"400px"}}>
-                        <div class="mancala-board">
+                <div class="mancala-board">
 
-                            {downPits}
-                            {downBank}
+                    {downPits}
+                    {downBank}
 
-                            {upPits}
-                            {upBank}
+                    {upPits}
+                    {upBank}
 
-                            <div class="mancala-pebble-container">
-                                <div class="mancala-pebble mancala-pebble-1"></div>
-                            </div>
-                        </div>
-                        
+                    <div class="mancala-pebble-container">
+                        <div class="mancala-pebble mancala-pebble-1"></div>
                     </div>
                 </div>
             )

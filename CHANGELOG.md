@@ -1,3 +1,5 @@
+# 2021-11-12
+- Challenge board and dashboard centered and sizes are well-defined and aligned.
 # 2021-11-11
 - Amazons grid pieces are now positioned in relation to the parent board grid
 - Moved indicator style classes from JS to CSS

@@ -23,8 +23,12 @@ See `BUILDING.md`
 
 # Do-List
 1. FE: Make the website somewhat presentable
-    - Display game status and player IDs neatly
-        - Anonymous user ID should be shown with less characters
+    - Display game status and player IDs neatly in a Dashboard
+        - Player names
+            - Anonymous user ID should be shown with less characters
+        - Player with turn
+        - Game status
+        - Move list
     - Current turn indicator + an indicator for what side the client is playing
 1. Get a static IP for the production instance
 
