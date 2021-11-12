@@ -5,6 +5,7 @@
 - Added a header.
 - `<marquee> Added a footer. </marquee>`
 - Removed Amazons 6x6 configuration.
+- Added last-move indicators to Amazons
 # 2021-11-10
 - Found a name and domain for the project that I'm really happy with: strate.gg!
 - Wrote scripts for installing dependencies, preparing configurations and running servers

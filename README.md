@@ -22,7 +22,6 @@ My ambition is to build a website for real-time and correspondence matches of th
 See `BUILDING.md`
 
 # Do-List
-1. Add last-move indicators to Amazons
 1. FE: Make the website somewhat presentable
     - Display game status and player IDs neatly
         - Anonymous user ID should be shown with less characters

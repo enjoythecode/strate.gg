@@ -6,6 +6,13 @@
     background-color: #F0D9B5;
 }
 
+.cellDark.indicator.indicatorLastMove{
+    background: radial-gradient(circle at 50% 50%, #946F51 80%, rgba(10, 10, 14, 0.87) 80%)
+}
+.cellLight.indicator.indicatorLastMove{
+    background: radial-gradient(circle at 50% 50%, #F0D9B5 80%, rgba(10, 10, 14, 0.87) 80%)
+}
+
 .cellDark.indicator.indicatorPrimary.indicatorInner{
     background: radial-gradient(circle at 50% 50%, rgba(125, 131, 206, 0.87) 20%, #946F51 20%)
 }

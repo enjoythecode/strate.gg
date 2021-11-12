@@ -43,6 +43,7 @@ class Amazons {
         makeObservable(this,{
             board: observable,
             selection: observable,
+            lastMove: observable,
             clickCell: action,
             process_new_move: action,
             resetSelection: action,
@@ -61,6 +62,7 @@ class Amazons {
 
     board = null
     selection = [null, null, null]; // selected cells; [from, to, shoot]
+    lastMove = [null, null, null];
 
     resetSelection = () => {
         this.selection = [null, null, null];
@@ -145,6 +147,8 @@ class Amazons {
         this.board[shoot_x][shoot_y] = 3
 
         this.turn = (this.turn + 1) % 2
+
+        this.lastMove = [move.from, move.to, move.shoot]
     }
 
     get selectionFrom () {return this.selection[0]}
@@ -195,6 +199,10 @@ class Amazons {
 
                 // TODO: separate this because it never changes
                 classes.push((y % this.config.size + x) % 2 ? "cellLight" : "cellDark");
+
+                // last move indicator
+                if (this.lastMove !== null && this.lastMove.includes(cell))
+                    classes.push(...["indicator", "indicatorLastMove"])
 
                 // TODO: Optimize the speed of this by having the movables put on indication classes to cells instead!
                 if (this.currentSelectionStep === "to" && this.cell_can_reach(this.selectionFrom, cell)) 
