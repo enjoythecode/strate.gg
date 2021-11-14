@@ -60,22 +60,27 @@ class Challenge {
 
 const PlayerTagView = (props) => {
 
-    let classes = ["player-tag"]
+    let spanClasses = ["player-tag"]
     if (props.isSelf){
-        classes.push("player-tag-self")
+        spanClasses.push("player-tag-self")
+    }
+
+    let divClasses = ["challenge-dashboard-player"];
+
+    if (props.isTurn){
+        divClasses.push("challenge-dashboard-player-hasTurn")
     }
 
     let display;
     if(typeof props.displayName !== 'undefined'){
-        console.log("dn", props.displayName)
-        display = "Anon#" + props.displayName.slice(0, 7)
+        display = "Guest #" + props.displayName.slice(0, 7)
     }else{
         display = "Waiting for opponent..."
     }
 
     return (
-        <div>
-            <span className={classes.join(" ")}>{display}</span>
+        <div className={divClasses.join(" ")}>
+            <span className={spanClasses.join(" ")}>{display}</span>
         </div>
     )
 }
@@ -91,11 +96,11 @@ const ChallengeView = observer(({ challenge }) =>(
                         <challenge.ViewComponent game_state={challenge.game_state}/>
                     </div>
                     <div className="challenge-dashboard">
-                        <div>
-                            <PlayerTagView displayName={challenge.players[1]} isSelf={challenge.client_turn == 1}/>
-                            <h3>Move List</h3>
+                        <div style={{width:"100%"}}>
+                            <PlayerTagView displayName={challenge.players[1]} isSelf={challenge.client_turn == 1} isTurn={challenge.game_state.turn == 1}/>
+                            <h3>Move List {challenge.moves}</h3>
                             <h4>Status: {challenge.status}</h4>
-                            <PlayerTagView displayName={challenge.players[0]} isSelf={challenge.client_turn == 0}/>
+                            <PlayerTagView displayName={challenge.players[0]} isSelf={challenge.client_turn == 0} isTurn={challenge.game_state.turn == 0}/>
                         </div>
                     </div>
                 </div>

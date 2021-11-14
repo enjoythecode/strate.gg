@@ -45,6 +45,8 @@ class Amazons {
             board: observable,
             selection: observable,
             lastMove: observable,
+            turn: observable,
+            setTurn: action,
             clickCell: action,
             process_new_move: action,
             resetSelection: action,
@@ -55,15 +57,23 @@ class Amazons {
             boardCssClasses: computed,
             renderedPieces: computed,
         })
-        this.turn = 0
+
+        this.setTurn(0)
         this.config = config
         this.challenge = challenge
         this.board = initializeBoard(config)
     }
 
+    turn = null
     board = null
     selection = [null, null, null]; // selected cells; [from, to, shoot]
     lastMove = [null, null, null];
+
+    setTurn = (val) => {
+        console.log("setting", val)
+        this.turn = val;
+        console.log("set", this.turn)
+    }
 
     resetSelection = () => {
         this.selection = [null, null, null];
@@ -147,7 +157,7 @@ class Amazons {
         this.board[to_x][to_y] = this.turn + 1
         this.board[shoot_x][shoot_y] = 3
 
-        this.turn = (this.turn + 1) % 2
+        this.setTurn((this.turn + 1) % 2)
 
         this.lastMove = [move.from, move.to, move.shoot]
     }

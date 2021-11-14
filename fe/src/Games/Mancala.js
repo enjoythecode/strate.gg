@@ -20,16 +20,23 @@ class Mancala {
     constructor(challenge, config){
         makeObservable(this,{
             board: observable,
+            turn: observable,
             clickPit: action,
             process_new_move: action,
         })
-        this.turn = 0
+
+        this.setTurn(0)
         this.config = config
         this.challenge = challenge
         this.board = initializeBoard(config)
     }
 
+    turn = null
     board = null
+
+    setTurn = (val) => {
+        this.turn = val;
+    }
 
     clickPit = (p) => {
         // check if it is the players turn before allowing a click
@@ -72,7 +79,7 @@ class Mancala {
 
         // advance the round to the next player if landed outside self-bank.
         if (ptr !== BANKS[this.turn]){
-            this.turn = next_plyr
+            this.setTurn(next_plyr)
         } 
 
     }
@@ -114,15 +121,15 @@ const MancalaView = observer(class _ extends React.Component{
         </div>
 
         return (
-            <div class="mancala-board">
+            <div className="mancala-board">
                 {downPits}
                 {downBank}
 
                 {upPits}
                 {upBank}
 
-                <div class="mancala-pebble-container">
-                    <div class="mancala-pebble mancala-pebble-1"></div>
+                <div className="mancala-pebble-container">
+                    <div className="mancala-pebble mancala-pebble-1"></div>
                 </div>
             </div>
         )

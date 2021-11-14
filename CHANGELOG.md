@@ -1,3 +1,7 @@
+# 2021-11-14
+- Challenge dashboard now has a background and border to separate it from others.
+- The player with the turn in the dashboard is now higlighted.
+- Changed "Anon" to "Guest" (wording matters!)
 # 2021-11-12
 - Challenge board and dashboard centered and sizes are well-defined and aligned.
 # 2021-11-11

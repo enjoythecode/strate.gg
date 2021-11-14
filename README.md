@@ -23,18 +23,15 @@ See `BUILDING.md`
 
 # Do-List
 1. FE: Make the website somewhat presentable
-    - Display game status and player IDs neatly in a Dashboard
-        - Player names
-            - Anonymous user ID should be shown with less characters
-        - Player with turn
+    - Display game status and player IDs neatly in a Dashboar
         - Game status
         - Move list
-    - Current turn indicator + an indicator for what side the client is playing
+1. Make sure footer behaves well on pages with long content (scroll) 
 1. Get a static IP for the production instance
 
 ## Unordered/Wish-List/Future
 1. Fix header on mobile
-1. Make sure footer behaves well on pages with long content (scroll)
+1. Fix in Mancala: clicking opponent plays corresponding pit for self when you have turn!
 1. TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)

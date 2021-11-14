@@ -64,6 +64,22 @@ h2{
     float:left;
 }
 
+.challenge-dashboard{
+    padding: 0.2em;
+    margin: 0.3em; 
+    border: grey 2px solid;
+    background: #f4f4f4;
+}
+.challenge-dashboard-player{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-bottom: grey 3px solid;
+}
+.challenge-dashboard-player.challenge-dashboard-player-hasTurn{
+    border-bottom: rgb(20, 187, 20) 3px solid;
+}
+
 .challenge-wrapper{
     margin: auto;
     margin-top: 0.5em;
@@ -81,7 +97,7 @@ h2{
 }
 
 .challenge-dashboard{
-    width: 400px;
+    width: 330px;
     display: flex;
     align-items: center;
 }
