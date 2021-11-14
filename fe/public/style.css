@@ -86,6 +86,15 @@ h2{
     align-items: center;
 }
 
+.player-tag{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3em;
+}
+
+.player-tag-self{
+    font-weight: 600;
+}
+
 .mancala-board{
     width: 70vmin;
     height: 23.333vmin;

@@ -58,6 +58,29 @@ class Challenge {
     }
 }
 
+const PlayerTagView = (props) => {
+
+    let classes = ["player-tag"]
+    if (props.isSelf){
+        classes.push("player-tag-self")
+    }
+
+    let display;
+    if(typeof props.displayName !== 'undefined'){
+        console.log("dn", props.displayName)
+        display = "Anon#" + props.displayName.slice(0, 7)
+    }else{
+        display = "Waiting for opponent..."
+    }
+
+    return (
+        <div>
+            <span className={classes.join(" ")}>{display}</span>
+        </div>
+    )
+}
+
+
 const ChallengeView = observer(({ challenge }) =>(
     <div>
         {
@@ -69,8 +92,10 @@ const ChallengeView = observer(({ challenge }) =>(
                     </div>
                     <div className="challenge-dashboard">
                         <div>
-                            <p>{challenge.status}</p>
-                            <p>Players: {challenge.players.join(", ")}</p>
+                            <PlayerTagView displayName={challenge.players[1]} isSelf={challenge.client_turn == 1}/>
+                            <h3>Move List</h3>
+                            <h4>Status: {challenge.status}</h4>
+                            <PlayerTagView displayName={challenge.players[0]} isSelf={challenge.client_turn == 0}/>
                         </div>
                     </div>
                 </div>
