@@ -43,8 +43,15 @@ class Challenge {
     }
 
     process_new_move(move){
+        this.moves.push({
+            "human": {
+                    "turn": this.game_state.turn,
+                    "formatted_move": this.game_state.format_move_for_human(move),
+                    "color": this.game_state.turn_to_color[this.game_state.turn]
+                },
+            "robot": move
+        })
         this.game_state.process_new_move(move)
-        this.moves.push(move)
     }
 
     update_challenge_information(data){
@@ -85,6 +92,23 @@ const PlayerTagView = (props) => {
     )
 }
 
+const MoveList = (props) => {
+    let rendered_moves = []
+
+    console.log("pp", props)
+
+    for (let index = 0; index < props.moves.length; index++) {
+        const move = props.moves[index]
+
+        rendered_moves.push(
+            <li key={index}>
+                <b>{move.human.color.name}</b> <span style={{height:"1em"}}>{move.human.formatted_move}</span>
+            </li>
+        )
+    }
+
+    return <ol>{rendered_moves}</ol>
+}
 
 const ChallengeView = observer(({ challenge }) =>(
     <div>
@@ -97,10 +121,22 @@ const ChallengeView = observer(({ challenge }) =>(
                     </div>
                     <div className="challenge-dashboard">
                         <div style={{width:"100%"}}>
-                            <PlayerTagView displayName={challenge.players[1]} isSelf={challenge.client_turn == 1} isTurn={challenge.game_state.turn == 1}/>
-                            <h3>Move List {challenge.moves}</h3>
+
+                            <PlayerTagView
+                                displayName={challenge.players[1]}
+                                isSelf={challenge.client_turn === 1}
+                                isTurn={challenge.game_state.turn === 1}
+                                />
+
+                            <MoveList moves={challenge.moves}/>
                             <h4>Status: {challenge.status}</h4>
-                            <PlayerTagView displayName={challenge.players[0]} isSelf={challenge.client_turn == 0} isTurn={challenge.game_state.turn == 0}/>
+
+                            <PlayerTagView
+                                displayName={challenge.players[0]}
+                                isSelf={challenge.client_turn === 0}
+                                isTurn={challenge.game_state.turn === 0}
+                            />
+
                         </div>
                     </div>
                 </div>

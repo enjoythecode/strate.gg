@@ -1,3 +1,5 @@
+# 2021-11-15
+- Move list now shows nicely formatted moves for Amazons
 # 2021-11-14
 - Challenge dashboard now has a background and border to separate it from others.
 - The player with the turn in the dashboard is now higlighted.
