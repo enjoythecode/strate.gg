@@ -95,19 +95,26 @@ const PlayerTagView = (props) => {
 const MoveList = (props) => {
     let rendered_moves = []
 
-    console.log("pp", props)
-
     for (let index = 0; index < props.moves.length; index++) {
         const move = props.moves[index]
 
         rendered_moves.push(
-            <li key={index}>
-                <b>{move.human.color.name}</b> <span style={{height:"1em"}}>{move.human.formatted_move}</span>
-            </li>
+            <div style={{display:"flex", alignContent: "center", textAlign: "center", alignItems: "center"}} key={index}>
+                {index+1}.
+                <div style={{maxWidth:"22px", maxHeight:"22px"}}>{move.human.color.badge}</div><span>{move.human.formatted_move}</span>
+            </div>
         )
     }
 
-    return <ol>{rendered_moves}</ol>
+    // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
+    return (
+            <div style={{maxHeight:"11em", overflow:"auto", display:"flex", flexDirection:"column-reverse", fontFamily:"monospace"}}> 
+                <div>
+                    {rendered_moves}
+                </div>
+            </div>
+        )
+    
 }
 
 const ChallengeView = observer(({ challenge }) =>(

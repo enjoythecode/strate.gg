@@ -25,7 +25,7 @@ See `BUILDING.md`
 1. FE: Make the website somewhat presentable
     - Display game status and player IDs neatly in a Dashboard
         - Game status
-        - Player color identity should be represented nicely with colors
+        - Add color badge next to the player name also
     - Make sure Mancala has caught up with the dashboard changes
 1. Make sure footer behaves well on pages with long content (scroll) 
 1. Fix header on mobile

@@ -69,12 +69,10 @@ class Amazons {
     selection = [null, null, null]; // selected cells; [from, to, shoot]
     lastMove = [null, null, null];
 
-    turn_to_color = [{"name":"White", "rgb":"#FFF"}, {"name":"Black", "rgb":"#000"}];
+    turn_to_color = [{"name":"White", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wqueen.png"/>}, {"name":"Black", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bqueen.png"/>}];
 
     setTurn = (val) => {
-        console.log("setting", val)
         this.turn = val;
-        console.log("set", this.turn)
     }
 
     resetSelection = () => {
@@ -142,10 +140,8 @@ class Amazons {
 
     format_move_for_human = (move) => {
         let ind2coord = (index) => {
-            console.log(index)
             return String.fromCharCode(65 + Number(index[1])) + String(Number(index[0])+1);
         }
-        console.log(move)
         return ind2coord(move.from) + "-" + ind2coord(move.to) + "/" + ind2coord(move.shoot)
     }
 
