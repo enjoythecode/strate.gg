@@ -22,8 +22,12 @@ My ambition is to build a website for real-time and correspondence matches of th
 See `BUILDING.md`
 
 # Do-List
-1. Make sure footer behaves well on pages with long content (scroll) 
-1. Fix header on mobile
+1. Front-end presentability improvements
+    1. Fix header on mobile
+    1. Make the logo clickable to go back to /index.js
+    1. Make the challenge boxes be 2 per column!
+    1. Challenge box button should be at the bottom and as wide as the box, and potentially capitalized for style points
+    1. Make the challenge boxes properly push down when the screen is too narrow (i.e. narrow)
 
 ## Unordered/Wish-List/Future
 1. Get a static IP for the production instance
@@ -42,7 +46,6 @@ See `BUILDING.md`
     - FE: Implementation
         - Show pebbles on `MancalaView`
         - Animate the pebbles on `MancalaView` using react-spring or similar
-    - Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. Look into browser back button working with router.
 1. Add time controls
     - BE: Planning-- how do we architecture things? How do we account for network latency?
@@ -59,7 +62,11 @@ See `BUILDING.md`
 1. FE-TV: Add delay to disposing of games when the game is over, as well as some sort of indicator
 1. FE TV: load the component of the game only, not the whole challenge view (i.e. exclude the toolbar etc.)
 1. Investigate: Why is front-end sending two join requests when `PlayPage` is loaded?
-1. FE: Push challenge-create boxes downwards when the screen is not wide enough for them, and load more in as necessary!
 1. camelCase (or some other specific code style) should be determined to be the style to use, and this should be enforced!
 1. BE `challenge.py` should not know about what responses are being sent back! It should only return a boolean for success/error, and a potential data bundle!
+1. Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
+1. Add MongoDB database
+1. Load games from database if not in memory
+1. Add account system
+1. Decide on primary color for the website!

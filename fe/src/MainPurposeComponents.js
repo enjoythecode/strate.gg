@@ -54,8 +54,9 @@ class Footer extends React.Component{
             <footer>
                 <p style={{paddingLeft:"20%", paddingRight:"20%"}}>
                     <span>
-                    A project by <a href="enjoythecode.com">Sinan</a> dedicated to the play and exploration of abstract strategy board games.
-                        <span style={{float:"right"}}>
+                        A project by <a href="https://enjoythecode.com">Sinan</a> dedicated to the play and exploration of abstract strategy board games.
+                        <br/>
+                        <span>
                             Take a look at the <a href="https://github.com/enjoythecode/strate.gg">source code.</a>
                         </span>
                     </span>

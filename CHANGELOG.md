@@ -3,6 +3,7 @@
 - Back-end can now differentiate between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
 - Added a color badge next to the player name in challenge dashboard
 - Mancala is now compatible with the challenge dashboard upgrades
+- Footer now sticks to the bottom properly and is at the bottom on pages that require scroll (say, mobile devices with narrow screens pushing challenge dashboard down)
 # 2021-11-15
 - Move list now shows nicely formatted moves for Amazons
 - Move list now shows color badges nicely for Amazons
