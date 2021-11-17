@@ -1,6 +1,7 @@
 # 2021-11-16
 - Game status is now nicely rendered in the challenge dashboard
 - Back-end can now differentiate between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
+- Added a color badge next to the player name in challenge dashboard
 # 2021-11-15
 - Move list now shows nicely formatted moves for Amazons
 - Move list now shows color badges nicely for Amazons

@@ -92,7 +92,8 @@ const PlayerTagView = (props) => {
     }
 
     return (
-        <div className={divClasses.join(" ")}>
+        <div className={divClasses.join(" ")} style={{display:"flex", alignContent: "center", textAlign: "center", alignItems: "center" }}>
+            <div style={{maxWidth:"30px", maxHeight:"30px", marginRight:"5px"}}>{props.colorBadge}</div>
             <span className={spanClasses.join(" ")}>{display}</span>
         </div>
     )
@@ -186,6 +187,7 @@ const ChallengeView = observer(({ challenge }) =>(
                                 displayName={challenge.players[1]}
                                 isSelf={challenge.client_turn === 1}
                                 isTurn={challenge.game_state.turn === 1}
+                                colorBadge={challenge.game_state.turn_to_color[1].badge}
                                 />
 
                             <MoveList moves={challenge.moves}/>
@@ -195,6 +197,7 @@ const ChallengeView = observer(({ challenge }) =>(
                                 displayName={challenge.players[0]}
                                 isSelf={challenge.client_turn === 0}
                                 isTurn={challenge.game_state.turn === 0}
+                                colorBadge={challenge.game_state.turn_to_color[0].badge}
                             />
 
                         </div>
