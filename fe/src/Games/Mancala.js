@@ -34,6 +34,12 @@ class Mancala {
     turn = null
     board = null
 
+    turn_to_color = [{"name":"Down", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wstone.png"/>}, {"name":"Up", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bstone.png"/>}];
+
+    format_move_for_human = (move) => {
+        return "Pit " + String(move.pit)
+    }
+
     setTurn = (val) => {
         this.turn = val;
     }

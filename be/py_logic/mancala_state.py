@@ -81,6 +81,18 @@ class MancalaState(game_state.GameState):
 
         self.number_of_turns += 1
 
+        # check for game end
+        game_end_sweep = -1
+
+        if sum(self.board[0:6]) == 0:
+            game_end_sweep = 0
+        elif sum(self.board[7:13]) == 0:
+            game_end_sweep = 1
+            
+        if game_end_sweep != -1:
+            self.board[6 + game_end_sweep * 7] += sum(self.board[0:6]) + sum(self.board[7:13])
+            
+
     def is_valid_move(self, move):
         if not "pit" in move:
             return False
@@ -95,11 +107,16 @@ class MancalaState(game_state.GameState):
 
         return True
 
-    def is_game_over(self):
-        pass
-        # TODO implement
-        # TODO: add the sweeping logic to make_move
-        # TODO: call is_game_over at the end of all moves in all games?!
+    def check_game_end(self):
+        if sum(self.board[0:6]) == 0 or sum(self.board[7:13]) == 0:
+            if self.board[6] > self.board[13]:
+                return 1
+            elif self.board[6] < self.board[13]:
+                return 2
+            else:
+                return -2 # draw!
+                
+        return 0 # going on
 
     def __repr__(self): # string representation of the board from the perspective of P0
         return(str(self.board) + "turn" + str(self.turn))

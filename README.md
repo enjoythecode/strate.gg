@@ -22,10 +22,6 @@ My ambition is to build a website for real-time and correspondence matches of th
 See `BUILDING.md`
 
 # Do-List
-1. FE: Make the website somewhat presentable
-    - Display game status and player IDs neatly in a Dashboard
-        - Added a color badge next to the player name in challenge dashboard also
-    - Make sure Mancala has caught up with the dashboard changes
 1. Make sure footer behaves well on pages with long content (scroll) 
 1. Fix header on mobile
 

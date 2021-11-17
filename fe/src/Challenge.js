@@ -108,7 +108,7 @@ const MoveList = (props) => {
         rendered_moves.push(
             <div style={{display:"flex", alignContent: "center", textAlign: "center", alignItems: "center"}} key={index}>
                 {index+1}.
-                <div style={{maxWidth:"22px", maxHeight:"22px"}}>{move.human.color.badge}</div><span>{move.human.formatted_move}</span>
+                <div style={{maxWidth:"22px", maxHeight:"22px", marginRight:"4px"}}>{move.human.color.badge}</div><span>{move.human.formatted_move}</span>
             </div>
         )
     }
@@ -158,6 +158,9 @@ const StatusIndicator = (props) => {
                 break;
             case 2:
                 els.push(<em key={2}>Black wins. 0 - 1</em>)
+                break;
+            case -2:
+                els.push(<em key={2}>Draw. ½ - ½</em>)
                 break;
         }
     }
