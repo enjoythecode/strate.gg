@@ -19,6 +19,7 @@ const game_name_to_view_component = {
 class Challenge {
     game_name = ""
     game_state = null
+    game_end = null
     players = []
     status = ""
     cid = ""
@@ -29,11 +30,14 @@ class Challenge {
             game_state: observable,
             players: observable,
             status: observable,
+            game_end: observable,
             update_challenge_information: action,
+            process_new_move: action,
             client_turn: computed
         })
         this.cid = data.cid
         this.game_name = data.game_name
+        this.game_end = 0
         this.game_state = new game_name_to_state_class[this.game_name](this, data.config)
         this.ViewComponent = game_name_to_view_component[this.game_name]
     }
@@ -42,22 +46,24 @@ class Challenge {
         RootState.socket.send_move({"cid": this.cid, "move": move})
     }
 
-    process_new_move(move){
+    process_new_move(data){
         this.moves.push({
             "human": {
                     "turn": this.game_state.turn,
-                    "formatted_move": this.game_state.format_move_for_human(move),
+                    "formatted_move": this.game_state.format_move_for_human(data.move),
                     "color": this.game_state.turn_to_color[this.game_state.turn]
                 },
-            "robot": move
+            "robot": data.move
         })
-        this.game_state.process_new_move(move)
+        this.game_state.process_new_move(data.move)
+        this.game_end = data.game_end
     }
 
     update_challenge_information(data){
         if("status" in data){this.status = data.status}
         if("players" in data){this.players = data.players}
         if("cid" in data){this.cid = data.cid}
+        if("game_end" in data){this.game_end = data.game_end}
     }
 
     get client_turn(){ // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...), -1 if not a player
@@ -107,14 +113,61 @@ const MoveList = (props) => {
     }
 
     // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
-    return (
-            <div style={{maxHeight:"11em", overflow:"auto", display:"flex", flexDirection:"column-reverse", fontFamily:"monospace"}}> 
-                <div>
-                    {rendered_moves}
+    if(props.moves.length !== 0){
+        return (
+                <div style={{maxHeight:"11em", overflow:"auto", display:"flex", flexDirection:"column-reverse", fontFamily:"monospace", padding:"1em"}}> 
+                    <div>
+                        {rendered_moves}
+                    </div>
                 </div>
-            </div>
-        )
+            )
+    }else{
+        return null;
+    }
     
+}
+
+const StatusIndicator = (props) => {
+    let text = ""
+    let els = []
+    switch (props.status) {
+        case "WAITING_FOR_PLAYERS":
+            text = "Waiting for players to join..."
+            break;
+        case "OVER_NORMAL":
+            text = "Game over."
+            break;
+        case "OVER_DISCONNECT":
+            text = "Game over due to disconnect."
+            break;
+        case "OVER_TIME":
+            text = "Game over due to time out."
+            break;
+    }
+
+    if(text){
+        els.push(<em key={0}>{text}</em>)
+    }
+
+    if(props.end !== 0){
+        els.push(<br key={1}/>)
+        switch (props.end) {
+            case 1:
+                els.push(<em key={2}>White wins. 1 - 0</em>)
+                break;
+            case 2:
+                els.push(<em key={2}>Black wins. 0 - 1</em>)
+                break;
+        }
+    }
+    
+    return (
+        <div style={{textAlign: "center", display: "block", margin: "1em"}}>
+            {els}
+        </div>
+            
+        )
+
 }
 
 const ChallengeView = observer(({ challenge }) =>(
@@ -136,7 +189,7 @@ const ChallengeView = observer(({ challenge }) =>(
                                 />
 
                             <MoveList moves={challenge.moves}/>
-                            <h4>Status: {challenge.status}</h4>
+                            <StatusIndicator status={challenge.status} end={challenge.game_end}/>
 
                             <PlayerTagView
                                 displayName={challenge.players[0]}

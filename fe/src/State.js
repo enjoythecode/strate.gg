@@ -30,7 +30,7 @@ class State {
     update_challenge_new_move = (data) => {
         let cid = data.cid
         if(this.challenges.has(cid)){
-            this.challenges.get(cid).process_new_move(data.move)
+            this.challenges.get(cid).process_new_move(data)
         }
     }
 

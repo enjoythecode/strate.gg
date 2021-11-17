@@ -26,6 +26,7 @@ class Challenge:
         self.moves = None
         self.status = None
         self.cid = None
+        self.game_end_override = None # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
         
     def initialize_challenge(self, game_name, cid, config):
         if not game_name in game_classes:
@@ -89,6 +90,7 @@ class Challenge:
 
         if user.sid in self.players and self.state.turn == self.players.index(user.sid):
             self.state.make_move(move)
+            game_end = self.check_game_end()
         else:
             return {"result": "error", "error": "not your turn"}
 
@@ -96,7 +98,8 @@ class Challenge:
             "cid": self.cid,
             "result" : "success",
             "move": move,
-            "status": self.status.name
+            "status": self.status.name,
+            "game_end": game_end
         }
         return response
 
@@ -106,9 +109,18 @@ class Challenge:
     def handle_disconnect(self, user):
         self.status = ChallengeStatus.OVER_DISCONNECT
 
+        self.game_end_override = ((self.players.index(user.sid) + 1) % 2) + 1 # set the remaining player as the winner
+
         response = {
             "cid": self.cid,
-            "status": self.status.name
+            "status": self.status.name,
+            "game_end": self.check_game_end()
         }
 
         return response
+
+    def check_game_end(self):
+        if self.game_end_override:
+            return self.game_end_override
+        else:
+            return self.state.check_game_end()

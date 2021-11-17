@@ -1,4 +1,5 @@
 from flask import Flask, send_from_directory, request
+from werkzeug.wrappers import PlainRequest
 import flask_socketio as sckt
 from py_logic.user import User
 from py_logic.challenge import Challenge, ChallengeStatus
@@ -116,7 +117,6 @@ def available_tv_challenges(payload):
     return {"result": "error", "error": "No games available!"}
 
 def handle_player_disconnect(cid, user):
-
     response = challenges[cid].handle_disconnect(user)
     payload = {"result": "success", "info": response}
     sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())

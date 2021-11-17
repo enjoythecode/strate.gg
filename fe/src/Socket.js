@@ -54,6 +54,7 @@ class Socket {
         })
 
         this.io.on("game-update-meta", (data) => {
+            console.log(data)
             if("result" in data && data.result === "success"){
                 RootState.update_challenge_information(data.info)
             }
