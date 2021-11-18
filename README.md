@@ -22,14 +22,24 @@ My ambition is to build a website for real-time and correspondence matches of th
 See `BUILDING.md`
 
 # Do-List
+1. AI opponents for Amazons
+    1. Create the ability to play against a simple AI
+        - FE: add button for AI challenge
+        - BE: add code for loading AI opponent, and responding with AI move in games where one opponent is AI
+            - In User, ability to distinguish between humans and robots
+            - In make_move, hook that checks if it is an AI player turn, and if so plays it
+            - Q: how do we trigger a separate process that will calculate the AI move, especially when it might take some number of seconds?
+    1. Add multiple AI (say, MCTS, blocker)
+    1. Look up established models to see if any of them are open-source.
+    1. Think about training my own model so that I can have bots at different difficulties!
+
+## Unordered/Wish-List/Future
 1. Front-end presentability improvements
     1. Fix header on mobile
     1. Make the logo clickable to go back to /index.js
     1. Make the challenge boxes be 2 per column!
     1. Challenge box button should be at the bottom and as wide as the box, and potentially capitalized for style points
     1. Make the challenge boxes properly push down when the screen is too narrow (i.e. narrow)
-
-## Unordered/Wish-List/Future
 1. Get a static IP for the production instance
 1. Fix in Mancala: clicking opponent plays corresponding pit for self when you have turn!
 1. TV should play a game from memory when no live games are available
