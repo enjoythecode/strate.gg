@@ -6,7 +6,8 @@ import RootState from "./State.js"
 const marqueeArr = [
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     "Warning: Do not use <marquee> elements as they can create visual accessibility issues and are deprecated.",
-    "Comics I enjoy: xkcd"
+    "Comics I enjoy: xkcd",
+    <a href="https://xkcd.com/1112/">Here's why Chess is not on strate.gg</a>
 ]
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
