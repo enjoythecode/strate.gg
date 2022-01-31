@@ -41,7 +41,6 @@ See `BUILDING.md`
     1. Challenge box button should be at the bottom and as wide as the box, and potentially capitalized for style points
     1. Make the challenge boxes properly push down when the screen is too narrow (i.e. narrow)
 1. Get a static IP for the production instance
-1. Fix in Mancala: clicking opponent plays corresponding pit for self when you have turn!
 1. TV should play a game from memory when no live games are available
         - Design a rudimentary format for storing games
         - Create example games using AI (or local play)

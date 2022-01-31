@@ -44,12 +44,14 @@ class Mancala {
         this.turn = val;
     }
 
-    clickPit = (p) => {
+    clickPit = (p, side) => {
         // check if it is the players turn before allowing a click
         // also checks for observers because client_turn == -1 if the client is not a player
         // TODO
         //if(this.turn === this.challenge.client_turn + 1 && this.challenge.status === "IN_PROGRESS"){
-            this.challenge.send_move({"pit": p})
+            if ( (side == "down") == (this.challenge.client_turn == 0)){
+                this.challenge.send_move({"pit": p})
+            }
         //} 
     }
 
@@ -103,7 +105,7 @@ const MancalaView = observer(class _ extends React.Component{
             downPits.push(<div  
                 className={"mancala-pit mancala-pit-d-" + (k+1).toString()}
                 key={k}
-                onClick={this.props.game_state.clickPit.bind(null, k)}>
+                onClick={this.props.game_state.clickPit.bind(null, k, "down")}>
                     {this.props.game_state.board[k]}
             </div>)
 
@@ -111,7 +113,7 @@ const MancalaView = observer(class _ extends React.Component{
                 <div  
                 className={"mancala-pit mancala-pit-u-" + (6-k).toString()}
                 key={k}
-                onClick={this.props.game_state.clickPit.bind(null, k)}>
+                onClick={this.props.game_state.clickPit.bind(null, k, "up")}>
                     {this.props.game_state.board[k + 7]}
             </div>
             )
