@@ -21,7 +21,21 @@ My ambition is to build a website for real-time and correspondence matches of th
 ## Further Notes
 See `BUILDING.md`
 
-# Do-List
+# Essential To-do
+1. Add Mancala
+    - FE: Implementation
+        - Show pebbles on `MancalaView`
+        - Animate the pebbles on `MancalaView` using react-spring or similar
+1. Add account system
+    - Add MongoDB database
+    - Add tasks of how this would appear across the site
+1. Add time controls
+    - BE: Planning-- how do we architecture things? How do we account for network latency?
+    - FE: Display time, add configuration of time controls when creating a game
+    
+# Useful To-do
+1. Add a game-lobby chat
+1. Add site-wide availability of rulesets: Option to play w/ or w/o stealing for mancala
 1. AI opponents for Amazons
     1. Create the ability to play against a simple AI
         - FE: add button for AI challenge
@@ -32,8 +46,18 @@ See `BUILDING.md`
     1. Add multiple AI (say, MCTS, blocker)
     1. Look up established models to see if any of them are open-source.
     1. Think about training my own model so that I can have bots at different difficulties!
+1. Put TV games in create-game boxes
+    - Add a parameter to the TV polling backend for the game type
+    - Make the create-game box a component that is created with a for loop in `App.js`
+    - Glue all of these together!
+    - TV should play a game from memory when no live games are available
+        - Design a rudimentary format for storing games
+        - Create example games using AI (or local play)
+        - Serve this information from the BE when no games are available
+        - Create a component that wraps the game board and view and sends moves from this example game at a delay
+            - (this will require that the View component is decoupled from Challenge, see "Tech Debt" section)
 
-## Unordered/Wish-List/Future
+## Unordered/Wish-List
 1. Front-end presentability improvements
     1. Fix header on mobile
     1. Make the logo clickable to go back to /index.js
@@ -41,26 +65,8 @@ See `BUILDING.md`
     1. Challenge box button should be at the bottom and as wide as the box, and potentially capitalized for style points
     1. Make the challenge boxes properly push down when the screen is too narrow (i.e. narrow)
 1. Get a static IP for the production instance
-1. TV should play a game from memory when no live games are available
-        - Design a rudimentary format for storing games
-        - Create example games using AI (or local play)
-        - Serve this information from the BE when no games are available
-        - Create a component that wraps the game board and view and sends moves from this example game at a delay
-            - (this will require that the View component is decoupled from Challenge, see "Tech Debt" section)
-1. Put TV games in create-game boxes
-        - Add a parameter to the TV polling backend for the game type
-        - Make the create-game box a component that is created with a for loop in `App.js`
-        - Glue all of these together!
-1. Add Mancala
-    - FE: Implementation
-        - Show pebbles on `MancalaView`
-        - Animate the pebbles on `MancalaView` using react-spring or similar
 1. Look into browser back button working with router.
-1. Add time controls
-    - BE: Planning-- how do we architecture things? How do we account for network latency?
-    - FE: Display time, add configuration of time controls when creating a game
 1. FE: Add option to request/suggest undo of the last move
-1. Add a game-lobby chat
 1. README: Explain project structure with `tree`
 1. Minimize the use of CSS-in-JS, especially in `Amazons`, to the bare minimum, preferably 0
 1. Add option to resign
@@ -73,9 +79,6 @@ See `BUILDING.md`
 1. Investigate: Why is front-end sending two join requests when `PlayPage` is loaded?
 1. camelCase (or some other specific code style) should be determined to be the style to use, and this should be enforced!
 1. BE `challenge.py` should not know about what responses are being sent back! It should only return a boolean for success/error, and a potential data bundle!
-1. Add site-wide availability of rulesets: Option to play w/ or w/o stealing
 1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
-1. Add MongoDB database
 1. Load games from database if not in memory
-1. Add account system
 1. Decide on primary color for the website!

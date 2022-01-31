@@ -1,5 +1,6 @@
 # 2022-01-31
 - Fixed bug where clicking opponent's pit in Mancala would play the corresponding move.
+- Re-order priorities in README.md
 # 2021-11-16
 - Game status is now nicely rendered in the challenge dashboard
 - Back-end can now differentiate between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
