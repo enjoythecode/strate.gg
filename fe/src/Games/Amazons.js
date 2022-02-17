@@ -1,6 +1,6 @@
 import { makeObservable, computed, observable, action } from "mobx"
 import { observer } from "mobx-react"
-import React from "react"
+import { React, useState} from "react"
 import './grid.css'
 
 const boardCss = (x) => { return {
@@ -39,23 +39,16 @@ const initializeBoard = (config) => {
     return startingBoards[key]
 }
 
+// TODO (Amazons general) change cell naming convention from "xy" to two integer arguments/parameters x and y!
+
 class Amazons {
     constructor(challenge, config){
         makeObservable(this,{
             board: observable,
-            selection: observable,
             lastMove: observable,
             turn: observable,
             setTurn: action,
-            clickCell: action,
             process_new_move: action,
-            resetSelection: action,
-            selectionFrom:  computed,
-            selectionTo: computed,
-            selectionShoot: computed,
-            currentSelectionStep: computed,
-            boardCssClasses: computed,
-            renderedPieces: computed,
         })
 
         this.setTurn(0)
@@ -66,47 +59,12 @@ class Amazons {
 
     turn = null
     board = null
-    selection = [null, null, null]; // selected cells; [from, to, shoot]
     lastMove = [null, null, null];
 
     turn_to_color = [{"name":"White", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wqueen.png"/>}, {"name":"Black", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bqueen.png"/>}];
 
     setTurn = (val) => {
         this.turn = val;
-    }
-
-    resetSelection = () => {
-        this.selection = [null, null, null];
-    }
-
-    clickCell = (c) => {
-        // check if it is the players turn before allowing a click
-        // also checks for observers because client_turn == -1 if the client is not a player
-        if(this.turn === this.challenge.client_turn && this.challenge.status === "IN_PROGRESS"){
-            switch (this.currentSelectionStep) {
-                case "from":
-                    if(this.board[Number(c[0])][Number(c[1])] === this.turn + 1){
-                        this.selection[0] = c
-                    }
-                    break;
-                case "to":
-                    if(this.cell_can_reach(this.selectionFrom, c)){
-                        this.selection[1] = c
-                    }else{
-                        this.resetSelection()
-                    }
-                    break;
-                case "shoot":
-                    if(this.cell_can_reach(this.selectionTo, c, this.selectionFrom)){
-                        this.selection[2] = c
-                        this.challenge.send_move(this.formatMoveForSend())
-                    }
-                    this.resetSelection()
-                    break;
-                default:
-                    break;
-            }
-        } 
     }
 
     cell_can_reach = (from, to, ignore) => {
@@ -145,13 +103,6 @@ class Amazons {
         return ind2coord(move.from) + "-" + ind2coord(move.to) + "/" + ind2coord(move.shoot)
     }
 
-    formatMoveForSend(){
-        return {"from": this.selectionFrom,
-                "to": this.selectionTo,
-                "shoot": this.selectionShoot
-            }
-    }
-
     process_new_move(move){
         let from_x = move.from[0]
         let from_y = move.from[1]
@@ -169,26 +120,32 @@ class Amazons {
         this.lastMove = [move.from, move.to, move.shoot]
     }
 
-    get selectionFrom () {return this.selection[0]}
-    get selectionTo () {return this.selection[1]}
-    get selectionShoot () {return this.selection[2]}
-    get currentSelectionStep () {
-        if(this.selectionFrom === null) return "from"
-        if(this.selectionTo === null) return "to"
-        if(this.selectionShoot === null) return "shoot"
-        return null
-    }
+}
 
-    get renderedPieces(){
+const AmazonsView = observer( 
+    ({game_state}) => {
+
+        // the cells that are clicked as part of the current move
+        const [selection, setSelection] = useState({"from": null, "to": null, "shoot": null})
+
+        let currentSelectionStep = () => {
+            if(selection["from"] === null) return "from"
+            if(selection["to"] === null) return "to"
+            if(selection["shoot"] === null) return "shoot"
+
+            // TODO is it good style to throw an error here?
+            return null // should be unreachable
+        }
+
         let pieces = [];
 
-        for(let x = 0; x < this.config.size; x++){
-            for(let y = 0; y < this.config.size; y++){
+        for(let x = 0; x < game_state.config.size; x++){
+            for(let y = 0; y < game_state.config.size; y++){
 
-                if(this.board[x][y] !== 0){
+                if(game_state.board[x][y] !== 0){
 
-                    let img_src = ["/images/wqueen.png", "/images/bqueen.png", "/images/fire.png"][this.board[x][y] - 1];
-                    let img_alt = ["White Queen", "Black Queen", "Burnt Off Square"][this.board[x][y] - 1];
+                    let img_src = ["/images/wqueen.png", "/images/bqueen.png", "/images/fire.png"][game_state.board[x][y] - 1];
+                    let img_alt = ["White Queen", "Black Queen", "Burnt Off Square"][game_state.board[x][y] - 1];
                     
                     let positionCss = {
                         left: y * 10 + "%", // TODO: FIX: Make this adaptive to board size!
@@ -197,81 +154,106 @@ class Amazons {
 
                     pieces.push(
                         <img src={img_src} alt={img_alt} style={{...positionCss, ...pieceCss}} key={pieces.length}
-                            onClick={() => {this.clickCell(x.toString() + y.toString())}}>
+                            onClick={() => {clickCell(x.toString() + y.toString())}}>
                         </img>
                     )
                 }
             }
         }
 
-        return pieces;
-    }
+        console.log("current selection step is:", currentSelectionStep())
 
-    get boardCssClasses(){
-        let result = []
-        for(let x = 0; x < this.config.size; x++){
-            let row = []
-            for(let y = 0; y < this.config.size; y++){
-                let cell = x.toString() + y.toString()
-                let classes = [];
+        let clickCell = (c) => {
+            // check if it is the players turn before allowing a click
+            // checks for observers because client_turn == -1 if the client is not a player
+            if(game_state.turn === game_state.challenge.client_turn && game_state.challenge.status === "IN_PROGRESS"){
+                switch (currentSelectionStep()) {
+                    case "from":
+                        if(game_state.board[Number(c[0])][Number(c[1])] === game_state.turn + 1){
+                            // when the new value of selection depends on the old value, we use what is called a 
+                            // *functional update*. Read more at https://reactjs.org/docs/hooks-reference.html#functional-updates
+                            setSelection(selection => {return {...selection, "from": c}} )
+                        }
+                        break;
 
-                // TODO: separate this because it never changes
-                classes.push((y % this.config.size + x) % 2 ? "cellLight" : "cellDark");
+                    case "to":
+                        if(game_state.cell_can_reach(selection["from"], c)){
+                            setSelection(selection => {return {...selection, "to": c}} )
+                        }else{
+                            setSelection([{"from": null, "to": null, "shoot": null}])
+                        }
+                        break;
 
-                // last move indicator
-                if (this.lastMove !== null && this.lastMove.includes(cell))
-                    classes.push(...["indicator", "indicatorLastMove"])
+                    case "shoot":
+                        if(game_state.cell_can_reach(selection["to"], c, selection["from"])){
+                            // we do not set the state within this if-block because we want the selection to be reset right away
+                            game_state.challenge.send_move({...selection, "shoot": c})
+                        }
+                        setSelection([{"from": null, "to": null, "shoot": null}])
+                        break;
 
-                // TODO: Optimize the speed of this by having the movables put on indication classes to cells instead!
-                if (this.currentSelectionStep === "to" && this.cell_can_reach(this.selectionFrom, cell)) 
-                    classes.push(...["indicator", "indicatorPrimary"])
-                if (this.currentSelectionStep === "shoot" && this.cell_can_reach(this.selectionTo, cell, this.selectionFrom)) 
-                    classes.push(...["indicator", "indicatorSecondary"])
-                if (this.currentSelectionStep === "shoot" && this.selectionTo === cell) 
-                    classes.push(...["indicator", "indicatorSecondary"])
-
-                if (classes.includes("indicator")){
-                    if (this.currentSelectionStep === "shoot" && 
-                    [this.selectionFrom, this.selectionTo].includes(cell)){
-                        classes.push("indicatorOuter")
-                    }else{
-                        classes.push("indicatorInner")
-                    }
+                    default:
+                        break;
                 }
-
-                row.push(classes.join(" "))
             }
-            result.push(row)
         }
-        return result
-    }
-}
+        
+        let styleClassesForCellAtCoord = (cell) => {
+            let classes = [];
+            let x = Number(cell[0])
+            let y = Number(cell[1])
 
-const AmazonsView = observer(class _ extends React.Component{
+            // last move indicator
+            if (game_state.lastMove !== null && game_state.lastMove.includes(cell))
+                classes.push("indicatorLastMove")
+            if (currentSelectionStep() === "to" && game_state.cell_can_reach(selection["from"], cell)) 
+                classes.push("indicatorPrimary")
+            if (currentSelectionStep() === "shoot" && game_state.cell_can_reach(selection["to"], cell, selection["from"])) 
+                classes.push("indicatorSecondary")
+            if (currentSelectionStep() === "shoot" && selection["to"] === cell) 
+                classes.push("indicatorSecondary")
 
-    render() {
-        let boardCells = []
-        let size = this.props.game_state.board.length
-
-        for(let x = 0; x < size; x++){
-            for(let y = 0; y < size; y++){
-                boardCells.push(
-                    <div
-                        className={this.props.game_state.boardCssClasses[x][y]}
-                        key={x * size + y}
-                        onClick={() => {this.props.game_state.clickCell(x.toString() + y.toString())}}>
-                    </div>
+            if (classes.length > 0){ // this checks if this cell got an indicator class
+                classes.push(
+                    (
+                        currentSelectionStep() === "shoot" && 
+                        [selection["from"], selection["to"]].includes(cell)
+                    ) ? "indicatorOuter": "indicatorInner"
                 )
             }
+
+            // TODO: separate this logic because it never changes
+            classes.push((y % game_state.config.size + x) % 2 ? "cellLight" : "cellDark");
+
+            return classes.join(" ")
         }
 
-        return (
-            <div style={boardCss(this.props.game_state.board.length)}>
-                {boardCells}
-                {this.props.game_state.renderedPieces}
-            </div>
-        )
+        if (game_state){
+            let boardCells = []
+            let size = game_state.board.length
+    
+            for(let x = 0; x < size; x++){
+                for(let y = 0; y < size; y++){
+                    boardCells.push(
+                        <div
+                            className={styleClassesForCellAtCoord(x.toString() + y.toString())}
+                            key={x * size + y}
+                            onClick={() => {clickCell(x.toString() + y.toString())}}>
+                        </div>
+                    )
+                }
+            }
+    
+            return (
+                <div style={boardCss(game_state.board.length)}>
+                    {boardCells}
+                    {pieces}
+                </div>
+            )
+        }else{
+            <p>Game is loading...</p>
+        }
     }
-})
+)
 
 export {Amazons, AmazonsView}

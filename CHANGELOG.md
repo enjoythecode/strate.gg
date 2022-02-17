@@ -1,3 +1,6 @@
+# 2022-02-17
+- Separated State Management for the Amazons (game state) and AmazonsView (volatile UI state)
+- Removed a redundant CSS class `indicator` from AmazonsView and `grid.css` for cleaner code
 # 2022-01-31
 - Fixed bug where clicking opponent's pit in Mancala would play the corresponding move.
 - Re-order priorities in README.md
