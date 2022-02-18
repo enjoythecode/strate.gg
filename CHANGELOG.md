@@ -13,13 +13,15 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Added a color badge next to the player name in challenge dashboard
 - Mancala is now compatible with the challenge dashboard upgrades
 - Footer now sticks to the bottom properly and is at the bottom on pages that require scroll (say, mobile devices with narrow screens pushing challenge dashboard down)
-# 2021-11-15
-- Move list now shows nicely formatted moves for Amazons
-- Move list now shows color badges nicely for Amazons
-# 2021-11-14
-- Challenge dashboard now has a background and border to separate it from others.
-- The player with the turn in the dashboard is now higlighted.
-- Changed "Anon" to "Guest" (wording matters!)
+
+## [0.3.2] - 2021-11-15
+### Added
+- Background and border to Challenge Dashboard to visually separate it from other components
+- Visual highlight to the player with the turn in the dashboard.
+### Changed
+- Move list to show nicely formatted moves for Amazons
+- Move list to show color badges nicely for Amazons
+- "Anon" to "Guest" (wording matters!)
 
 ## [0.3.1] - 2021-11-12
 ### Added
