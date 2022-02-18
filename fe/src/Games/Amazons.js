@@ -1,4 +1,4 @@
-import { makeObservable, computed, observable, action } from "mobx"
+import { makeObservable, observable, action } from "mobx"
 import { observer } from "mobx-react"
 import { React, useState} from "react"
 import './grid.css'
@@ -61,7 +61,10 @@ class Amazons {
     board = null
     lastMove = [null, null, null];
 
-    turn_to_color = [{"name":"White", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wqueen.png"/>}, {"name":"Black", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bqueen.png"/>}];
+    turn_to_color = [
+        {"name":"White", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wqueen.png" alt="White Queen Piece"/>},
+        {"name":"Black", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bqueen.png" alt="Black Queen Piece"/>}
+    ];
 
     setTurn = (val) => {
         this.turn = val;
@@ -137,32 +140,6 @@ const AmazonsView = observer(
             return null // should be unreachable
         }
 
-        let pieces = [];
-
-        for(let x = 0; x < game_state.config.size; x++){
-            for(let y = 0; y < game_state.config.size; y++){
-
-                if(game_state.board[x][y] !== 0){
-
-                    let img_src = ["/images/wqueen.png", "/images/bqueen.png", "/images/fire.png"][game_state.board[x][y] - 1];
-                    let img_alt = ["White Queen", "Black Queen", "Burnt Off Square"][game_state.board[x][y] - 1];
-                    
-                    let positionCss = {
-                        left: y * 10 + "%", // TODO: FIX: Make this adaptive to board size!
-                        top: x * 10 + "%"
-                    }
-
-                    pieces.push(
-                        <img src={img_src} alt={img_alt} style={{...positionCss, ...pieceCss}} key={pieces.length}
-                            onClick={() => {clickCell(x.toString() + y.toString())}}>
-                        </img>
-                    )
-                }
-            }
-        }
-
-        console.log("current selection step is:", currentSelectionStep())
-
         let clickCell = (c) => {
             // check if it is the players turn before allowing a click
             // checks for observers because client_turn == -1 if the client is not a player
@@ -226,6 +203,30 @@ const AmazonsView = observer(
             classes.push((y % game_state.config.size + x) % 2 ? "cellLight" : "cellDark");
 
             return classes.join(" ")
+        }
+
+        let pieces = [];
+
+        for(let x = 0; x < game_state.config.size; x++){
+            for(let y = 0; y < game_state.config.size; y++){
+
+                if(game_state.board[x][y] !== 0){
+
+                    let img_src = ["/images/wqueen.png", "/images/bqueen.png", "/images/fire.png"][game_state.board[x][y] - 1];
+                    let img_alt = ["White Queen", "Black Queen", "Burnt Off Square"][game_state.board[x][y] - 1];
+                    
+                    let positionCss = {
+                        left: y * 10 + "%", // TODO: FIX: Make this adaptive to board size!
+                        top: x * 10 + "%"
+                    }
+
+                    pieces.push(
+                        <img src={img_src} alt={img_alt} style={{...positionCss, ...pieceCss}} key={pieces.length}
+                            onClick={() => {clickCell(x.toString() + y.toString())}}>
+                        </img>
+                    )
+                }
+            }
         }
 
         if (game_state){

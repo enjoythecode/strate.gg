@@ -2,14 +2,6 @@ import React from "react"
 import { observer } from "mobx-react"
 import RootState from "./State.js"
 
-// websites gotta have some identity!
-const marqueeArr = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "Warning: Do not use <marquee> elements as they can create visual accessibility issues and are deprecated.",
-    "Comics I enjoy: xkcd",
-    <a href="https://xkcd.com/1112/">Here's why Chess is not on strate.gg</a>
-]
-
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -45,6 +37,13 @@ class Header extends React.Component{
 class Footer extends React.Component{
     render(){
 
+        // marquee is an easter egg, not shown in the UI
+        const marqueeArr = [
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "Warning: Do not use <marquee> elements as they can create visual accessibility issues and are deprecated.",
+            "Comics I enjoy: xkcd",
+            <a href="https://xkcd.com/1112/">Here's why Chess is not on strate.gg</a>
+        ]
         let marqueeArrShuffled = shuffleArray(marqueeArr)
         let marqueeTags = [];
         for (let i = 0; i<marqueeArr.length;i++) {
@@ -61,9 +60,14 @@ class Footer extends React.Component{
                             Take a look at the <a href="https://github.com/enjoythecode/strate.gg">source code.</a>
                         </span>
                     </span>
+                    
+                    {
+                    /*
                     <marquee truespeed="True" scrolldelay="10" scrollamount="1">
                         {marqueeTags}
                     </marquee>
+                    */
+                    }
                 </p>
             </footer>
         )

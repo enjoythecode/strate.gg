@@ -34,7 +34,10 @@ class Mancala {
     turn = null
     board = null
 
-    turn_to_color = [{"name":"Down", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wstone.png"/>}, {"name":"Up", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bstone.png"/>}];
+    turn_to_color = [
+        {"name":"Down", "badge":<img style={{width:"100%", height:"100%"}} src="/images/wstone.png" alt="White Mancala Stone Badge"/>},
+        {"name":"Up", "badge":<img style={{width:"100%", height:"100%"}} src="/images/bstone.png" alt="Black Mancala Stone Badge"/>}
+    ];
 
     format_move_for_human = (move) => {
         return "Pit " + String(move.pit)
@@ -49,7 +52,7 @@ class Mancala {
         // also checks for observers because client_turn == -1 if the client is not a player
         // TODO
         //if(this.turn === this.challenge.client_turn + 1 && this.challenge.status === "IN_PROGRESS"){
-            if ( (side == "down") == (this.challenge.client_turn == 0)){
+            if ( (side === "down") === (this.challenge.client_turn === 0)){
                 this.challenge.send_move({"pit": p})
             }
         //} 
