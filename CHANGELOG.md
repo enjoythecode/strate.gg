@@ -63,25 +63,14 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Fix bug where players could join a game that was not in progress! (Commonly occured when using back button on the browser.)
 - Completed front-end refactor to MobX + React
 - Rough first Mancala implementation
-# 2021-10-09
-- Major `fex` refactor progress: TV prototype works!
-    - Back-end API for polling for active games to watch
-    - Front-end `Tv` component that polls for active games and displays them!
-- Fixed all `fex` regressions:
-    - Connection status is now responsive
-    - Game status is correctly synced
-    - Players are now correctly displayed
-    - Removed debug elements, console.log()s
-    - Addressed most compile warnings
-    - Amazons: is_valid_move() implemented
-    - Amazons: valid move indicators implemented
-    - Amazons: pieces (queens) are now proper images, instead of text!
-# 2021-10-08
-- `fex` refactor progress: basic play with move syncing!
-# 2021-10-05
-- Made the decision to write the front-end with MobX + React.
-- Started working on a front-end refactor for MobX + React under `src/fex`
-    - Implemented connection status and active user count using purely MobX + React.
+
+## [0.2.0] - 2021-10-09
+This version is a rewrite of the FE using React + MobX
+### Added
+- BE API to poll for active games to watch
+- FE `Tv` component that polls for active games and displays them.
+### Changed
+- All FE code to React and MobX
 
 ## [0.1.3] - 2021-10-04
 ### Added
