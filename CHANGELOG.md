@@ -89,12 +89,18 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Updated BE `app.py` to use `Challenge` exclusively to manage game (decoupled game-specific game from the I/O layer)
 - Updated FE to work with the reduced, non-redundant amount of data that BE is now sending (the data sent was refactored thanks to the BE rewrite)
 - Update Amazons move notation to a reasonably standard notation (a1-a2/a3)
-# 2021-10-03
-- Updated front-end Amazons JavaScript to be a little smarter and a whole lot more bug-free.
-- Display connection information, number of active users.
-- Phased out the jQuery dependency, reducing page size from ~250kb to ~180kb (-30%!)
-- Disconnects are now handled by the back-end. Any games the user was an active player in are terminated, and all observed games are updated accordingly
-- Improved back-end folder structure, included description in README
+
+## [0.1.2] - 2021-10-03
+### Added
+- Display of connection information, number of active users.
+- Handling of disconnects in the back-end
+- README description
+### Changed
+- Back-end folder structure
+### Removed
+- jQuery dependency, reducing page size from ~250kb to ~180kb (-30%!)
+### Fixed
+- Various bugs in Amazons JavaScript (front-end)
 
 ## [0.1.1] - 2021-10-02
 ### Added
