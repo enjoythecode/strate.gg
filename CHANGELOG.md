@@ -31,16 +31,22 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Removed Amazons 6x6 configuration.
 - Added last-move indicators to Amazons
 # 2021-11-10
-- Found a name and domain for the project that I'm really happy with: strate.gg!
-- Wrote scripts for installing dependencies, preparing configurations and running servers
-- Updated README with project overview
-- Set up DNS records for new domain
-- Set up Cloudflare for new domain
-- Fix secrets issue in `./src/format_common.sh`
-- Removed problematic `secrets` dependency with `random.SystemRandom`
-- Fixed nginx configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
-- Updated website title and description
-- Production server is now started in a tmux session, therefore it persists beyond the SSH connection to the server.
+
+## [0.3.0] - 2021-11-10
+This version marks the new name and domain of the project, strate.gg!
+### Added
+- Name/domain: strate.gg
+- Scripts for installing dependencies, preparing configurations and running servers
+- DNS records for new domain
+- Cloudflare configuration for new domain
+### Changed
+- README with project overview
+- Website title and description
+### Removed
+- Problematic `secrets` dependency with `random.SystemRandom`
+### Fixed
+- NginX configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
+- Production server to be started in a tmux session, therefore it persists beyond the SSH connection to the server.
 
 ## [0.2.3] - 2021-10-13
 ### Added
