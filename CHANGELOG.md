@@ -110,7 +110,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Moves are now communicated incrementally
 - Added rudimentary move list. 
 ## [0.1.0] - 2021-10-01
-Started working on this project. It is a renewal of a previous project which was simply an offline Amazons game page.
+This version marks when I started working on the website with the ambition of being a multiplayer abstract strategy boardgame website with correspondence and real-time play. It is a renewal of a previous project which was simply an offline Amazons game page.
 ### Added
 - Proper Python venv
 - Websocket connectivity between client and server
