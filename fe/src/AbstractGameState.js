@@ -1,15 +1,15 @@
-import { makeObservable, observable, computed, action, flow } from "mobx"
+import { makeObservable, observable, computed, action, flow } from "mobx";
 
-class AbstractGameState{
-    constructor(){
-        makeObservable(this, {
-            makeMove: action
-        })
-    }
+class AbstractGameState {
+  constructor() {
+    makeObservable(this, {
+      makeMove: action,
+    });
+  }
 
-    makeMove() {
-        console.error("Not implemented!")
-    }
+  makeMove() {
+    console.error("Not implemented!");
+  }
 }
 
-export default AbstractGameState
+export default AbstractGameState;

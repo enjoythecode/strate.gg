@@ -4,6 +4,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ## [Unreleased]
 ### Added
 - Prettier (JS auto-formatting) as a dependency
+### Changed
+- Code format with an initial run of Prettier
 ### Fixed
 - All ESLint warnings.
 
