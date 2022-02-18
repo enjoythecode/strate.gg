@@ -57,12 +57,15 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Fixed bug where BE Amazons was incorrectly removing pieces from the board.
 - Fixed bug with TV where BE would reject observers joining if the game had started.
 - Refactored Mancala board representation and logic to be simpler, squashing many bugs with the previous implementation in the process!
-# 2021-10-11
-- You can no longer click on an Amazons board for a move if it isn't your turn or you are just observing.
-- Fix bug where player could move in a game that was not in progress!
-- Fix bug where players could join a game that was not in progress! (Commonly occured when using back button on the browser.)
-- Completed front-end refactor to MobX + React
+
+## [0.2.1] - 2021-10-11
+### Added 
 - Rough first Mancala implementation
+- Final touches for FE rewrite to React + MobX
+### Fixed
+- Bug where clicking on Amazons board would execute move as an observer or out-of-turn player
+- Bug where player could move in a game that was not in progress!
+- Bug where players could join a game that was not in progress! (Commonly occured when using back button on the browser.)
 
 ## [0.2.0] - 2021-10-09
 This version is a rewrite of the FE using React + MobX
@@ -70,7 +73,7 @@ This version is a rewrite of the FE using React + MobX
 - BE API to poll for active games to watch
 - FE `Tv` component that polls for active games and displays them.
 ### Changed
-- All FE code to React and MobX
+- All FE code to React + MobX
 
 ## [0.1.3] - 2021-10-04
 ### Added
