@@ -82,3 +82,4 @@ See `BUILDING.md`
 1. BE `app.py` should have a function for turning successful challenge.method() calls and those with errors to network payloads. `Socket.js` should mirror this on the receiving end.
 1. Load games from database if not in memory
 1. Decide on primary color for the website!
+1. CONTRIBUTING.md
