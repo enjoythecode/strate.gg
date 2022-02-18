@@ -14,7 +14,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Fixed
 - Bug where clicking opponent's pit in Mancala would play the corresponding move.
 
-## [0.3.3] - 2021-11-16
+## [0.3.3] - 2021-11-18
 ### Added
 - Game status rendering in the challenge dashboard
 - BE distinction between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
