@@ -2,6 +2,8 @@
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Git tags for all SemVer versions retroactively
 ### Changed
 - FE State Management for Amazons to separate game state and board UI state
 - CHANGELOG to follow [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) and [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
