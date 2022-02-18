@@ -82,13 +82,16 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Made the decision to write the front-end with MobX + React.
 - Started working on a front-end refactor for MobX + React under `src/fex`
     - Implemented connection status and active user count using purely MobX + React.
-# 2021-10-04
-- Created class for a Challenge and a User in the back-end.
-- Created abstract class for game states (`game_state`)
-- Adapted `amazons_state` to conform to `game_state`
-- Updated BE `app.py` to use `Challenge` exclusively to manage game (decoupled game-specific game from the I/O layer)
-- Updated FE to work with the reduced, non-redundant amount of data that BE is now sending (the data sent was refactored thanks to the BE rewrite)
-- Update Amazons move notation to a reasonably standard notation (a1-a2/a3)
+
+## [0.1.3] - 2021-10-04
+### Added
+- Back-end classes `Challenge` and `User`
+- Abstract class for game states, `game_state`
+### Changed
+- `amazons_state` to conform to `game_state`
+- BE `app.py` to use `Challenge` exclusively to manage game (decoupling game-specific info from the I/O layer)
+- FE to work with the reduced, non-redundant amount of data that BE is now sending
+- Amazons move notation to a reasonably standard notation (a1-a2/a3)
 
 ## [0.1.2] - 2021-10-03
 ### Added
