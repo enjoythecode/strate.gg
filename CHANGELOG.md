@@ -47,16 +47,20 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Started cleaning up index.js, mapped out tasks for making the website look presentable.
 - Play page now adjusts to the viewport size (in a rudimentary way)
 - Simplified Amazons CSS computation
-# 2021-10-12
-- BE responses are now better suited for a game-agnostic network interface.
-- FE components are now more game-agnostic, allowing for easy scaling up in the number of games!
-- You can now create a Mancala game! (with no way to play it)
-- Created rudimentary UI for Mancala for testing.
-- Code style improvement: BE now keeps track of `turn`, rather than `playerJustMoved`
-- Basic Mancala play established (lacking just a UI)
-- Fixed bug where BE Amazons was incorrectly removing pieces from the board.
-- Fixed bug with TV where BE would reject observers joining if the game had started.
-- Refactored Mancala board representation and logic to be simpler, squashing many bugs with the previous implementation in the process!
+
+## [0.2.2] - 2021-10-12
+### Added
+- Rudimentary Mancala UI
+- Creating Mancala games
+- Basic play of Mancala
+### Changed
+- BE responses to be better suited for a game-agnostic network interface
+- FE components to be more game-agnostic, allowing for easy scaling up in the number of games!
+- BE to track `turn` rather than `playerJustMoved`
+- Mancala board representation and logic to be simpler, squashing many bugs with the previous implementation in the process!
+### Fixed
+- Bug where BE Amazons was incorrectly removing pieces from the board.
+- Bug with TV where BE would reject observers joining if the game had started.
 
 ## [0.2.1] - 2021-10-11
 ### Added 
@@ -64,14 +68,14 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Final touches for FE rewrite to React + MobX
 ### Fixed
 - Bug where clicking on Amazons board would execute move as an observer or out-of-turn player
-- Bug where player could move in a game that was not in progress!
-- Bug where players could join a game that was not in progress! (Commonly occured when using back button on the browser.)
+- Bug where player could move in a game that was not in progress
+- Bug where players could join a game that was not in progress (Commonly occured when using back button on the browser)
 
 ## [0.2.0] - 2021-10-09
 This version is a rewrite of the FE using React + MobX
 ### Added
 - BE API to poll for active games to watch
-- FE `Tv` component that polls for active games and displays them.
+- FE `Tv` component that polls for active games and displays them
 ### Changed
 - All FE code to React + MobX
 
