@@ -7,17 +7,20 @@ This file lists all changes to this project, grouped by versions that follow [Se
 # 2022-01-31
 - Fixed bug where clicking opponent's pit in Mancala would play the corresponding move.
 - Re-order priorities in README.md
-# 2021-11-16
-- Game status is now nicely rendered in the challenge dashboard
-- Back-end can now differentiate between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
-- Added a color badge next to the player name in challenge dashboard
-- Mancala is now compatible with the challenge dashboard upgrades
-- Footer now sticks to the bottom properly and is at the bottom on pages that require scroll (say, mobile devices with narrow screens pushing challenge dashboard down)
+
+## [0.3.3] - 2021-11-16
+### Added
+- Game status rendering in the challenge dashboard
+- BE distinction between games that ended due to gameplay objective (like checkmate) and other, meta-events (like disconnect, time control).
+- A color badge next to the player name in challenge dashboard
+- Challenge dashboard compatibility to Mancala
+### Changed
+- Footer to sticks to the bottom properly and is at the bottom on pages that require scroll (say, mobile devices with narrow screens pushing challenge dashboard down)
 
 ## [0.3.2] - 2021-11-15
 ### Added
 - Background and border to Challenge Dashboard to visually separate it from other components
-- Visual highlight to the player with the turn in the dashboard.
+- Visual highlight to the player with the turn in the dashboard
 ### Changed
 - Move list to show nicely formatted moves for Amazons
 - Move list to show color badges nicely for Amazons
