@@ -4,50 +4,55 @@ import flask_socketio as sckt
 from py_logic.user import User
 from py_logic.challenge import Challenge, ChallengeStatus
 import random, os, string, json
- 
+
 # Returns a random string of the required size.
 def generate_ID(size, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for x in range(size))
+    return "".join(random.choice(chars) for x in range(size))
+
 
 challenges = {}
 users = {}
 
 # create and configure the app
-app = Flask(__name__, instance_relative_config=False, static_folder = "../fe/build")
-with open('config.json') as config_file:
-    app.config.update(json.load(config_file)) # load secret key
+app = Flask(__name__, instance_relative_config=False, static_folder="../fe/build")
+with open("config.json") as config_file:
+    app.config.update(json.load(config_file))  # load secret key
 
 socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 
 
 ############ SERVE REACT APP ################################################
-@app.route('/', defaults={'path': ''})                                      #
-@app.route('/<path:path>')                                                  #
-def serve(path):                                                            #
-    if path != "" and os.path.exists(app.static_folder + '/' + path):       #
-        return send_from_directory(app.static_folder, path)                 #
-    else:                                                                   #
-        return send_from_directory(app.static_folder, 'index.html')         #
+@app.route("/", defaults={"path": ""})  #
+@app.route("/<path:path>")  #
+def serve(path):  #
+    if path != "" and os.path.exists(app.static_folder + "/" + path):  #
+        return send_from_directory(app.static_folder, path)  #
+    else:  #
+        return send_from_directory(app.static_folder, "index.html")  #
+
+
 #############################################################################
 
 
 ############# SOCKETS #############
 ### Generic
-@socketio.on('message')
+@socketio.on("message")
 def handle_message(data):
-    print('Received message:', data)
+    print("Received message:", data)
 
-@socketio.on('connect')
+
+@socketio.on("connect")
 def handle_connect():
     sid = request.sid
     users[sid] = User(sid)
-    print(f'Client (#{sid}) connected. Currently connected: {len(users)}')
-    socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
+    print(f"Client (#{sid}) connected. Currently connected: {len(users)}")
+    socketio.emit("connection-info-update", {"users": len(users)}, broadcast=True)
 
     # this helps the client distinguish themselves among other users
-    socketio.emit("connection-player-id", {"pid": sid}, to = sid) 
+    socketio.emit("connection-player-id", {"pid": sid}, to=sid)
 
-@socketio.on('disconnect')
+
+@socketio.on("disconnect")
 def handle_disconnect():
     # Handle: notify any games they were in and change those accordingly!
     sid = request.sid
@@ -57,25 +62,27 @@ def handle_disconnect():
         handle_player_disconnect(cid, user)
 
     users.pop(sid)
-    
-    socketio.emit("connection-info-update", {"users": len(users)}, broadcast = True)
-    print(f'Client (#{sid}) disconnected. Currently connected: {len(users)}')
+
+    socketio.emit("connection-info-update", {"users": len(users)}, broadcast=True)
+    print(f"Client (#{sid}) disconnected. Currently connected: {len(users)}")
+
 
 ### Game Events
-@socketio.on('game-create')
+@socketio.on("game-create")
 def create_game(payload):
 
     cid = generate_ID(8)
     while cid in challenges:
         cid = generate_ID(8)
-        
+
     c = Challenge()
     challenges[cid] = c
     response = c.initialize_challenge(payload["game_name"], cid, payload["config"])
 
     return response
 
-@socketio.on('game-join')
+
+@socketio.on("game-join")
 def game_join(payload):
     cid = payload["cid"]
     sid = request.sid
@@ -89,13 +96,16 @@ def game_join(payload):
         else:
             return response
         # avoid sending twice by first emitting, and then sending the room
-        sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
+        sckt.emit(
+            "game-update-meta", payload, to=challenges[cid].get_socket_room_name()
+        )
         sckt.join_room(c.get_socket_room_name())
         return payload
     else:
         return {"result": "error", "error": "Game not found."}
 
-@socketio.on('game-move')
+
+@socketio.on("game-move")
 def handle_game_move(payload):
     cid = payload["cid"]
     sid = request.sid
@@ -104,11 +114,14 @@ def handle_game_move(payload):
         c = challenges[cid]
         response = c.make_move(payload["move"], users[sid])
         print(response)
-        sckt.emit("game-update-move", response, to=challenges[cid].get_socket_room_name())
+        sckt.emit(
+            "game-update-move", response, to=challenges[cid].get_socket_room_name()
+        )
     else:
         return {"result": "error", "error": "Game not found"}
 
-@socketio.on('tv-poll')
+
+@socketio.on("tv-poll")
 def available_tv_challenges(payload):
     for key in challenges:
         if challenges[key].status == ChallengeStatus.IN_PROGRESS:
@@ -116,10 +129,12 @@ def available_tv_challenges(payload):
             return r
     return {"result": "error", "error": "No games available!"}
 
+
 def handle_player_disconnect(cid, user):
     response = challenges[cid].handle_disconnect(user)
     payload = {"result": "success", "info": response}
     sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
 
+
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0', port='8080')
+    socketio.run(app, host="0.0.0.0", port="8080")

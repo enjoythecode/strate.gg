@@ -2,6 +2,7 @@ from py_logic.amazons_state import AmazonsState
 from py_logic.mancala_state import MancalaState
 import enum
 
+
 class ChallengeStatus(enum.Enum):
     WAITING_FOR_PLAYERS = 1
     IN_PROGRESS = 2
@@ -9,10 +10,9 @@ class ChallengeStatus(enum.Enum):
     OVER_DISCONNECT = 4
     OVER_TIME = 5
 
-game_classes = {
-    "amazons": AmazonsState,
-    "mancala": MancalaState
-}
+
+game_classes = {"amazons": AmazonsState, "mancala": MancalaState}
+
 
 class Challenge:
     """
@@ -26,12 +26,14 @@ class Challenge:
         self.moves = None
         self.status = None
         self.cid = None
-        self.game_end_override = None # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
-        
+        self.game_end_override = (
+            None
+        )  # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
+
     def initialize_challenge(self, game_name, cid, config):
         if not game_name in game_classes:
             return {"result": "error", "error": "Not a valid name."}
-        
+
         game = game_classes[game_name]
 
         if not game.is_valid_config(config):
@@ -47,7 +49,7 @@ class Challenge:
         self.config = config
 
         response = {
-            "result" : "success",
+            "result": "success",
             "game_name": game_name,
             "cid": cid,
             "players": self.players,
@@ -58,7 +60,10 @@ class Challenge:
         return response
 
     def join_player(self, user):
-        if len(self.players) < self.state.get_max_no_players() and not user.sid in self.players:
+        if (
+            len(self.players) < self.state.get_max_no_players()
+            and not user.sid in self.players
+        ):
             if not self.status == ChallengeStatus.WAITING_FOR_PLAYERS:
                 return {"result": "error", "error": "Game is not accepting players!"}
             self.players.append(user.sid)
@@ -77,7 +82,7 @@ class Challenge:
             "cid": self.cid,
             "config": self.config,
             "game_name": self.game_name,
-            "result": "success"
+            "result": "success",
         }
         return response
 
@@ -96,10 +101,10 @@ class Challenge:
 
         response = {
             "cid": self.cid,
-            "result" : "success",
+            "result": "success",
             "move": move,
             "status": self.status.name,
-            "game_end": game_end
+            "game_end": game_end,
         }
         return response
 
@@ -109,12 +114,14 @@ class Challenge:
     def handle_disconnect(self, user):
         self.status = ChallengeStatus.OVER_DISCONNECT
 
-        self.game_end_override = ((self.players.index(user.sid) + 1) % 2) + 1 # set the remaining player as the winner
+        self.game_end_override = (
+            (self.players.index(user.sid) + 1) % 2
+        ) + 1  # set the remaining player as the winner
 
         response = {
             "cid": self.cid,
             "status": self.status.name,
-            "game_end": self.check_game_end()
+            "game_end": self.check_game_end(),
         }
 
         return response

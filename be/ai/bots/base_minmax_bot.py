@@ -7,15 +7,20 @@ MIN_VAL = -1e9
 
 
 class GameNode:
-    def __init__(self, game_state, depth, move=None, max_depth = 2):
+    def __init__(self, game_state, depth, move=None, max_depth=2):
         self.state = game_state.clone()
         self.children = []
         self.depth = depth
-        self.move = move  # only undefined for root node. root node only functions as a holder of other nodes so it's ok
+        self.move = (
+            move
+        )  # only undefined for root node. root node only functions as a holder of other nodes so it's ok
         self.isLeaf = False
         self.MAX_DEPTH = max_depth
         if depth == 0:  # only in the root node, calculate MAX_DEPTH
-            self.MAX_DEPTH = math.log(MAX_CALCULATIONS, max(len(self.state.get_possible_moves()), 2)) / 2
+            self.MAX_DEPTH = (
+                math.log(MAX_CALCULATIONS, max(len(self.state.get_possible_moves()), 2))
+                / 2
+            )
 
         if depth < self.MAX_DEPTH:
             possible_moves = self.state.get_possible_moves()
@@ -23,7 +28,11 @@ class GameNode:
                 for possible_move in possible_moves:
                     possible_game = self.state.clone()
                     possible_game.make_move(possible_move)
-                    self.children.append(GameNode(possible_game, self.depth + 1, possible_move, self.MAX_DEPTH))
+                    self.children.append(
+                        GameNode(
+                            possible_game, self.depth + 1, possible_move, self.MAX_DEPTH
+                        )
+                    )
             else:
                 self.isLeaf = True
         else:
@@ -35,7 +44,6 @@ class GameNode:
 
 
 class BaseMinmaxBot(amazons_agent.AmazonsAgent):
-
     def __init__(self, friend, enemy):
         self.meta_name = "Base minmax implementation to be extended by other bots"
         self.meta_developer = "Anonymous"
@@ -44,7 +52,14 @@ class BaseMinmaxBot(amazons_agent.AmazonsAgent):
         self.enemy = enemy
 
     def greet(self):
-        print(self.meta_name + " by " + self.meta_developer + ". [" + self.meta_description + "]")
+        print(
+            self.meta_name
+            + " by "
+            + self.meta_developer
+            + ". ["
+            + self.meta_description
+            + "]"
+        )
 
     def next_move(self, board_state):
         """
@@ -59,7 +74,9 @@ class BaseMinmaxBot(amazons_agent.AmazonsAgent):
 
     def utility(self, board):
         """to be overwritten by inheriting classes"""
-        raise NotImplementedError("Utility functions not implemented by the child class!")
+        raise NotImplementedError(
+            "Utility functions not implemented by the child class!"
+        )
 
     def evaluate(self, board):
         """a wrapper over the utility function. automatically calculates game end. uses the utility() function"""
@@ -83,7 +100,9 @@ class BaseMinmaxBot(amazons_agent.AmazonsAgent):
 
             for child in node.children:
 
-                val = self.minimax(child, curr_depth + 1, not is_maximizing_player, alpha, beta)
+                val = self.minimax(
+                    child, curr_depth + 1, not is_maximizing_player, alpha, beta
+                )
                 if val > best:
                     best = val
                     best_move = child.move
@@ -97,7 +116,9 @@ class BaseMinmaxBot(amazons_agent.AmazonsAgent):
 
             for child in node.children:
 
-                val = self.minimax(child, curr_depth + 1, not is_maximizing_player, alpha, beta)
+                val = self.minimax(
+                    child, curr_depth + 1, not is_maximizing_player, alpha, beta
+                )
                 if val < best:
                     best = val
                     best_move = child.move

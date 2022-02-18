@@ -1,0 +1,18 @@
+{
+  "prettier.configPath": "./fe/.prettierrc.json",
+  "[javascript]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.workingDirectories": ["./fe"],
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  // black auto-formatter compatibility
+  // see https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#flake8
+  "python.linting.flake8Args": ["--ignore=E203", "--max-line-length=88"]
+}

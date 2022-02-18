@@ -3,10 +3,14 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased]
 ### Added
-- Prettier (JS auto-formatting) as a dependency
 - HACKING.md for recommended settings for developers
+    - Prettier (JS auto-formatting) as a dependency
+    - ESLint (JS linting)
+    - Black (Python auto-formatting)
+    - Flake8 (Python linting)
 ### Changed
-- Code format with an initial run of Prettier
+- FE code with an initial run of Prettier
+- BE code with an initial run of Black.
 ### Fixed
 - All ESLint warnings.
 

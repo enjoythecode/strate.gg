@@ -1,6 +1,7 @@
 import amazons_agent
 import random
 
+
 class AmazonsPlayer(amazons_agent.AmazonsAgent):
     def __init__(self, friend, enemy):
         self.meta_developer = "enjoythecode"

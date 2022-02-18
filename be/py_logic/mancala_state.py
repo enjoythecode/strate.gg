@@ -1,25 +1,24 @@
 from py_logic import game_state
 import copy
 
-starting_board = [
-    4, 4, 4, 4, 4, 4, 0,
-    4, 4, 4, 4, 4, 4, 0
-]
+starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
 ###### INDICES MAPPING TO BOARD ########
 # P2:  13, 12, 11, 10, 9, 8, 7
 # P1:       0,  1,  2, 3, 4, 5, 6,
 
 
-BANKS = [6, 13] # bank indices
+BANKS = [6, 13]  # bank indices
+
 
 class MancalaState(game_state.GameState):
-
-    def __init__(self, board, turn = 0):
-        self.turn = 0 
+    def __init__(self, board, turn=0):
+        self.turn = 0
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = (
+            0
+        )  # used to track the total number of shots which is used to calculate points in the end
 
     @classmethod
     def is_valid_config(self, config):
@@ -39,7 +38,7 @@ class MancalaState(game_state.GameState):
             "board": self.board,
             "game_size": self.game_size,
             "turn": self.turn,
-            "turns_taken": self.number_of_turns
+            "turns_taken": self.number_of_turns,
         }
 
     def clone(self):
@@ -57,15 +56,15 @@ class MancalaState(game_state.GameState):
         self.board[ptr] = 0
         while seeds:
             ptr += 1
-            ptr = ptr % 14 # wrap around the board!
+            ptr = ptr % 14  # wrap around the board!
 
-            if ptr == BANKS[next_plyr]: # rival bank
+            if ptr == BANKS[next_plyr]:  # rival bank
                 continue
             else:
                 self.board[ptr] += 1
-                seeds -=1
+                seeds -= 1
 
-        # check for capture 
+        # check for capture
         # (ruleset: capture happens when landing on empty pit on friendly side)
         if 0 <= ptr - 7 * self.turn <= 5 and self.board[ptr] == 1:
             capture = 0
@@ -74,9 +73,9 @@ class MancalaState(game_state.GameState):
                 capture += self.board[i]
                 self.board[i] = 0
             self.board[BANKS[self.turn]] += capture
-        
+
         # advance the round to the next player if landed outside self-bank.
-        if not ptr == BANKS[self.turn]: 
+        if not ptr == BANKS[self.turn]:
             self.turn = next_plyr
 
         self.number_of_turns += 1
@@ -88,10 +87,11 @@ class MancalaState(game_state.GameState):
             game_end_sweep = 0
         elif sum(self.board[7:13]) == 0:
             game_end_sweep = 1
-            
+
         if game_end_sweep != -1:
-            self.board[6 + game_end_sweep * 7] += sum(self.board[0:6]) + sum(self.board[7:13])
-            
+            self.board[6 + game_end_sweep * 7] += sum(self.board[0:6]) + sum(
+                self.board[7:13]
+            )
 
     def is_valid_move(self, move):
         if not "pit" in move:
@@ -100,7 +100,7 @@ class MancalaState(game_state.GameState):
         # it should be a friendly pit
         if not (0 <= move["pit"] <= 5):
             return False
-        
+
         # pit must not be empty
         if self.board[move["pit"] + 7 * self.turn] == 0:
             return False
@@ -114,9 +114,9 @@ class MancalaState(game_state.GameState):
             elif self.board[6] < self.board[13]:
                 return 2
             else:
-                return -2 # draw!
-                
-        return 0 # going on
+                return -2  # draw!
 
-    def __repr__(self): # string representation of the board from the perspective of P0
-        return(str(self.board) + "turn" + str(self.turn))
+        return 0  # going on
+
+    def __repr__(self):  # string representation of the board from the perspective of P0
+        return str(self.board) + "turn" + str(self.turn)

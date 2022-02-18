@@ -11,7 +11,7 @@ starting_board_10x0 = [
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 1, 0, 0, 0]
+    [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
 ]
 
 starting_board_6x0 = [
@@ -20,19 +20,15 @@ starting_board_6x0 = [
     [0, 0, 0, 0, 0, 2],
     [2, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0]
+    [0, 0, 0, 1, 0, 0],
 ]
 
-starting_board_4x0 = [
-    [0, 1, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 2, 0]
-]
+starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
+
 
 def prettify_board_character(n):
-    '''Convenience method that turns the board representation of different board entities to their representations
-    '''
+    """Convenience method that turns the board representation of different board entities to their representations
+    """
     return ".WBX"[n]
 
 
@@ -47,7 +43,9 @@ class AmazonsState(game_state.GameState):
         self.turn = turn
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = (
+            0
+        )  # used to track the total number of shots which is used to calculate points in the end
 
     @classmethod
     def is_valid_config(self, config):
@@ -87,7 +85,7 @@ class AmazonsState(game_state.GameState):
             "board": self.board,
             "game_size": self.game_size,
             "turn": self.turn,
-            "turns_taken": self.number_of_turns
+            "turns_taken": self.number_of_turns,
         }
 
     def clone(self):
@@ -100,7 +98,6 @@ class AmazonsState(game_state.GameState):
         fr = move["from"]
         to = move["to"]
         sh = move["shoot"]
-
 
         self.board[int(fr[0])][int(fr[1])] = 0
         self.board[int(to[0])][int(to[1])] = self.turn + 1
@@ -146,7 +143,12 @@ class AmazonsState(game_state.GameState):
 
         queen_moves = self.get_possible_queen_moves(player)
         for q in queen_moves:
-            out.extend([[q[0], q[1], s] for s in self.get_possible_shots_from_queen(q[1], q[0])])
+            out.extend(
+                [
+                    [q[0], q[1], s]
+                    for s in self.get_possible_shots_from_queen(q[1], q[0])
+                ]
+            )
         return out
 
     def get_possible_queen_moves(self, player=None):
@@ -193,10 +195,15 @@ class AmazonsState(game_state.GameState):
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
         # neat!
-        deltas = [ # incremental changes to x and y to move in 8 directions
-            (-1, 1), (0, 1), (1, 1),
-            (-1, 0),        (1, 0),
-            (-1,-1), (0,-1), (1,-1)
+        deltas = [  # incremental changes to x and y to move in 8 directions
+            (-1, 1),
+            (0, 1),
+            (1, 1),
+            (-1, 0),
+            (1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
         ]
 
         for dx, dy in deltas:
@@ -213,13 +220,13 @@ class AmazonsState(game_state.GameState):
                         break
                 else:
                     out.append(str(x) + str(y))
-        return out 
-        
+        return out
+
     def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
-        '''
+        """
             Different from len(get_sliding_squares) because natively counting is marginally faster than
             adding all the possible moves to a list and counting it. 
-        '''
+        """
         out = 0
         from_x = int(cell_from[0])
         from_y = int(cell_from[1])
@@ -227,10 +234,15 @@ class AmazonsState(game_state.GameState):
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
         # neat!
-        deltas = [ # incremental changes to x and y to move in 8 directions
-            (-1, 1), (0, 1), (1, 1),
-            (-1, 0),         (1, 0),
-            (-1,-1), (0,-1), (1,-1)
+        deltas = [  # incremental changes to x and y to move in 8 directions
+            (-1, 1),
+            (0, 1),
+            (1, 1),
+            (-1, 0),
+            (1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
         ]
 
         for dx, dy in deltas:
@@ -257,9 +269,9 @@ class AmazonsState(game_state.GameState):
         p2 = self.count_possible_queen_moves(2)
         if p1 == 0 and p2 == 0:
             return (self.turn - 1) % 2  # player who just moved wins
-        elif p1 == 0: # player 2 won
+        elif p1 == 0:  # player 2 won
             return 2
-        elif p2 == 0: # player 1 won
+        elif p2 == 0:  # player 1 won
             return 1
         else:  # game going on
             return 0
@@ -270,6 +282,7 @@ class AmazonsState(game_state.GameState):
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
         )
+
 
 # small, informal tests
 if __name__ == "__main__":
