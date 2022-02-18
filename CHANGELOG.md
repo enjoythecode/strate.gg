@@ -95,20 +95,22 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Phased out the jQuery dependency, reducing page size from ~250kb to ~180kb (-30%!)
 - Disconnects are now handled by the back-end. Any games the user was an active player in are terminated, and all observed games are updated accordingly
 - Improved back-end folder structure, included description in README
-# 2021-10-02
-- Establish basic status text in the client.
-- Establish simple room-joining logic.
-- Emit relevant updates when joining rooms.
-- Sync moves, resulting in basic play!
-- Added back-end move validation
-- Amazons move indicator updates
-    - Better JS code signatures
-    - Show different indicator on queen
-    - Show different colors for move and shoot
+
+## [0.1.1] - 2021-10-02
+### Added
+- Basic status text in the client.
+- Simple room-joining logic.
+- Emitting relevant updates when joining rooms.
+- Synchorinizing moves, resulting in basic play!
+- Back-end move validation
+- Rudimentary move list. 
+### Changed
+- Amazons move indicator to have better JS code signatures
+- Amazons move indicator adapts for the queen symbol, and also didifferent colors for move and shoot
 - Site-wide CSS updates
-- Improve amazons_state.py
-- Moves are now communicated incrementally
-- Added rudimentary move list. 
+- amazons_state.py with overall improvement
+- Moves to be communicated incrementally
+
 ## [0.1.0] - 2021-10-01
 This version marks when I started working on the website with the ambition of being a multiplayer abstract strategy boardgame website with correspondence and real-time play. It is a renewal of a previous project which was simply an offline Amazons game page.
 ### Added
