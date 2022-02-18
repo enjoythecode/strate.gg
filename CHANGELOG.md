@@ -7,6 +7,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Changed
 - FE State Management for Amazons to separate game state and board UI state
 - CHANGELOG to follow [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html) and [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+- README to include link to CHANGELOG
 ### Removed
 - Redundant CSS class `indicator` from AmazonsView and `grid.css` for cleaner code
 

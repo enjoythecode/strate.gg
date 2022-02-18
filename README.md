@@ -1,9 +1,12 @@
-**State:** Currently under development (expect major changes)
+> This project is currently under development in **v0.\*.\***. Most code in this repository is not final.  See the current version and unreleased changes in the [changelog.](CHANGELOG.md)
 
 # Strate.gg
-A hobby project dedicated to the play and exploration of various abstract strategy board games.
+A website dedicated to the play and exploration of various abstract strategy board games.
 
 My ambition is to build a website for real-time and correspondence matches of these games, as well as AI analysis and practice.
+
+I am also using this project as a real-world website to learn good software development practices such as testing, linting, versioning.
+
 
 # Building
 `src` includes all scripts for installing dependencies and running development or production environments.
@@ -83,3 +86,6 @@ See `BUILDING.md`
 1. Load games from database if not in memory
 1. Decide on primary color for the website!
 1. CONTRIBUTING.md
+    1. Instructions for building the website
+    1. How to contribute
+1. TODO.md
