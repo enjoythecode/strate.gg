@@ -109,10 +109,13 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Improve amazons_state.py
 - Moves are now communicated incrementally
 - Added rudimentary move list. 
-# 2021-10-01
-- Restarting this project with a focus on the ability to play correspondence games against other players.
-- Cleared up instructions for running the codebase.
-- Configured basic socket connection between client and server!
-- Improved Amazons State creation.
-- Moved amazons game logic inside flask-server
-- Introduce proper venv! (fixed socketio versioning problem across dev platforms)
+## [0.1.0] - 2021-10-01
+Started working on this project. It is a renewal of a previous project which was simply an offline Amazons game page.
+### Added
+- Proper Python venv
+- Websocket connectivity between client and server
+### Changed
+- Instructions for running the codebase
+- Location of Amazons game logic
+### Fixed
+- Socketio versioning inconsistency across
