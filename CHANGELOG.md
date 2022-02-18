@@ -20,17 +20,19 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Challenge dashboard now has a background and border to separate it from others.
 - The player with the turn in the dashboard is now higlighted.
 - Changed "Anon" to "Guest" (wording matters!)
-# 2021-11-12
-- Challenge board and dashboard centered and sizes are well-defined and aligned.
-# 2021-11-11
-- Amazons grid pieces are now positioned in relation to the parent board grid
-- Moved indicator style classes from JS to CSS
-- Re-organized the Do-list for progress
-- Added a header.
-- `<marquee> Added a footer. </marquee>`
-- Removed Amazons 6x6 configuration.
-- Added last-move indicators to Amazons
-# 2021-11-10
+
+## [0.3.1] - 2021-11-12
+### Added
+- Last-move indicators to Amazons
+- `<marquee> Added a footer. </marquee>` as an easter-egg
+- Added a header
+### Changed
+- Location of indicator style from JS to CSS
+- Amazons grid pieces to be positioned in relation to the parent board grid
+- Task list
+- Challenge board and dashboard to be centered and sizes are well-defined and aligned.
+### Removed
+- Amazons 6x6 configuration.
 
 ## [0.3.0] - 2021-11-10
 This version marks the new name and domain of the project, strate.gg!
