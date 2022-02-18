@@ -41,12 +41,15 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Fixed nginx configuration, gunicorn worker type, and eventlet version to allow websocket connections in production.
 - Updated website title and description
 - Production server is now started in a tmux session, therefore it persists beyond the SSH connection to the server.
-# 2021-10-13
-- Simple Mancala board using CSS (pending graphic design later)
-- Clean up Mancala and Amazons views further.
-- Started cleaning up index.js, mapped out tasks for making the website look presentable.
-- Play page now adjusts to the viewport size (in a rudimentary way)
-- Simplified Amazons CSS computation
+
+## [0.2.3] - 2021-10-13
+### Added
+- Simple Mancala board using CSS
+- PlayPage now responds to the viewport size in a rudimentary way
+### Changed 
+- Mancala and Amazons views to be cleaner
+- Parts of home page to be more presentable
+- Amazons CSS computation to be simpler
 
 ## [0.2.2] - 2021-10-12
 ### Added
