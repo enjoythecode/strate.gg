@@ -28,7 +28,9 @@ starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
 
 
 def prettify_board_character(n):
-    """Convenience method that turns the board representation of different board entities to their representations"""
+    """
+    Convenience method that maps internal number representations to strings for humans
+    """
     return ".WBX"[n]
 
 
@@ -43,7 +45,7 @@ class AmazonsState(game_state.GameState):
         self.turn = turn
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = 0
 
     @classmethod
     def is_valid_config(self, config):
@@ -78,7 +80,10 @@ class AmazonsState(game_state.GameState):
         return 2
 
     def game_data(self):
-        """Returns relevant game data in a dictionary. Intended to be passed onto a client for consumption"""
+        """
+        Returns relevant game data in a dictionary.
+        Intended to be passed onto a client for consumption
+        """
         return {
             "board": self.board,
             "game_size": self.game_size,
@@ -126,7 +131,8 @@ class AmazonsState(game_state.GameState):
         Returns a list of all possible moves from this state.
         ---
         Arguments:
-            player: [1, 2]. The player to get the theoric possible moves from. Does not take into account turns.
+            player: [1, 2]. The player to get the theoric possible moves from. Does not
+            take into account turns.
                 Defaults to player with the turn.
         ---
         Returns:
@@ -180,9 +186,11 @@ class AmazonsState(game_state.GameState):
 
     def get_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
         """
-        Helper function that returns the sliding move squares from a given square in the given board state.
+        Helper function that returns the sliding move squares from a given square in
+        the given board state.
 
-        This is used by most other move functions since all movement and shooting in Amazons is the same 8-direction sliding attack
+        This is used by most other move functions since all movement and shooting in
+        Amazons is the same 8-direction sliding attack
         """
         out = []
         from_x = int(cell_from[0])
@@ -220,8 +228,8 @@ class AmazonsState(game_state.GameState):
 
     def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
         """
-        Different from len(get_sliding_squares) because natively counting is marginally faster than
-        adding all the possible moves to a list and counting it.
+        Different from len(get_sliding_squares) because natively counting is faster
+        than adding all the possible moves to a list and counting it.
         """
         out = 0
         from_x = int(cell_from[0])

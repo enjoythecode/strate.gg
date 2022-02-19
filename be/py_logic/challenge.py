@@ -27,10 +27,12 @@ class Challenge:
         self.moves = None
         self.status = None
         self.cid = None
-        self.game_end_override = None  # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
+        # if game ends for a non-gameplay reason (resign, disconnect),
+        # this field will be populated.
+        self.game_end_override = None
 
     def initialize_challenge(self, game_name, cid, config):
-        if not game_name in game_classes:
+        if game_name not in game_classes:
             return {"result": "error", "error": "Not a valid name."}
 
         game = game_classes[game_name]
@@ -61,7 +63,7 @@ class Challenge:
     def join_player(self, user):
         if (
             len(self.players) < self.state.get_max_no_players()
-            and not user.sid in self.players
+            and user.sid not in self.players
         ):
             if not self.status == ChallengeStatus.WAITING_FOR_PLAYERS:
                 return {"result": "error", "error": "Game is not accepting players!"}

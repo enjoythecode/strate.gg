@@ -4,7 +4,7 @@ from py_logic import game_state
 
 starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
-###### INDICES MAPPING TO BOARD ########
+# ---- INDICES MAPPING TO BOARD ---- #
 # P2:  13, 12, 11, 10, 9, 8, 7
 # P1:       0,  1,  2, 3, 4, 5, 6,
 
@@ -17,7 +17,7 @@ class MancalaState(game_state.GameState):
         self.turn = 0
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = 0
 
     @classmethod
     def is_valid_config(self, config):
@@ -32,7 +32,10 @@ class MancalaState(game_state.GameState):
         return 2
 
     def game_data(self):
-        """Returns relevant game data in a dictionary. Intended to be passed onto a client for consumption"""
+        """
+        Returns relevant game data in a dictionary.
+        Intended to be passed onto a client for consumption
+        """
         return {
             "board": self.board,
             "game_size": self.game_size,
@@ -92,7 +95,7 @@ class MancalaState(game_state.GameState):
             )
 
     def is_valid_move(self, move):
-        if not "pit" in move:
+        if "pit" not in move:
             return False
 
         # it should be a friendly pit

@@ -21,6 +21,7 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
+        args: ["--extend-ignore=E203", "--max-line-length=88"]
 
   - repo: https://github.com/asottile/reorder_python_imports
     rev: v2.7.1
