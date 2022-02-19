@@ -1,3 +1,5 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/enjoythecode/strate.gg/main.svg)](https://results.pre-commit.ci/latest/github/enjoythecode/strate.gg/main)
+
 > This project is currently under development in **v0.\*.\***. Most code in this repository is not final. See the current version and unreleased changes in the [changelog.](CHANGELOG.md)
 
 # Strate.gg

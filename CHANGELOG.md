@@ -13,6 +13,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
   - ESLint (JS linting)
   - Black (Python auto-formatting)
   - Flake8 (Python linting)
+- Pre-commit build badge to README.md
 
 ### Changed
 
