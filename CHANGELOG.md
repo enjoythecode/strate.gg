@@ -22,7 +22,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ### Fixed
 
-- All ESLint warnings.
+- All ESLint warnings
+- All flake8 warnings
 
 ### Removed
 

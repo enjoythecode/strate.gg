@@ -7,11 +7,11 @@ import flask_socketio as sckt
 from flask import Flask
 from flask import request
 from flask import send_from_directory
-from werkzeug.wrappers import PlainRequest
 
 from py_logic.challenge import Challenge
 from py_logic.challenge import ChallengeStatus
 from py_logic.user import User
+
 
 # Returns a random string of the required size.
 def generate_ID(size, chars=string.ascii_uppercase + string.digits):
@@ -29,7 +29,7 @@ with open("config.json") as config_file:
 socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 
 
-############ SERVE REACT APP ################################################
+# ----------------------------   SERVE REACT   ---------------------------- #
 @app.route("/", defaults={"path": ""})  #
 @app.route("/<path:path>")  #
 def serve(path):  #
@@ -42,8 +42,8 @@ def serve(path):  #
 #############################################################################
 
 
-############# SOCKETS #############
-### Generic
+# ----------------------------     SOCKETS     ---------------------------- #
+# ---- Generic
 @socketio.on("message")
 def handle_message(data):
     print("Received message:", data)
@@ -75,7 +75,7 @@ def handle_disconnect():
     print(f"Client (#{sid}) disconnected. Currently connected: {len(users)}")
 
 
-### Game Events
+# ---- Game events
 @socketio.on("game-create")
 def create_game(payload):
 
