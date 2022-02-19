@@ -25,6 +25,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - All ESLint warnings
 - All flake8 warnings
 - `fe/package.json` which had duplicate eslint listed as dependencies
+- Uncatched `switch` value in `fe/src/Challenge.js`
 
 ### Removed
 

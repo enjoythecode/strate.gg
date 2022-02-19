@@ -185,8 +185,11 @@ const StatusIndicator = (props) => {
     case "OVER_TIME":
       text = "Game over due to time out.";
       break;
+    case "IN_PROGRESS":
+      text = false;
+      break;
     default:
-      throw new Error("Unknown status code");
+      throw new Error("Unknown status code:" + props.status);
   }
 
   if (text) {
@@ -206,7 +209,7 @@ const StatusIndicator = (props) => {
         els.push(<em key={2}>Draw. ½ - ½</em>);
         break;
       default:
-        throw new Error("Unknown status code");
+        throw new Error("Unknown status code" + props.end);
     }
   }
 
