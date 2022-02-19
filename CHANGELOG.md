@@ -28,6 +28,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Removed
 
 - `be/ai/` since it is currently unused on the website
+- Javascript files that weren't used
 
 ## [0.3.5] - 2022-02-18
 
