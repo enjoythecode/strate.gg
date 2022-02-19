@@ -22,7 +22,7 @@ class AmazonsPlayer(amazons_agent.AmazonsAgent):
 
     def next_move(self, state):
         """
-		Takes in a amazons_state and returns a move object ["AB","CD","EF"]
-		"""
+        Takes in a amazons_state and returns a move object ["AB","CD","EF"]
+        """
         print(state)
         return input("Human's next move: ").split(" ")

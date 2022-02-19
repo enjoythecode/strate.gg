@@ -1,5 +1,6 @@
-from py_logic import game_state
 import copy
+
+from py_logic import game_state
 
 starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
@@ -16,9 +17,7 @@ class MancalaState(game_state.GameState):
         self.turn = 0
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = (
-            0
-        )  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
 
     @classmethod
     def is_valid_config(self, config):
@@ -42,8 +41,7 @@ class MancalaState(game_state.GameState):
         }
 
     def clone(self):
-        """ Create a deep clone of this game state.
-        """
+        """Create a deep clone of this game state."""
         return MancalaState(copy.deepcopy(self.board), self.turn)
 
     def make_move(self, move):

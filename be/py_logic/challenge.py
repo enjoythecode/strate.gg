@@ -1,6 +1,7 @@
+import enum
+
 from py_logic.amazons_state import AmazonsState
 from py_logic.mancala_state import MancalaState
-import enum
 
 
 class ChallengeStatus(enum.Enum):
@@ -26,9 +27,7 @@ class Challenge:
         self.moves = None
         self.status = None
         self.cid = None
-        self.game_end_override = (
-            None
-        )  # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
+        self.game_end_override = None  # if game ends for a non-gameplay reason (resign, disconnect), this field will be populated.
 
     def initialize_challenge(self, game_name, cid, config):
         if not game_name in game_classes:

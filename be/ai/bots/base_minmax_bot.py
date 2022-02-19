@@ -1,5 +1,6 @@
-import amazons_agent
 import math
+
+import amazons_agent
 
 MAX_CALCULATIONS = 10_000
 MAX_VAL = 1e9
@@ -11,9 +12,7 @@ class GameNode:
         self.state = game_state.clone()
         self.children = []
         self.depth = depth
-        self.move = (
-            move
-        )  # only undefined for root node. root node only functions as a holder of other nodes so it's ok
+        self.move = move  # only undefined for root node. root node only functions as a holder of other nodes so it's ok
         self.isLeaf = False
         self.MAX_DEPTH = max_depth
         if depth == 0:  # only in the root node, calculate MAX_DEPTH

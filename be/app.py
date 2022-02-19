@@ -1,9 +1,17 @@
-from flask import Flask, send_from_directory, request
-from werkzeug.wrappers import PlainRequest
+import json
+import os
+import random
+import string
+
 import flask_socketio as sckt
+from flask import Flask
+from flask import request
+from flask import send_from_directory
+from werkzeug.wrappers import PlainRequest
+
+from py_logic.challenge import Challenge
+from py_logic.challenge import ChallengeStatus
 from py_logic.user import User
-from py_logic.challenge import Challenge, ChallengeStatus
-import random, os, string, json
 
 # Returns a random string of the required size.
 def generate_ID(size, chars=string.ascii_uppercase + string.digits):

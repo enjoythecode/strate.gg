@@ -1,7 +1,6 @@
 # implemented from mcts.ai
-
-from math import *
 import random
+from math import *
 
 import amazons_agent
 
@@ -10,8 +9,8 @@ PRINT_EVERY = 1_000
 
 
 class GameNode:
-    """ A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
-        Crashes if state not specified.
+    """A node in the game tree. Note wins is always from the viewpoint of playerJustMoved.
+    Crashes if state not specified.
     """
 
     def __init__(self, move=None, parent=None, state=None):
@@ -26,9 +25,9 @@ class GameNode:
         )  # the only part of the state that the node needs later
 
     def select_child_ucb(self):
-        """ Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
-            lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
-            exploration versus exploitation.
+        """Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
+        lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
+        exploration versus exploitation.
         """
         s = sorted(
             self.childnodes,
@@ -37,8 +36,8 @@ class GameNode:
         return s
 
     def add_child(self, m, s):
-        """ Remove m from untriedMoves and add a new child node for this move.
-            Return the added child node
+        """Remove m from untriedMoves and add a new child node for this move.
+        Return the added child node
         """
         n = GameNode(move=m, parent=self, state=s)
         self.untriedMoves.remove(m)
@@ -46,7 +45,7 @@ class GameNode:
         return n
 
     def update(self, result):
-        """ update this node - one additional visit and result additional wins. result must be from the viewpoint of
+        """update this node - one additional visit and result additional wins. result must be from the viewpoint of
         playerJustmoved.
         """
         self.visits += 1

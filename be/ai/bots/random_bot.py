@@ -1,5 +1,6 @@
-import amazons_agent
 import random
+
+import amazons_agent
 
 
 class AmazonsPlayer(amazons_agent.AmazonsAgent):

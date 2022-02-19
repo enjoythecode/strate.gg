@@ -1,5 +1,6 @@
-from py_logic import game_state
 import copy
+
+from py_logic import game_state
 
 starting_board_10x0 = [
     [0, 0, 0, 2, 0, 0, 2, 0, 0, 0],
@@ -27,13 +28,12 @@ starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
 
 
 def prettify_board_character(n):
-    """Convenience method that turns the board representation of different board entities to their representations
-    """
+    """Convenience method that turns the board representation of different board entities to their representations"""
     return ".WBX"[n]
 
 
 class AmazonsState(game_state.GameState):
-    """ 
+    """
     Holds the state of the Game of Amazons (board etc.).
     Players are numbered 1 and 2.
     Assumes a square board.
@@ -43,9 +43,7 @@ class AmazonsState(game_state.GameState):
         self.turn = turn
         self.board = copy.deepcopy(board)
         self.game_size = len(board)
-        self.number_of_turns = (
-            0
-        )  # used to track the total number of shots which is used to calculate points in the end
+        self.number_of_turns = 0  # used to track the total number of shots which is used to calculate points in the end
 
     @classmethod
     def is_valid_config(self, config):
@@ -89,8 +87,7 @@ class AmazonsState(game_state.GameState):
         }
 
     def clone(self):
-        """ Create a deep clone of this game state.
-        """
+        """Create a deep clone of this game state."""
         st = AmazonsState(copy.deepcopy(self.board), self.turn)
         return st
 
@@ -112,8 +109,7 @@ class AmazonsState(game_state.GameState):
         return move_arr in self.get_possible_moves()
 
     def count_possible_moves(self, player=None):
-        """ Get # of possible moves from this state.
-        """
+        """Get # of possible moves from this state."""
         out = 0
         if player is None:
             player = self.turn + 1
@@ -135,7 +131,7 @@ class AmazonsState(game_state.GameState):
         ---
         Returns:
             out: list of possible moves of the given player.
-        
+
         """
         out = []
         if player is None:
@@ -224,8 +220,8 @@ class AmazonsState(game_state.GameState):
 
     def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
         """
-            Different from len(get_sliding_squares) because natively counting is marginally faster than
-            adding all the possible moves to a list and counting it. 
+        Different from len(get_sliding_squares) because natively counting is marginally faster than
+        adding all the possible moves to a list and counting it.
         """
         out = 0
         from_x = int(cell_from[0])
@@ -277,8 +273,7 @@ class AmazonsState(game_state.GameState):
             return 0
 
     def __repr__(self):
-        """ Returns a string representation of the board.
-        """
+        """Returns a string representation of the board."""
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
         )

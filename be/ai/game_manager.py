@@ -1,17 +1,16 @@
-import amazons_state
-from bots import (
-    base_minmax_bot,
-    blocker_v1,
-    blocker_v3,
-    blocker_v5,
-    blocker_v2,
-    blocker_v4,
-    blocker_v6,
-    mcts_v1,
-    random_bot,
-)
-import time
 import itertools
+import time
+
+import amazons_state
+from bots import base_minmax_bot
+from bots import blocker_v1
+from bots import blocker_v2
+from bots import blocker_v3
+from bots import blocker_v4
+from bots import blocker_v5
+from bots import blocker_v6
+from bots import mcts_v1
+from bots import random_bot
 
 
 bots = [
