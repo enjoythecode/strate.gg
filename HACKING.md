@@ -55,7 +55,7 @@ Here are the settings:
 ```
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": ["--ignore=E203", "--max-line-length=88"]
+  "python.linting.flake8Args": ["--extend-ignore=E203", "--max-line-length=88"]
 ```
 
 The Flake8 arguments (last setting) are for compatibility with `black` auto-formatting. [Read more in Black documentation.](https://black.readthedocs.io/en/stable/guides/using_black_with_other_tools.html#flake8)
