@@ -23,11 +23,6 @@
     "format": "npx prettier --write ./src/",
     "format-check": "npx prettier --check ./src/"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
