@@ -18,11 +18,15 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Changed
 
 - FE code with an initial run of Prettier
-- BE code with an initial run of Black.
+- BE code with an initial run of Black
 
 ### Fixed
 
 - All ESLint warnings.
+
+### Removed
+
+- `be/ai/` since it is currently unused on the website
 
 ## [0.3.5] - 2022-02-18
 
