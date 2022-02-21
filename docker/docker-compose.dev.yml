@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  be:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.dev.be
+    ports:
+      - 127.0.0.1:8080:8080
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+# redis:
+#   image: "redis:alpine"
