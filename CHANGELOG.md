@@ -2,6 +2,20 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+### Added
+
+- Makefile as the central automation location for installing dependencies, building, etc.
+- Dockerfiles for:
+  - Development BE server
+- Docker compose files for:
+  - Development server (BE + FE)
+
+### Removed
+
+- Redundant .sh scripts under `src`
+
 ## [0.4.0] - 2022-02-19
 
 This version adds tooling (formatting and linting to the project) that are enforced with the `pre-commit` tool and `pre-commit.ci` CI.
