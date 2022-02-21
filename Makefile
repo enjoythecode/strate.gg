@@ -26,15 +26,18 @@ check:
 
 # BUILDING DEVELOPMENT SERVERS WITH DOCKER
 # -----------------------------------------------------------------------------
-.PHONY: gen-secret devup dewdown devup-build build-dev-be run-dev-be
+.PHONY: gen-secret devup devupd dewdown devup-build build-dev-be run-dev-be
 
 gen-secret:
 	./be/generate_secret.sh
 
 # uses docker compose to start a complete dev server
-# does not use -d because this is a development server and we want to see stdout
+# does not use -d because this is a development server and we may want to see stdout. see devupd
 devup:
 	docker compose -f docker/docker-compose.dev.yml up
+
+devupd:
+	docker compose -f docker/docker-compose.dev.yml up -d
 
 # shut down the development server running with docker compose
 devdown:
