@@ -2,13 +2,14 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.4.1] - 2022-02-22
 
 ### Added
 
 - Makefile as the central automation location for installing dependencies, building, etc.
 - Dockerfiles for:
   - Development BE server
+  - Development FE server
 - Docker compose files for:
   - Development server (BE + FE)
 
