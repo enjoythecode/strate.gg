@@ -1,0 +1,3 @@
+# https://docs.docker.com/engine/reference/commandline/build/#use-a-dockerignore-file
+# The name of this file tells to Docker (BuildKit engine that it applies to a specific Dockerfile
+__pycache__

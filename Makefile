@@ -26,7 +26,8 @@ check:
 
 # BUILDING DEVELOPMENT SERVERS WITH DOCKER
 # -----------------------------------------------------------------------------
-.PHONY: gen-secret devup devupd dewdown devup-build build-dev-be run-dev-be
+.PHONY: gen-secret devup devupd dewdown devup-fbuild
+.PHONY: build-dev-be run-dev-be build-dev-fe run-dev-fe
 
 gen-secret:
 	./be/generate_secret.sh
@@ -46,13 +47,22 @@ devdown:
 # --- below commands shouldn't be needed for building in 99% of cases.
 
 # like devup, but forces a rebuild of the underlying images
-devup-build:
+devup-fbuild:
 	docker compose -f docker/docker-compose.dev.yml up --build -d
 
 # docker build the BE container for development
 build-dev-be:
-	docker build --file docker/Dockerfile.dev.be . -t dev.be
+	docker build --file docker/dev.be.Dockerfile . -t dev.be
 
 # docker run the BE container for development
 run-dev-be:
 	docker run -i -t -p 8080:8080 dev.be
+
+
+# docker build the FE container for development
+build-dev-fe:
+	docker build --file docker/dev.fe.Dockerfile . -t dev.fe
+
+# docker run the FE container for development
+run-dev-fe:
+	docker run -i -t -p 3000:3000 dev.fe

@@ -3,10 +3,22 @@ services:
   be:
     build:
       context: ..
-      dockerfile: ./docker/Dockerfile.dev.be
+      dockerfile: ./docker/dev.be.Dockerfile
     ports:
       - 127.0.0.1:8080:8080
+    volumes:
+      - ../be/:/code
     stdin_open: true # docker run -i
     tty: true # docker run -t
+
+  fe:
+    build:
+      context: ..
+      dockerfile: ./docker/dev.fe.Dockerfile
+    ports:
+      - 127.0.0.1:3000:3000
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+
 # redis:
 #   image: "redis:alpine"
