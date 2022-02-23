@@ -1,3 +1,4 @@
+import functools
 import json
 import os
 import pathlib
@@ -13,6 +14,12 @@ from flask import send_from_directory
 from py_logic.challenge import Challenge
 from py_logic.challenge import ChallengeStatus
 from py_logic.user import User
+
+# import uuid
+
+# in seconds, how much time after the last known action is a user taken
+# to be online
+USER_ONLINE_KEEPALIVE = 60
 
 
 # Returns a random string of the required size.
@@ -67,6 +74,26 @@ if app.debug:
         return str(response)
 
 
+def set_user_alive(user_id):
+    r.set("user:is_online:" + user_id, 1, ex=USER_ONLINE_KEEPALIVE)
+
+
+def means_user_is_alive(f):
+    """
+    A decorator on socket.io endpoints that updates our cache to indicate that
+    this user is still online.
+    """
+
+    @functools.wraps(f)
+    def decorated_function(*args, **kwargs):
+        sid = request.sid
+        socketio.start_background_task(set_user_alive, sid)
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 # ----------------------------     SOCKETS     ---------------------------- #
 # ---- Generic
 @socketio.on("message")
@@ -77,9 +104,11 @@ def handle_message(data):
 @socketio.on("connect")
 def handle_connect():
     sid = request.sid
-    r.set("user:is_online:" + sid, 1)
+    set_user_alive(sid)
+
     count_users = r.incr("system:online_users")
     users[sid] = User(sid)
+
     # TODO pushing out the number of users should be handled by a background task
     print(f"Client (#{sid}) connected. Currently connected: {count_users}")
     socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
@@ -108,6 +137,7 @@ def handle_disconnect():
 
 # ---- Game events
 @socketio.on("game-create")
+@means_user_is_alive
 def create_game(payload):
 
     cid = generate_ID(8)
@@ -145,6 +175,7 @@ def game_join(payload):
 
 
 @socketio.on("game-move")
+@means_user_is_alive
 def handle_game_move(payload):
     cid = payload["cid"]
     sid = request.sid
