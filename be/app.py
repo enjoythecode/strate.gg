@@ -1,5 +1,6 @@
 import json
 import os
+import pathlib
 import random
 import string
 
@@ -23,7 +24,8 @@ users = {}
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=False, static_folder="../fe/build")
-with open("config.json") as config_file:
+config_location = pathlib.Path(__file__).parent.absolute() / pathlib.Path("config.json")
+with open(config_location) as config_file:
     app.config.update(json.load(config_file))  # load secret key
 
 socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
