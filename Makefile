@@ -7,7 +7,9 @@ setup: setup-pc setup-fe setup-be
 setup-pc:
 	pre-commit install
 setup-fe:
-	(cd fe && npm install)
+# npm ci instead of i because it ensures consistency with package-lock.json. source:
+# https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore#48524475
+	(cd fe && npm ci)
 setup-be:
 	(python3 -m venv venv && \
 	source ./venv/bin/activate && \
