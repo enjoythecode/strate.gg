@@ -50,7 +50,7 @@ devdown:
 
 # like devup, but forces a rebuild of the underlying images
 devup-fbuild:
-	docker compose -f docker/docker-compose.dev.yml up --build -d
+	docker compose -f docker/docker-compose.dev.yml up --build
 
 # docker build the BE container for development
 build-dev-be:

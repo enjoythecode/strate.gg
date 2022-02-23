@@ -5,6 +5,7 @@ import random
 import string
 
 import flask_socketio as sckt
+import redis
 from flask import Flask
 from flask import request
 from flask import send_from_directory
@@ -24,6 +25,7 @@ users = {}
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=False, static_folder="../fe/build")
+r = redis.Redis(host="redis", port=6379, db=0)
 config_location = pathlib.Path(__file__).parent.absolute() / pathlib.Path("config.json")
 with open(config_location) as config_file:
     app.config.update(json.load(config_file))  # load secret key
@@ -41,7 +43,28 @@ def serve(path):  #
         return send_from_directory(app.static_folder, "index.html")  #
 
 
-#############################################################################
+# ----------------------------   REDIS DEBUG   ---------------------------- #
+if app.debug:
+
+    @app.route("/r/ping")
+    def rdb_ping():
+        redis_alive = r.ping()
+        return "alive" if redis_alive else "dead"
+
+    @app.route("/r/set")
+    def rdb_set():
+        key = request.args.get("key")
+        val = request.args.get("val")
+        response = r.set(key, val)
+        print(f"set {key} => {val}. got {response}")
+        return "OK"
+
+    @app.route("/r/get")
+    def rdb_get():
+        key = request.args.get("key")
+        response = r.get(key)
+        print(f"got {key}; {response}")
+        return str(response)
 
 
 # ----------------------------     SOCKETS     ---------------------------- #
@@ -54,11 +77,15 @@ def handle_message(data):
 @socketio.on("connect")
 def handle_connect():
     sid = request.sid
+    r.set("user:is_online:" + sid, 1)
+    count_users = r.incr("system:online_users")
     users[sid] = User(sid)
-    print(f"Client (#{sid}) connected. Currently connected: {len(users)}")
-    socketio.emit("connection-info-update", {"users": len(users)}, broadcast=True)
+    # TODO pushing out the number of users should be handled by a background task
+    print(f"Client (#{sid}) connected. Currently connected: {count_users}")
+    socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
 
     # this helps the client distinguish themselves among other users
+    # TODO: this is to be replaced by UUIDs for users, including anons
     socketio.emit("connection-player-id", {"pid": sid}, to=sid)
 
 
@@ -67,14 +94,16 @@ def handle_disconnect():
     # Handle: notify any games they were in and change those accordingly!
     sid = request.sid
     user = users[sid]
+    r.delete("user:is_online:" + sid)
+    count_users = r.decr("system:online_users")
 
     for cid in user.games_playing:
         handle_player_disconnect(cid, user)
 
     users.pop(sid)
 
-    socketio.emit("connection-info-update", {"users": len(users)}, broadcast=True)
-    print(f"Client (#{sid}) disconnected. Currently connected: {len(users)}")
+    socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
+    print(f"Client (#{sid}) disconnected. Currently connected: {count_users}")
 
 
 # ---- Game events
@@ -147,4 +176,5 @@ def handle_player_disconnect(cid, user):
 
 
 if __name__ == "__main__":
+    r.set("system:online_users", 0)  # default value of 0
     socketio.run(app, host="0.0.0.0", port="8080")

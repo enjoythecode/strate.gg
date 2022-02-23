@@ -4,11 +4,17 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased] - 2022-02-23
 
+### Added
+
+- Redis to docker-compose for the dev environment
+
 ### Changed
 
 - fe/package.json to use the latest version of packages with vulnerabilities
   pm
 - `Makefile` to use `npm ci` instead of `npm i` to keep package-lock.json consistent across devices
+- These back-end features to use Redis as the datastore:
+  - Online user count.
 
 ## [0.4.1] - 2022-02-22
 
