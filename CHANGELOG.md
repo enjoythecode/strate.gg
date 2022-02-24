@@ -18,6 +18,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
   - Online user count.
   - Tracking UIDs (user IDs)
 - Renamed `State.js` to `RootStore.js`
+- Renamed the variable exported from `RootStore.js` to be `RootStore` rather than `RootState`
 
 ### Fixed
 

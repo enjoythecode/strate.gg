@@ -2,8 +2,10 @@ import { makeObservable, observable, action } from "mobx";
 import { Challenge } from "./Challenge.js";
 import Socket from "./Socket.js";
 
-class State {
+class _RootStore {
   challenges = observable.map({});
+  // user ID of this client, used to distinguish from other players
+  client_user_id = undefined;
 
   constructor() {
     makeObservable(this, {
@@ -37,8 +39,8 @@ class State {
 // we create all of our stores, socket IO class
 // and export them from this module to make it available to access
 // from every file without using React Contexts
-const RootState = new State();
+const RootStore = new _RootStore();
 const socket = new Socket();
-RootState.set_socket(socket);
+RootStore.set_socket(socket);
 
-export default RootState;
+export default RootStore;

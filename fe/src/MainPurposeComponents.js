@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import RootState from "./RootStore.js";
+import RootStore from "./RootStore.js";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
@@ -16,8 +16,8 @@ const ConnectionWidget = observer(
     render() {
       return (
         <div style={{ position: "absolute", top: "4px", right: "8px" }}>
-          You're {RootState.socket.connection_status}.
-          <b> {RootState.socket.active_users}</b> online users!
+          You're {RootStore.socket.connection_status}.
+          <b> {RootStore.socket.active_users}</b> online users!
         </div>
       );
     }

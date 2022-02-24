@@ -2,7 +2,7 @@ import { makeObservable, observable, action, computed } from "mobx";
 import { Amazons, AmazonsView } from "./Games/Amazons";
 import { Mancala, MancalaView } from "./Games/Mancala";
 import { observer } from "mobx-react";
-import RootState from "./RootStore.js";
+import RootStore from "./RootStore.js";
 import React from "react";
 
 const game_name_to_state_class = {
@@ -45,7 +45,7 @@ class Challenge {
   }
 
   send_move(move) {
-    RootState.socket.send_move({ cid: this.cid, move: move });
+    RootStore.socket.send_move({ cid: this.cid, move: move });
   }
 
   process_new_move(data) {
@@ -79,7 +79,7 @@ class Challenge {
   get client_turn() {
     // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...), -1 if not a player
     return this.players.findIndex(
-      (player) => player === RootState.socket.socket_id
+      (player) => player === RootStore.socket.socket_id
     );
   }
 }

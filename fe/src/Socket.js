@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import RootState from "./RootStore.js";
+import RootStore from "./RootStore.js";
 import { makeObservable, observable, action } from "mobx";
 
 class Socket {
@@ -58,13 +58,13 @@ class Socket {
     });
 
     this.io.on("game-update-move", (data) => {
-      RootState.update_challenge_new_move(data);
+      RootStore.update_challenge_new_move(data);
     });
 
     this.io.on("game-update-meta", (data) => {
       console.log(data);
       if ("result" in data && data.result === "success") {
-        RootState.update_challenge_information(data.info);
+        RootStore.update_challenge_information(data.info);
       }
     });
   };
@@ -72,7 +72,7 @@ class Socket {
   create_new_game = (payload) => {
     this.io.emit("game-create", payload, (data) => {
       if (data.result && data.result === "success") {
-        RootState.update_challenge_information(data);
+        RootStore.update_challenge_information(data);
         window.location.replace("/play/" + data.game_name + "?cid=" + data.cid);
       }
     });
@@ -81,7 +81,7 @@ class Socket {
   join_challenge = (cid) => {
     this.io.emit("game-join", { cid: cid }, (data) => {
       if ("result" in data && data.result === "success") {
-        RootState.update_challenge_information(data.info);
+        RootStore.update_challenge_information(data.info);
       }
     });
   };

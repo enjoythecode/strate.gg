@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App.js";
 import PlayPage from "./PlayPage.js";
-import RootState from "./RootStore.js";
+import RootStore from "./RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, Footer } from "./MainPurposeComponents";
 
-RootState.socket.connect();
+RootStore.socket.connect();
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,10 +15,10 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route path="/play/:gameName">
-          <PlayPage state={RootState} />
+          <PlayPage state={RootStore} />
         </Route>
         <Route path="/">
-          <App state={RootState} />
+          <App state={RootStore} />
         </Route>
       </Switch>
     </Router>
