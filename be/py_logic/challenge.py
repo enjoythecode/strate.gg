@@ -1,7 +1,12 @@
 import enum
 
+from flask import session
+
 from py_logic.amazons_state import AmazonsState
 from py_logic.mancala_state import MancalaState
+
+# style will be improved with the factory system
+SESSION_KEYFOR_GAMESPLAYING = "games_playing"
 
 
 class ChallengeStatus(enum.Enum):
@@ -60,18 +65,30 @@ class Challenge:
         }
         return response
 
-    def join_player(self, user):
+    def join_player(self, uid):
         if (
             len(self.players) < self.state.get_max_no_players()
-            and user.sid not in self.players
+            and uid not in self.players
         ):
             if not self.status == ChallengeStatus.WAITING_FOR_PLAYERS:
                 return {"result": "error", "error": "Game is not accepting players!"}
-            self.players.append(user.sid)
-            user.games_playing.append(self.cid)
-            print("\nGAMES PLAYING:", user.sid, user.games_playing)
+            self.players.append(uid)
+
+            if "games_playing" in session and session["games_playing"]:
+                session["games_playing"].append(self.cid)
+            else:
+                session["games_playing"] = [self.cid]
+
+            session.modified = True  # TODO is this necessary?
+
+            print("\nGAMES PLAYING:", uid, session[SESSION_KEYFOR_GAMESPLAYING])
         else:
-            user.games_observing.append(self.cid)
+            if "games_observing" in session and session["games_observing"]:
+                session["games_observing"].append(self.cid)
+            else:
+                session["games_observing"] = [self.cid]
+
+            session.modified = True  # TODO is this necessary?
 
         if len(self.players) == self.state.get_max_no_players():
             self.status = ChallengeStatus.IN_PROGRESS
@@ -87,14 +104,14 @@ class Challenge:
         }
         return response
 
-    def make_move(self, move, user):
+    def make_move(self, move, uid):
         if not self.status == ChallengeStatus.IN_PROGRESS:
             return {"result": "error", "error": "game is not in progress"}
 
         if not self.state.is_valid_move(move):
             return {"result": "error", "error": "invalid move"}
 
-        if user.sid in self.players and self.state.turn == self.players.index(user.sid):
+        if uid in self.players and self.state.turn == self.players.index(uid):
             self.state.make_move(move)
             game_end = self.check_game_end()
         else:
@@ -112,11 +129,11 @@ class Challenge:
     def get_socket_room_name(self):
         return self.game_name + "_" + self.cid
 
-    def handle_disconnect(self, user):
+    def handle_disconnect(self, uid):
         self.status = ChallengeStatus.OVER_DISCONNECT
 
         self.game_end_override = (
-            (self.players.index(user.sid) + 1) % 2
+            (self.players.index(uid) + 1) % 2
         ) + 1  # set the remaining player as the winner
 
         response = {

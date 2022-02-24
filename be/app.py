@@ -1,25 +1,31 @@
+import base64
 import functools
 import json
 import os
 import pathlib
 import random
 import string
+import uuid
 
 import flask_socketio as sckt
 import redis
 from flask import Flask
+from flask import redirect
 from flask import request
 from flask import send_from_directory
+from flask import session
+from flask_session import Session
 
 from py_logic.challenge import Challenge
 from py_logic.challenge import ChallengeStatus
-from py_logic.user import User
 
-# import uuid
 
 # in seconds, how much time after the last known action is a user taken
 # to be online
 USER_ONLINE_KEEPALIVE = 60
+
+SESSION_KEYFOR_USERID = "uid"
+SESSION_KEYFOR_GAMESPLAYING = "games_playing"
 
 
 # Returns a random string of the required size.
@@ -28,26 +34,76 @@ def generate_ID(size, chars=string.ascii_uppercase + string.digits):
 
 
 challenges = {}
-users = {}
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=False, static_folder="../fe/build")
-r = redis.Redis(host="redis", port=6379, db=0)
+
 config_location = pathlib.Path(__file__).parent.absolute() / pathlib.Path("config.json")
 with open(config_location) as config_file:
     app.config.update(json.load(config_file))  # load secret key
-
-socketio = sckt.SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
+r = redis.Redis(host="redis", port=6379, db=0)
+app.config.update(
+    SESSION_TYPE="redis",  # Flask-Session
+    SESSION_REDIS=r,  # Flask-Session uses the existing redis connection object
+)
+Session(app)
+socketio = sckt.SocketIO(
+    app, async_mode="eventlet", cors_allowed_origins="*", manage_session=False
+)
 
 
 # ----------------------------   SERVE REACT   ---------------------------- #
 @app.route("/", defaults={"path": ""})  #
-@app.route("/<path:path>")  #
-def serve(path):  #
-    if path != "" and os.path.exists(app.static_folder + "/" + path):  #
-        return send_from_directory(app.static_folder, path)  #
-    else:  #
-        return send_from_directory(app.static_folder, "index.html")  #
+# TODO switch this to /static/<path:path> (coordinate with FE)
+@app.route("/<path:path>")
+def serve(path):
+
+    # in the development environment, the client files are served by the npm
+    # development server which is on a different port. in production, they
+    # are built by npm and served by flask within this method
+    # to get the same session flow between dev and prod, we set the session
+    # here at the base url for the Flask app *in debug mode only*
+    # that means that you should go to localhost:8080 when testing the data
+    # in your local environment.
+    # note: sessions are handled server side in Redis, and that is why setting
+    # the cookie once is enough. this is also how we get access to the Flask
+    # session in Flask-SocketIO: socketio defers session management with the
+    # manage_session = False setting on initialization.
+    if app.debug:
+        setup_server_side_session_cookie()
+        return redirect("http://localhost:3000")
+
+    if path != "" and os.path.exists(app.static_folder + "/" + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, "index.html")
+
+
+# ----------------------------       API       ---------------------------- #
+
+
+@app.route("/api/user")
+def setup_server_side_session_cookie():
+    """
+
+    dummy implementation that assigns all new users a new UID (= user ID) (since there
+    is no matching account (there isn't an account system yet), this is equivalent to a
+    new anon user!)
+
+    does not replace existing UID such that repeat visitors are identified the same
+    until the cookie expires or they clear it.
+
+    """
+    # decode a b64 encoded UUID to original (if ever needed) as follows:
+    # uuid.UUID(bytes=base64.b64decode("WgNqblksTomwoelTRw0vaQ=="))
+
+    if SESSION_KEYFOR_USERID in session:
+        pass  # note: might need to record some index to redis (sid <-> uid)
+    else:
+        uid = base64.b64encode(uuid.uuid4().bytes).decode()
+        session[SESSION_KEYFOR_USERID] = uid
+
+    return "ok"
 
 
 # ----------------------------   REDIS DEBUG   ---------------------------- #
@@ -74,8 +130,11 @@ if app.debug:
         return str(response)
 
 
-def set_user_alive(user_id):
-    r.set("user:is_online:" + user_id, 1, ex=USER_ONLINE_KEEPALIVE)
+# ---------------------------- ONLINE STATUS ---------------------------- #
+
+
+def set_user_alive(uid):
+    r.set("user:is_online:" + uid, 1, ex=USER_ONLINE_KEEPALIVE)
 
 
 def means_user_is_alive(f):
@@ -86,9 +145,7 @@ def means_user_is_alive(f):
 
     @functools.wraps(f)
     def decorated_function(*args, **kwargs):
-        sid = request.sid
-        socketio.start_background_task(set_user_alive, sid)
-
+        socketio.start_background_task(set_user_alive, session["uid"])
         return f(*args, **kwargs)
 
     return decorated_function
@@ -102,34 +159,43 @@ def handle_message(data):
 
 
 @socketio.on("connect")
-def handle_connect():
+@means_user_is_alive
+def handle_connect(*args, **kwargs):
     sid = request.sid
-    set_user_alive(sid)
+    print("=" * 70)
+    print("@socketion.on('connect')")
+    print(request.cookies)
+    print(socketio.manage_session)
+    print(session)
+    print("=" * 70)
 
+    uid = session[SESSION_KEYFOR_USERID]
+
+    # TODO look into the accuracy of this: this will count open pages, and not
+    # individual users
     count_users = r.incr("system:online_users")
-    users[sid] = User(sid)
 
-    # TODO pushing out the number of users should be handled by a background task
+    # TODO pushing out the number of users should be handled by some other task
+    # as number of users scale, this will consume a lot of cpu and bandwidth!
     print(f"Client (#{sid}) connected. Currently connected: {count_users}")
     socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
 
-    # this helps the client distinguish themselves among other users
-    # TODO: this is to be replaced by UUIDs for users, including anons
-    socketio.emit("connection-player-id", {"pid": sid}, to=sid)
+    # telling the client their UID so that it can distinguish itself from others in
+    # game metadata
+    socketio.emit("connection-player-id", {"uid": uid}, to=sid)
 
 
 @socketio.on("disconnect")
 def handle_disconnect():
     # Handle: notify any games they were in and change those accordingly!
     sid = request.sid
-    user = users[sid]
-    r.delete("user:is_online:" + sid)
+    uid = session[SESSION_KEYFOR_USERID]
+
+    r.delete("user:is_online:" + uid)
     count_users = r.decr("system:online_users")
 
-    for cid in user.games_playing:
-        handle_player_disconnect(cid, user)
-
-    users.pop(sid)
+    for cid in session.get(SESSION_KEYFOR_GAMESPLAYING, []):
+        handle_player_disconnect(cid, uid)
 
     socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
     print(f"Client (#{sid}) disconnected. Currently connected: {count_users}")
@@ -154,12 +220,12 @@ def create_game(payload):
 @socketio.on("game-join")
 def game_join(payload):
     cid = payload["cid"]
-    sid = request.sid
-    user = users[sid]
+    # sid = request.sid
+    uid = session[SESSION_KEYFOR_USERID]
 
     if cid and cid in challenges:
         c = challenges[cid]
-        response = c.join_player(user)
+        response = c.join_player(uid)
         if response["result"] == "success":
             payload = {"result": "success", "info": response}
         else:
@@ -178,11 +244,11 @@ def game_join(payload):
 @means_user_is_alive
 def handle_game_move(payload):
     cid = payload["cid"]
-    sid = request.sid
+    uid = session["uid"]
 
     if cid and cid in challenges:
         c = challenges[cid]
-        response = c.make_move(payload["move"], users[sid])
+        response = c.make_move(payload["move"], uid)
         print(response)
         sckt.emit(
             "game-update-move", response, to=challenges[cid].get_socket_room_name()
@@ -200,8 +266,8 @@ def available_tv_challenges(payload):
     return {"result": "error", "error": "No games available!"}
 
 
-def handle_player_disconnect(cid, user):
-    response = challenges[cid].handle_disconnect(user)
+def handle_player_disconnect(cid, uid):
+    response = challenges[cid].handle_disconnect(uid)
     payload = {"result": "success", "info": response}
     sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
 

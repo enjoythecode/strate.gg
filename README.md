@@ -99,3 +99,8 @@ See `BUILDING.md`
    1. Instructions for building the website
    1. How to contribute
 1. TODO.md
+1. Flask-Login for users (also look into Flask-Pedantic, and choose)
+   1. Set the following in Flask:
+      SESSION_COOKIE_HTTPONLY = True
+      REMEMBER_COOKIE_HTTPONLY = True
+      also, sign the cookies!

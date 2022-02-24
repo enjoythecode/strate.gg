@@ -17,8 +17,8 @@ services:
       dockerfile: ./docker/dev.fe.Dockerfile
     ports:
       - 127.0.0.1:3000:3000
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    #stdin_open: true # docker run -i
+    #tty: true # docker run -t
 
   redis:
     image: "redis:alpine"
