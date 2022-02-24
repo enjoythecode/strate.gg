@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import RootState from "./State.js";
+import RootState from "./RootStore.js";
 import { ChallengeView } from "./Challenge.js";
 
 function get_game_id() {

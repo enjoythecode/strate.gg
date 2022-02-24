@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import RootState from "./State.js";
+import RootState from "./RootStore.js";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {

@@ -2,7 +2,7 @@ import { makeObservable, observable, action, computed } from "mobx";
 import { Amazons, AmazonsView } from "./Games/Amazons";
 import { Mancala, MancalaView } from "./Games/Mancala";
 import { observer } from "mobx-react";
-import RootState from "./State.js";
+import RootState from "./RootStore.js";
 import React from "react";
 
 const game_name_to_state_class = {

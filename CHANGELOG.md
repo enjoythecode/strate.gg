@@ -17,6 +17,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - These back-end features to use Redis as the datastore:
   - Online user count.
   - Tracking UIDs (user IDs)
+- Renamed `State.js` to `RootStore.js`
 
 ### Fixed
 

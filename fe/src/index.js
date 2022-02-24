@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App.js";
 import PlayPage from "./PlayPage.js";
-import RootState from "./State.js";
+import RootState from "./RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, Footer } from "./MainPurposeComponents";
 
