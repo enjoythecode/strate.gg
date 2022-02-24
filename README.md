@@ -104,3 +104,4 @@ See `BUILDING.md`
       SESSION_COOKIE_HTTPONLY = True
       REMEMBER_COOKIE_HTTPONLY = True
       also, sign the cookies!
+1. rename uid to user_id
