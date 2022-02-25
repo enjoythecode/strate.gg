@@ -2,6 +2,12 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] -
+
+### Fixed
+
+- Makefile issue where `make deps` needed to be ran twice.
+
 ## [0.5.0] - 2022-02-25
 
 ### Added

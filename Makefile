@@ -3,9 +3,8 @@
 # References I used:
 # https://stackoverflow.com/a/70572654
 
-# If `venv/bin/python` exists, it is used. If not, use PATH to find python.
+# Use SYSTEM_PYTHON to create venv
 SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
-PYTHON         = $(or $(wildcard venv/bin/python), $(SYSTEM_PYTHON))
 
 # REPOSITORY SET-UP
 # -----------------------------------------------------------------------------
@@ -13,14 +12,14 @@ PYTHON         = $(or $(wildcard venv/bin/python), $(SYSTEM_PYTHON))
 
 venv:
 	(rm -rf venv && \
-    $(PYTHON) -m venv venv)
+    $(SYSTEM_PYTHON) -m venv venv)
 
 deps: deps-be deps-fe install-commit-hooks
 
 deps-be:
-	($(PYTHON) -m venv venv && \
+	($(SYSTEM_PYTHON) -m venv venv && \
 	. ./venv/bin/activate && \
-	$(PYTHON) -m pip install --upgrade pip -r requirements.txt -r requirements-dev.txt)
+	venv/bin/python -m pip install --upgrade pip -r requirements.txt -r requirements-dev.txt)
 
 deps-fe:
 # npm ci instead of i because it ensures consistency with package-lock.json. source:
