@@ -10,12 +10,19 @@ class _RootStore {
   constructor() {
     makeObservable(this, {
       challenges: observable,
+      client_user_id: observable,
+      set_client_user_id: action,
       update_challenge_information: action,
     });
   }
 
   set_socket = (sckt) => {
     this.socket = sckt;
+  };
+
+  set_client_user_id = (new_user_id) => {
+    console.log(this.client_user_id);
+    this.client_user_id = new_user_id;
   };
 
   update_challenge_information = (data) => {

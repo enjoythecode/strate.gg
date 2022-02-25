@@ -3,15 +3,11 @@ import RootStore from "./RootStore.js";
 import { makeObservable, observable, action } from "mobx";
 
 class Socket {
-  socket_id = "";
   active_users = 0;
   connection_status = "offline";
 
   constructor() {
     makeObservable(this, {
-      socket_id: observable,
-      set_socket_id: action,
-
       active_users: observable,
       set_active_users: action,
 
@@ -21,9 +17,6 @@ class Socket {
     this.io = null;
   }
 
-  set_socket_id = (sid) => {
-    this.socket_id = sid;
-  };
   set_active_users = (new_active_users) => {
     this.active_users = new_active_users;
   };
@@ -44,13 +37,16 @@ class Socket {
   };
 
   bind_socket_listeners = () => {
-    this.io.on("connect", (data) => {
+    this.io.on("connect", () => {
       this.set_connection_status("online");
-      this.set_socket_id(this.io.id);
     });
 
     this.io.on("disconnect", (data) => {
       this.set_connection_status("offline");
+    });
+
+    this.io.on("connection-player-id", (data) => {
+      RootStore.set_client_user_id(data["user_id"]);
     });
 
     this.io.on("connection-info-update", (data) => {
