@@ -39,7 +39,7 @@ class Challenge {
     this.game_end = 0;
     this.game_state = new game_name_to_state_class[this.game_name](
       this,
-      data.config
+      data.state.config
     );
     this.ViewComponent = game_name_to_view_component[this.game_name];
   }
@@ -79,7 +79,7 @@ class Challenge {
   get client_turn() {
     // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...), -1 if not a player
     return this.players.findIndex(
-      (player_id) => player_id === RootStore.client_user_id
+      (player_id) => player_id === RootStore.client_uid
     );
   }
 }

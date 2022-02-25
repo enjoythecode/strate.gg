@@ -14,15 +14,14 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - fe/package.json to use the latest version of packages with vulnerabilities
   pm
 - `Makefile` to use `npm ci` instead of `npm i` to keep package-lock.json consistent across devices
-- These back-end features to use Redis as the datastore:
-  - Online user count.
-  - Tracking UIDs (user IDs)
 - Renamed `State.js` to `RootStore.js`
 - Renamed the variable exported from `RootStore.js` to be `RootStore` rather than `RootState`
 - Moved the user identifier of the client to be the server-generated user-id, rather than the socket ID.
   - Moved this to RootStore.js (from Socket.js) since it is state that applies the whole page.
 - Iterated on Makefile
 - Iterated on README.md, CONTRIBUTING.md
+- Data store from in-memory variables to Redis. All challenges and user IDs are held in Redis, and
+  therefore Flask workers are stateless (and thus should be horizontally scalable)
 
 ### Fixed
 
@@ -33,6 +32,12 @@ This file lists all changes to this project, grouped by versions that follow [Se
   "withCredentials" option for the SocketIO object in the front-end to True.
 - AmazonsView regression where cancelling a move would disable all further move
   indicators.
+
+### Removed
+
+- Removed the box to create Mancala games from the FE because the current
+  change of architecture broke it, and I do not want to waste effort on it
+  until I solidify the architecture of the code with the factory pattern.
 
 ## [0.4.1] - 2022-02-22
 

@@ -5,13 +5,13 @@ import Socket from "./Socket.js";
 class _RootStore {
   challenges = observable.map({});
   // user ID of this client, used to distinguish from other players
-  client_user_id = undefined;
+  client_uid = undefined;
 
   constructor() {
     makeObservable(this, {
       challenges: observable,
-      client_user_id: observable,
-      set_client_user_id: action,
+      client_uid: observable,
+      set_client_uid: action,
       update_challenge_information: action,
     });
   }
@@ -20,9 +20,9 @@ class _RootStore {
     this.socket = sckt;
   };
 
-  set_client_user_id = (new_user_id) => {
-    console.log(this.client_user_id);
-    this.client_user_id = new_user_id;
+  set_client_uid = (new_uid) => {
+    this.client_uid = new_uid;
+    console.info("Client UID is ", new_uid);
   };
 
   update_challenge_information = (data) => {

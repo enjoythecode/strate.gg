@@ -46,7 +46,7 @@ class Socket {
     });
 
     this.io.on("connection-player-id", (data) => {
-      RootStore.set_client_user_id(data["user_id"]);
+      RootStore.set_client_uid(data["uid"]);
     });
 
     this.io.on("connection-info-update", (data) => {
@@ -58,7 +58,6 @@ class Socket {
     });
 
     this.io.on("game-update-meta", (data) => {
-      console.log(data);
       if ("result" in data && data.result === "success") {
         RootStore.update_challenge_information(data.info);
       }

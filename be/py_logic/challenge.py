@@ -43,6 +43,36 @@ class Challenge:
     }
     """
 
+    def __repr__(self):
+        """
+        Returns relevant data as a dictionary.
+        __repr__ is meant for robots (not humans!)
+        Intended to be passed onto a client for consumption or storage
+        """
+        return {
+            "game_name": self.game_name,
+            "state": self.state.__repr__(),
+            "players": self.players,
+            "moves": self.moves,
+            "status": self.status.name,
+            "cid": self.cid,
+            "game_end_override": self.game_end_override,
+        }
+
+    # XXX: I think I am re-inventing the wheel with data modeling here!
+    @staticmethod
+    def init_from_repr(repr):
+        c = Challenge()
+        c.game_name = repr["game_name"]
+        # XXX: TECH DEBT!!
+        c.state = game_classes[repr["game_name"]].init_from_repr(repr["state"])
+        c.players = repr["players"]
+        c.moves = repr["moves"]
+        c.status = ChallengeStatus[repr["status"]]
+        c.cid = repr["cid"]
+        c.game_end_override = repr["game_end_override"]
+        return c
+
     def __init__(self):
         self.game_name = None
         self.state = None
@@ -72,16 +102,7 @@ class Challenge:
         self.cid = cid
         self.config = config
 
-        response = {
-            "result": "success",
-            "game_name": game_name,
-            "cid": cid,
-            "players": self.players,
-            "status": self.status.name,
-            "game": self.state.game_data(),
-            "config": self.config,
-        }
-        return response
+        return {"result": "success"}
 
     def join_player(self, uid):
         if (
@@ -111,15 +132,8 @@ class Challenge:
         if len(self.players) == self.state.get_max_no_players():
             self.status = ChallengeStatus.IN_PROGRESS
 
-        response = {
-            "game": self.state.game_data(),
-            "players": self.players,
-            "status": self.status.name,
-            "cid": self.cid,
-            "config": self.config,
-            "game_name": self.game_name,
-            "result": "success",
-        }
+        response = {"result": "success"}
+        response.update(self.__repr__())
         return response
 
     def make_move(self, move, uid):
@@ -135,13 +149,14 @@ class Challenge:
         else:
             return {"result": "error", "error": "not your turn"}
 
-        response = {
-            "cid": self.cid,
-            "result": "success",
-            "move": move,
-            "status": self.status.name,
-            "game_end": game_end,
-        }
+        response = {"result": "success"}
+        response.update(self.__repr__())
+        response.update(
+            {
+                "move": move,
+                "game_end": game_end,
+            }
+        )
         return response
 
     def get_socket_room_name(self):

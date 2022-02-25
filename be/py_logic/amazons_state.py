@@ -48,16 +48,23 @@ class AmazonsState(game_state.GameState):
         "board": List of List of Integers. Board[x][y] is the cell at row (from top) x,
             col (from left) y. 0 is blank, 1 is white queen, 2 is black queen, 3 is
             cell that was burned off.
-        "game_size": Integer. Side length of the board. Most likely, 10.
+        "config": {
+            "size": Integer.  Side length of the board. Most likely, 10.
+            "variation": Integer. Variation number (specific to size)
+        }
         "number_of_turns": Integer. Number of turns taken in the game so far.
     }
 
     """
 
-    def __init__(self, board, turn=0):
+    def __init__(self, board, turn=0, config=None):
+        # XXX: smelly code
+        if not config:
+            config = {"size": len(board), "variation": 0}
+
         self.turn = turn
         self.board = copy.deepcopy(board)
-        self.game_size = len(board)
+        self.config = config
         self.number_of_turns = 0
 
     @classmethod
@@ -92,17 +99,28 @@ class AmazonsState(game_state.GameState):
     def get_max_no_players(self):
         return 2
 
-    def game_data(self):
+    def __repr__(self):
         """
-        Returns relevant game data in a dictionary.
-        Intended to be passed onto a client for consumption
+        Returns relevant game data as a dictionary.
+        Intended to be passed onto a client for consumption or storage
+        (ie JSON in Redis.)
         """
         return {
             "board": self.board,
-            "game_size": self.game_size,
+            "config": self.config,
             "turn": self.turn,
-            "turns_taken": self.number_of_turns,
+            "number_of_turns": self.number_of_turns,
         }
+
+    @staticmethod
+    def init_from_repr(repr):
+        c = AmazonsState(repr["board"])
+        c.turn = repr["turn"]
+        # XXX: TECH DEBT!!
+        c.board = repr["board"]
+        c.config = repr["config"]
+        c.number_of_turns = repr["number_of_turns"]
+        return c
 
     def clone(self):
         """Create a deep clone of this game state."""
@@ -170,8 +188,8 @@ class AmazonsState(game_state.GameState):
         out = []
         if player is None:
             player = self.turn + 1
-        for q_x in range(self.game_size):
-            for q_y in range(self.game_size):
+        for q_x in range(self.config["size"]):
+            for q_y in range(self.config["size"]):
                 if self.board[q_x][q_y] == player:
                     q = str(q_x) + str(q_y)
                     out.extend([[q, x] for x in self.get_sliding_squares(q)])
@@ -183,8 +201,8 @@ class AmazonsState(game_state.GameState):
             player = self.turn + 1
         out = 0
 
-        for q_x in range(self.game_size):
-            for q_y in range(self.game_size):
+        for q_x in range(self.config["size"]):
+            for q_y in range(self.config["size"]):
                 if self.board[q_x][q_y] == player:
                     q = str(q_x) + str(q_y)
                     out += self.count_sliding_squares(q)
@@ -225,7 +243,9 @@ class AmazonsState(game_state.GameState):
 
         for dx, dy in deltas:
             x, y = from_x, from_y
-            while 0 <= x + dx < self.game_size and 0 <= y + dy < self.game_size:
+            while (
+                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
+            ):
                 x += dx
                 y += dy
                 if self.board[x][y] != 0:
@@ -264,7 +284,9 @@ class AmazonsState(game_state.GameState):
 
         for dx, dy in deltas:
             x, y = from_x, from_y
-            while 0 <= x + dx < self.game_size and 0 <= y + dy < self.game_size:
+            while (
+                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
+            ):
                 x += dx
                 y += dy
                 if self.board[x][y] != 0:
@@ -293,7 +315,7 @@ class AmazonsState(game_state.GameState):
         else:  # game going on
             return 0
 
-    def __repr__(self):
+    def __str__(self):
         """Returns a string representation of the board."""
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in x]) for x in self.board]

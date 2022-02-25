@@ -17,7 +17,6 @@ from flask import session
 from flask_session import Session
 
 from py_logic.challenge import Challenge
-from py_logic.challenge import ChallengeStatus
 
 
 # in seconds, how much time after the last known action is a user taken
@@ -32,8 +31,6 @@ SESSION_KEYFOR_GAMESPLAYING = "games_playing"
 def generate_ID(size, chars=string.ascii_uppercase + string.digits):
     return "".join(random.choice(chars) for x in range(size))
 
-
-challenges = {}
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=False, static_folder="../fe/build")
@@ -195,7 +192,8 @@ def handle_disconnect():
     count_users = r.decr("system:online_users")
 
     for cid in session.get(SESSION_KEYFOR_GAMESPLAYING, []):
-        handle_player_disconnect(cid, uid)
+        if r.exists("challenge:" + cid):  # XXX: code smell
+            handle_player_disconnect(cid, uid)
 
     socketio.emit("connection-info-update", {"users": count_users}, broadcast=True)
     print(f"Client (#{sid}) disconnected. Currently connected: {count_users}")
@@ -207,33 +205,45 @@ def handle_disconnect():
 def create_game(payload):
 
     cid = generate_ID(8)
-    while cid in challenges:
+    while r.exists("challenge:" + cid):
         cid = generate_ID(8)
 
     c = Challenge()
-    challenges[cid] = c
-    response = c.initialize_challenge(payload["game_name"], cid, payload["config"])
+    result = c.initialize_challenge(payload["game_name"], cid, payload["config"])
+    if result["result"] == "error":
+        return result
 
-    return response
+    c_repr = c.__repr__()
+    c_json = json.dumps(c_repr)
+    r.set("challenge:" + cid, c_json)
+
+    result.update(c_repr)
+
+    return result
 
 
 @socketio.on("game-join")
 def game_join(payload):
     cid = payload["cid"]
-    # sid = request.sid
     uid = session[SESSION_KEYFOR_USERID]
 
-    if cid and cid in challenges:
-        c = challenges[cid]
+    print(cid, uid)
+    if cid and r.exists("challenge:" + cid):
+        print("hejhej")
+        c_data = json.loads(r.get("challenge:" + cid).decode())
+
+        c = Challenge.init_from_repr(c_data)
+
         response = c.join_player(uid)
         if response["result"] == "success":
             payload = {"result": "success", "info": response}
         else:
             return response
+
+        c_json = json.dumps(c.__repr__())
+        r.set("challenge:" + cid, c_json)
         # avoid sending twice by first emitting, and then sending the room
-        sckt.emit(
-            "game-update-meta", payload, to=challenges[cid].get_socket_room_name()
-        )
+        sckt.emit("game-update-meta", payload, to=c.get_socket_room_name())
         sckt.join_room(c.get_socket_room_name())
         return payload
     else:
@@ -246,30 +256,29 @@ def handle_game_move(payload):
     cid = payload["cid"]
     uid = session["uid"]
 
-    if cid and cid in challenges:
-        c = challenges[cid]
+    if cid and r.exists("challenge:" + cid):
+
+        c_data = json.loads(r.get("challenge:" + cid).decode())
+        c = Challenge.init_from_repr(c_data)
+
         response = c.make_move(payload["move"], uid)
+        c_json = json.dumps(c.__repr__())
+        r.set("challenge:" + cid, c_json)
+
         print(response)
-        sckt.emit(
-            "game-update-move", response, to=challenges[cid].get_socket_room_name()
-        )
+        sckt.emit("game-update-move", response, to=c.get_socket_room_name())
     else:
         return {"result": "error", "error": "Game not found"}
 
 
-@socketio.on("tv-poll")
-def available_tv_challenges(payload):
-    for key in challenges:
-        if challenges[key].status == ChallengeStatus.IN_PROGRESS:
-            r = {"result": "success", "cid": challenges[key].cid}
-            return r
-    return {"result": "error", "error": "No games available!"}
-
-
 def handle_player_disconnect(cid, uid):
-    response = challenges[cid].handle_disconnect(uid)
+    c_data = json.loads(r.get("challenge:" + cid).decode())
+    c = Challenge.init_from_repr(c_data)
+
+    response = c.handle_disconnect(uid)
     payload = {"result": "success", "info": response}
-    sckt.emit("game-update-meta", payload, to=challenges[cid].get_socket_room_name())
+
+    sckt.emit("game-update-meta", payload, to=c.get_socket_room_name())
 
 
 if __name__ == "__main__":
