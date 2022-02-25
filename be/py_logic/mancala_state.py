@@ -13,6 +13,20 @@ BANKS = [6, 13]  # bank indices
 
 
 class MancalaState(game_state.GameState):
+    """
+    MancalaState is serialized in JSON as such:
+    {
+        "turn": Integer. Current player with the turn, 0-indexed. Ex: white to move ->
+            "turn" == 0, black to move -> "turn" == 1.
+        "board": List of Integers. Board[x] is the number of stones on that cell.
+            ---- INDICES MAPPING TO BOARD ----
+             P2:  13, 12, 11, 10, 9, 8, 7
+             P1:       0,  1,  2, 3, 4, 5, 6,
+             (6 is P1 bank, 13 is P2 bank)
+        "number_of_turns": Integer. Number of turns taken in the game so far.
+    }
+    """
+
     def __init__(self, board, turn=0):
         self.turn = 0
         self.board = copy.deepcopy(board)
