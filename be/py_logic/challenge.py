@@ -10,11 +10,11 @@ SESSION_KEYFOR_GAMESPLAYING = "games_playing"
 
 
 class ChallengeStatus(enum.Enum):
-    WAITING_FOR_PLAYERS = 1
-    IN_PROGRESS = 2
-    OVER_NORMAL = 3
-    OVER_DISCONNECT = 4
-    OVER_TIME = 5
+    WAITING_FOR_PLAYERS = enum.auto()
+    IN_PROGRESS = enum.auto()
+    OVER_NORMAL = enum.auto()
+    OVER_DISCONNECT = enum.auto()
+    OVER_TIME = enum.auto()
 
 
 game_classes = {"amazons": AmazonsState, "mancala": MancalaState}
