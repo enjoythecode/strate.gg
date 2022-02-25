@@ -8,10 +8,15 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
 # add app (incl. dependencies)
-COPY ../fe/ ./
+COPY ../fe/package.json ./
+COPY ../fe/package-lock.json ./
+COPY ../fe/.eslintrc.json ./
+COPY ../fe/.prettierrc.json ./
+COPY ../fe/src/ ./src/
+COPY ../fe/public/ ./public/
 
 # install dependencies
-RUN npm install
+RUN npm ci
 
 # start app
 CMD ["npm", "start"]

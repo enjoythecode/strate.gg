@@ -200,7 +200,7 @@ const AmazonsView = observer(({ game_state }) => {
               return { ...selection, to: c };
             });
           } else {
-            setSelection([{ from: null, to: null, shoot: null }]);
+            setSelection({ from: null, to: null, shoot: null });
           }
           break;
 
@@ -211,7 +211,7 @@ const AmazonsView = observer(({ game_state }) => {
             // we do not set the state within this if-block because we want the selection to be reset right away
             game_state.challenge.send_move({ ...selection, shoot: c });
           }
-          setSelection([{ from: null, to: null, shoot: null }]);
+          setSelection({ from: null, to: null, shoot: null });
           break;
 
         default:

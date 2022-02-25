@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import RootState from "./State.js";
+import RootStore from "./RootStore.js";
 import { ChallengeView } from "./Challenge.js";
 
 function get_game_id() {
@@ -13,11 +13,11 @@ const PlayPage = observer(
     constructor() {
       super();
       this.cid = get_game_id();
-      RootState.socket.join_challenge(this.cid);
+      RootStore.socket.join_challenge(this.cid);
     }
 
     render() {
-      return <ChallengeView challenge={RootState.challenges.get(this.cid)} />;
+      return <ChallengeView challenge={RootStore.challenges.get(this.cid)} />;
     }
   }
 );

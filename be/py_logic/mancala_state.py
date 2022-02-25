@@ -13,10 +13,23 @@ BANKS = [6, 13]  # bank indices
 
 
 class MancalaState(game_state.GameState):
+    """
+    MancalaState is serialized in JSON as such:
+    {
+        "turn": Integer. Current player with the turn, 0-indexed. Ex: white to move ->
+            "turn" == 0, black to move -> "turn" == 1.
+        "board": List of Integers. Board[x] is the number of stones on that cell.
+            ---- INDICES MAPPING TO BOARD ----
+             P2:  13, 12, 11, 10, 9, 8, 7
+             P1:       0,  1,  2, 3, 4, 5, 6,
+             (6 is P1 bank, 13 is P2 bank)
+        "number_of_turns": Integer. Number of turns taken in the game so far.
+    }
+    """
+
     def __init__(self, board, turn=0):
         self.turn = 0
         self.board = copy.deepcopy(board)
-        self.game_size = len(board)
         self.number_of_turns = 0
 
     @classmethod
@@ -31,14 +44,15 @@ class MancalaState(game_state.GameState):
     def get_max_no_players(self):
         return 2
 
-    def game_data(self):
+    def __repr__(self):
         """
-        Returns relevant game data in a dictionary.
-        Intended to be passed onto a client for consumption
+        Returns relevant game data as a dictionary.
+        __repr__ is meant for robots (not humans!)
+        Intended to be passed onto a client for consumption or storage
+        (ie JSON in Redis.)
         """
         return {
             "board": self.board,
-            "game_size": self.game_size,
             "turn": self.turn,
             "turns_taken": self.number_of_turns,
         }
@@ -119,5 +133,5 @@ class MancalaState(game_state.GameState):
 
         return 0  # going on
 
-    def __repr__(self):  # string representation of the board from the perspective of P0
+    def __str__(self):  # string representation of the board from the perspective of P0
         return str(self.board) + "turn" + str(self.turn)

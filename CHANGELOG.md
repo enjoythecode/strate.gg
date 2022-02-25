@@ -2,6 +2,43 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] - 2022-02-25
+
+### Added
+
+- Redis to docker-compose for the dev environment
+- Flask-Session to handle server-side sessions with redis as the data backend
+
+### Changed
+
+- fe/package.json to use the latest version of packages with vulnerabilities
+  pm
+- `Makefile` to use `npm ci` instead of `npm i` to keep package-lock.json consistent across devices
+- Renamed `State.js` to `RootStore.js`
+- Renamed the variable exported from `RootStore.js` to be `RootStore` rather than `RootState`
+- Moved the user identifier of the client to be the server-generated user-id, rather than the socket ID.
+  - Moved this to RootStore.js (from Socket.js) since it is state that applies the whole page.
+- Iterated on Makefile
+- Iterated on README.md, CONTRIBUTING.md
+- Data store from in-memory variables to Redis. All challenges and user IDs are held in Redis, and
+  therefore Flask workers are stateless (and thus should be horizontally scalable)
+
+### Fixed
+
+- Issue with socketIO not transferring cookies to development server because
+  Flask-SocketIO could only read cookies that were already sent in a regular HTTP
+  route. Because the Flask backend is only a "websocket API" in the development
+  set-up and not in production, this was causing issues. Fixed by setting the
+  "withCredentials" option for the SocketIO object in the front-end to True.
+- AmazonsView regression where cancelling a move would disable all further move
+  indicators.
+
+### Removed
+
+- Removed the box to create Mancala games from the FE because the current
+  change of architecture broke it, and I do not want to waste effort on it
+  until I solidify the architecture of the code with the factory pattern.
+
 ## [0.4.1] - 2022-02-22
 
 ### Added

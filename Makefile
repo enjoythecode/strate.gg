@@ -1,28 +1,45 @@
-#TODO: checking for requirements
+# Usage explained in CONTRIBUTING.md
+
+# References I used:
+# https://stackoverflow.com/a/70572654
+
+# If `venv/bin/python` exists, it is used. If not, use PATH to find python.
+SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
+PYTHON         = $(or $(wildcard venv/bin/python), $(SYSTEM_PYTHON))
 
 # REPOSITORY SET-UP
 # -----------------------------------------------------------------------------
-.PHONY: setup setup-pc setup-fe setup-be
-setup: setup-pc setup-fe setup-be
-setup-pc:
-	pre-commit install
-setup-fe:
-	(cd fe && npm install)
-setup-be:
-	(python3 -m venv venv && \
-	source ./venv/bin/activate && \
-	pip install -r requirements.txt)
+.PHONY: venv deps deps-be deps-fe install-commit-hooks
+
+venv:
+	(rm -rf venv && \
+    $(PYTHON) -m venv venv)
+
+deps: deps-be deps-fe install-commit-hooks
+
+deps-be:
+	($(PYTHON) -m venv venv && \
+	. ./venv/bin/activate && \
+	$(PYTHON) -m pip install --upgrade pip -r requirements.txt -r requirements-dev.txt)
+
+deps-fe:
+# npm ci instead of i because it ensures consistency with package-lock.json. source:
+# https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore#48524475
+	(cd fe && npm ci)
+
+install-commit-hooks:
+	venv/bin/pre-commit install
+
 
 # PRE-COMMIT COMMANDS
 # -----------------------------------------------------------------------------
-.PHONY: check-all
+.PHONY: check-all check
 check-all:
-	pre-commit run --all-files
+	venv/bin/pre-commit run --all-files
 
 # run pre-commit checks on modified
-.PHONY: check
 check:
-	pre-commit run
+	venv/bin/pre-commit run
 
 # BUILDING DEVELOPMENT SERVERS WITH DOCKER
 # -----------------------------------------------------------------------------
@@ -48,7 +65,7 @@ devdown:
 
 # like devup, but forces a rebuild of the underlying images
 devup-fbuild:
-	docker compose -f docker/docker-compose.dev.yml up --build -d
+	docker compose -f docker/docker-compose.dev.yml up --build
 
 # docker build the BE container for development
 build-dev-be:
@@ -66,3 +83,9 @@ build-dev-fe:
 # docker run the FE container for development
 run-dev-fe:
 	docker run -i -t -p 3000:3000 dev.fe
+
+# ADMINISTRATIVE
+# -----------------------------------------------------------------------------
+.PHONY: clean-deps
+clean-deps:
+	rm -rf venv fe/node_modules be/__pycache__ be/config.json

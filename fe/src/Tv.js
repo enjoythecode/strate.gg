@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, when } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import RootState from "./State.js";
+import RootStore from "./State.js";
 import { ChallengeView } from "./Challenge.js";
 
 const Tv = observer(
@@ -28,19 +28,19 @@ const Tv = observer(
       let noChallenge = this.cid === null;
       let challengeNotPlaying =
         !noChallenge &&
-        RootState.challenges.has(this.cid) &&
-        RootState.challenges.get(this.cid).status !== "IN_PROGRESS";
+        RootStore.challenges.has(this.cid) &&
+        RootStore.challenges.get(this.cid).status !== "IN_PROGRESS";
 
       if (noChallenge || challengeNotPlaying) {
-        RootState.socket.poll_tv_games({}, (data) => {
+        RootStore.socket.poll_tv_games({}, (data) => {
           this.update_cid(data.cid);
-          RootState.socket.join_challenge(data.cid);
+          RootStore.socket.join_challenge(data.cid);
           this.dispose_game_end_watcher = when(
             () => {
               return (
                 this.cid !== null &&
-                RootState.challenges.has(this.cid) &&
-                RootState.challenges.get(this.cid).status !== "IN_PROGRESS"
+                RootStore.challenges.has(this.cid) &&
+                RootStore.challenges.get(this.cid).status !== "IN_PROGRESS"
               );
             },
             () => {
@@ -65,7 +65,7 @@ const Tv = observer(
         <div style={{ border: "solid", display: "block" }}>
           <h1>TV! {this.cid} </h1>
           {this.cid !== null ? (
-            <ChallengeView challenge={RootState.challenges.get(this.cid)} />
+            <ChallengeView challenge={RootStore.challenges.get(this.cid)} />
           ) : (
             "Looking for a game to watch!"
           )}
