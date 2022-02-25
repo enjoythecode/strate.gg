@@ -29,6 +29,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
   route. Because the Flask backend is only a "websocket API" in the development
   set-up and not in production, this was causing issues. Fixed by setting the
   "withCredentials" option for the SocketIO object in the front-end to True.
+- AmazonsView regression where cancelling a move would disable all further move
+  indicators.
 
 ## [0.4.1] - 2022-02-22
 
