@@ -23,6 +23,24 @@ game_classes = {"amazons": AmazonsState, "mancala": MancalaState}
 class Challenge:
     """
     Represent a challenge of an N-player game
+
+    A Challenge is serialized in JSON as such:
+    {
+        "game_name": String. Representing the type of game this challenge is playing
+            ex: "amazons" or "mancala",
+        "state": An Object that the individual game has serialized according to its
+            own representation.
+        "players": List of String. The uids of the players, where players[0] is the
+            first player, players[1] is the second, etc.
+        "moves": List of String. A list of moves in the game in chronological order.
+            The encode/decoding to string is handled by the individual game code.
+        "status": String (as defined in ChallengeStatus). Representing the game status
+            (waiting for players, in progress, over, etc.)
+        "cid": String. ID assigned to the game.
+        "game_end_override": Int or None. If a player won due to externalities (time up
+            for opponent, opponent disconnect, this is the index of the player that won)
+            Otherwise, it is None.
+    }
     """
 
     def __init__(self):
