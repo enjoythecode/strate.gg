@@ -4,6 +4,12 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased] -
 
+### Changed
+
+- be/generate_secret.sh now only generates a secret if one
+  does not exist. This way, sessions from previous deployments
+  are not invalidated.
+
 ### Fixed
 
 - Makefile issue where `make deps` needed to be ran twice.
