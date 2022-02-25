@@ -4,32 +4,17 @@
 
 # Strate.gg
 
-A website dedicated to the play and exploration of various abstract strategy board games.
+A website dedicated to the play and exploration of various abstract strategy board games. My ambition is to build a website for real-time and correspondence matches of games such as Amazons and Hex, as well as complimentary tools such as an analysis board, puzzles, and AI opponents.
 
-My ambition is to build a website for real-time and correspondence matches of these games, as well as AI analysis and practice.
-
-I am also using this project as a real-world website to learn good software development practices such as testing, linting, versioning.
+I am also using this project as an opportunity to learn good software development practices such as containerization (Docker), testing, tooling (linting, auto-formatting, commit hooks).
 
 # Building
 
-`src` includes all scripts for installing dependencies and running development or production environments.
+See [CONTRIBUTING](CONTRIBUTING.md#building)
 
-## Installing Dependencies
+# Contributing
 
-`. ./src/format_dev.sh` for developing on your local device.
-`. ./src/format_prod.sh` for deploying to a server for production (I use AWS EC2)
-
-## Running Development Server
-
-`./src/serve_dev.sh`
-
-## Running Production Server
-
-`./src/serve_prod.sh`
-
-## Further Notes
-
-See `BUILDING.md`
+All contributions (bug reports, suggestions, code changes, etc.) are welcome! If you'd like to work on the code, reading through [CONTRIBUTING](CONTRIBUTING.md) should get you up to speed!
 
 # Essential To-do
 

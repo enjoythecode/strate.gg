@@ -21,6 +21,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Renamed the variable exported from `RootStore.js` to be `RootStore` rather than `RootState`
 - Moved the user identifier of the client to be the server-generated user-id, rather than the socket ID.
   - Moved this to RootStore.js (from Socket.js) since it is state that applies the whole page.
+- Iterated on Makefile
+- Iterated on README.md, CONTRIBUTING.md
 
 ### Fixed
 
