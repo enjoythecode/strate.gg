@@ -50,10 +50,10 @@ gen-secret:
 
 # uses docker compose to start a complete dev server
 # does not use -d because this is a development server and we may want to see stdout. see devupd
-devup:
+devup: gen-secret
 	docker compose -f docker/docker-compose.dev.yml up
 
-devupd:
+devupd: gen-secret
 	docker compose -f docker/docker-compose.dev.yml up -d
 
 # shut down the development server running with docker compose
@@ -63,11 +63,11 @@ devdown:
 # --- below commands shouldn't be needed for building in 99% of cases.
 
 # like devup, but forces a rebuild of the underlying images
-devup-fbuild:
+devup-fbuild: gen-secret
 	docker compose -f docker/docker-compose.dev.yml up --build
 
 # docker build the BE container for development
-build-dev-be:
+build-dev-be: gen-secret
 	docker build --file docker/dev.be.Dockerfile . -t dev.be
 
 # docker run the BE container for development
@@ -87,4 +87,4 @@ run-dev-fe:
 # -----------------------------------------------------------------------------
 .PHONY: clean-deps
 clean-deps:
-	rm -rf venv fe/node_modules be/__pycache__ be/config.json
+	rm -rf venv fe/node_modules be/__pycache__
