@@ -39,6 +39,19 @@ class AmazonsState(game_state.GameState):
     Holds the state of the Game of Amazons (board etc.).
     Players are numbered 1 and 2.
     Assumes a square board.
+
+
+    An AmazonsState is serialized in JSON as such:
+    {
+        "turn": Integer. Current player with the turn, 0-indexed. Ex: white to move ->
+            "turn" == 0, black to move -> "turn" == 1.
+        "board": List of List of Integers. Board[x][y] is the cell at row (from top) x,
+            col (from left) y. 0 is blank, 1 is white queen, 2 is black queen, 3 is
+            cell that was burned off.
+        "game_size": Integer. Side length of the board. Most likely, 10.
+        "number_of_turns": Integer. Number of turns taken in the game so far.
+    }
+
     """
 
     def __init__(self, board, turn=0):
