@@ -13,7 +13,11 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Fixed
 
 - Makefile issue where `make deps` needed to be ran twice.
-- Makefile deploy commands now create a new secret key if one does not exist.
+- Makefile deploy commands now create a new secret key if one
+  does not exist.
+- Patched a potential security hole in Flask-Session where the
+  default data serializer is Pickle (vulnerable to arbitary code
+  execution) by changing it to JSON
 
 ## [0.5.0] - 2022-02-25
 

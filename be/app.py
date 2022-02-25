@@ -44,6 +44,7 @@ app.config.update(
     SESSION_REDIS=r,  # Flask-Session uses the existing redis connection object
 )
 Session(app)
+app.session_interface.serializer = json
 socketio = sckt.SocketIO(
     app, async_mode="eventlet", cors_allowed_origins="*", manage_session=False
 )
@@ -105,6 +106,16 @@ def setup_server_side_session_cookie():
 
 # ----------------------------   REDIS DEBUG   ---------------------------- #
 if app.debug:
+
+    @app.route("/sess")
+    def debug_session_serializer():
+        # our session interface should use JSON.
+        # default in Flask-Session is Pickle, which is likely a security hole.
+        # although there is no proof of vulnerability, Pickle very clearly
+        # discloses that non-trusted data can easily be used for arbitrary
+        # code execution!
+        # TODO: if I end up creating a proof of vulnerability, add it as a test!
+        return str(app.session_interface.serializer.__dir__())
 
     @app.route("/r/ping")
     def rdb_ping():
