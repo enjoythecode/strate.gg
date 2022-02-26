@@ -9,6 +9,12 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - be/generate_secret.sh now only generates a secret if one
   does not exist. This way, sessions from previous deployments
   are not invalidated.
+- Re-factoring the monolith app.py into `blueprints` and `services`.
+  - `blueprints` attach to certain HTTP routes and/or websocket events
+  - `services` provide the functions that deal with domain state such
+    as challenges, game instances, users, etc.
+    - currently, providers such as `redis` are also under `services.
+      this might change.
 
 ### Fixed
 
