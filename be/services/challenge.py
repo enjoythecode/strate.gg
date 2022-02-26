@@ -62,6 +62,14 @@ def _challenge_exists(challenge):
     return _cid_exists(challenge["cid"])
 
 
+def _generate_unique_cid():
+    cid = _generate_cid()
+    while _cid_exists(cid):
+        cid = _generate_cid()
+
+    return cid
+
+
 def _challenge_set(challenge):
     # XXX: I should handle this kind of result checking in the redis service!
     result = g.redis.set(_redis_key_challenge(challenge), challenge)
@@ -84,9 +92,7 @@ def create_challenge(game_name, game_config):
 
     game_state = game.create_from_config(game_config)
 
-    cid = _generate_cid()
-    while _cid_exists(cid):
-        cid = _generate_cid()
+    cid = _generate_unique_cid()
 
     challenge_obj = {
         "game_name": game_name,
