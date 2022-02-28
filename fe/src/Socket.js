@@ -53,45 +53,42 @@ class Socket {
       this.set_active_users(data.users);
     });
 
-    this.io.on("game-update-move", (data) => {
-      RootStore.update_challenge_new_move(data);
-    });
-
-    this.io.on("game-update-meta", (data) => {
+    this.io.on("challenge-update", (data) => {
       if ("result" in data && data.result === "success") {
-        RootStore.update_challenge_information(data.info);
+        RootStore.update_challenge_information(data.challenge);
       }
     });
   };
 
   create_new_game = (payload) => {
-    this.io.emit("game-create", payload, (data) => {
+    this.io.emit("challenge-create", payload, (data) => {
       if (data.result && data.result === "success") {
-        RootStore.update_challenge_information(data);
-        window.location.replace("/play/" + data.game_name + "?cid=" + data.cid);
+        window.location.replace(
+          "/play/" + data.challenge.game_name + "?cid=" + data.challenge.cid
+        );
       }
     });
   };
 
   join_challenge = (cid) => {
-    this.io.emit("game-join", { cid: cid }, (data) => {
+    this.io.emit("challenge-join", { cid: cid }, (data) => {
       if ("result" in data && data.result === "success") {
-        RootStore.update_challenge_information(data.info);
+        RootStore.update_challenge_information(data.challenge);
       }
     });
   };
 
-  send_move = (payload) => {
-    this.io.emit("game-move", payload);
+  challenge_subscribe = (cid) => {
+    this.io.emit("challenge-subscribe", { cid: cid });
   };
 
-  poll_tv_games(payload, successCallback) {
-    this.io.emit("tv-poll", payload, (data) => {
-      if ("result" in data && data.result === "success") {
-        successCallback(data);
-      }
-    });
-  }
+  challenge_unsubscribe = (cid) => {
+    this.io.emit("challenge-unsubscribe", { cid: cid });
+  };
+
+  challenge_send_move = (payload) => {
+    this.io.emit("challenge-move", payload);
+  };
 }
 
 export default Socket;

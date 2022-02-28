@@ -2,7 +2,6 @@ import functools
 
 from flask import Blueprint
 from flask import current_app
-from flask import g
 from flask import request
 
 bp = Blueprint("debug", __name__, url_prefix="/debug")
@@ -26,7 +25,7 @@ def test_extensions():
 
 @bp.route("/r/ping")
 def rdb_ping():
-    redis_alive = g.redis.ping()
+    redis_alive = current_app.redis.ping()
     return "alive" if redis_alive else "dead"
 
 

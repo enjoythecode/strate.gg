@@ -1,6 +1,6 @@
 import copy
 
-from py_logic import game_state
+from app.games.game_state import GameState
 
 starting_board_10x0 = [
     [0, 0, 0, 2, 0, 0, 2, 0, 0, 0],
@@ -34,7 +34,7 @@ def prettify_board_character(n):
     return ".WBX"[n]
 
 
-class AmazonsState(game_state.GameState):
+class AmazonsState(GameState):
     """
     Holds the state of the Game of Amazons (board etc.).
     Players are numbered 1 and 2.

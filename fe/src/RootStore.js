@@ -25,14 +25,14 @@ class _RootStore {
     console.info("Client UID is ", new_uid);
   };
 
-  update_challenge_information = (data) => {
-    let cid = data.cid;
+  update_challenge_information = (challenge) => {
+    let cid = challenge.cid;
     let chs = this.challenges;
 
     if (!chs.has(cid)) {
-      chs.set(cid, new Challenge(data));
+      chs.set(cid, new Challenge(challenge));
     }
-    chs.get(cid).update_challenge_information(data);
+    chs.get(cid).update_challenge_information(challenge);
   };
 
   update_challenge_new_move = (data) => {

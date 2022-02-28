@@ -11,7 +11,7 @@ const App = observer(({ state }) => (
             onClick={() => {
               state.socket.create_new_game({
                 game_name: "amazons",
-                config: { size: 10, variation: 0 },
+                game_config: { size: 10, variation: 0 },
               });
             }}
           >
@@ -30,7 +30,7 @@ const App = observer(({ state }) => (
               onClick={() => {
                 state.socket.create_new_game({
                   game_name: "mancala",
-                  config: {},
+                  game_config: {},
                 });
               }}
             >

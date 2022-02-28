@@ -1,6 +1,6 @@
 import copy
 
-from py_logic import game_state
+from app.games.game_state import GameState
 
 starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
@@ -12,7 +12,7 @@ starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 BANKS = [6, 13]  # bank indices
 
 
-class MancalaState(game_state.GameState):
+class MancalaState(GameState):
     """
     MancalaState is serialized in JSON as such:
     {

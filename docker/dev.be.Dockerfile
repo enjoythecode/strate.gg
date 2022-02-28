@@ -10,4 +10,4 @@ COPY ./be .
 # `flask run` does not support flask-socketio, therefore, we still run the app using
 # `python app.py`. This can still support the init_app() factory design.
 # See https://flask-socketio.readthedocs.io/en/latest/getting_started.html
-CMD ["python", "app.py"]
+CMD ["python", "serve.py"]
