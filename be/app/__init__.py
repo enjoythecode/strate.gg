@@ -31,9 +31,13 @@ def create_app():
     app.session_interface.serializer = json
     socketio.init_app(
         app,
-        # XXX: cors_allowed_origins="*"????
         async_mode="eventlet",
-        cors_allowed_origins="*",
+        cors_allowed_origins=[
+            "http://localhost:3000",
+            "http://localhost:8080",
+            "http://127.0.0.1:3000",
+            "http://127.0.0.1:8080",
+        ],
         manage_session=False,
     )
 
