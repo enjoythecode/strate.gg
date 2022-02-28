@@ -5,6 +5,7 @@ import PlayPage from "./PlayPage.js";
 import RootStore from "./RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, Footer } from "./MainPurposeComponents";
+import "./index.css";
 
 RootStore.socket.connect();
 

@@ -40,9 +40,9 @@ check-all:
 check:
 	venv/bin/pre-commit run
 
-# BUILDING DEVELOPMENT SERVERS WITH DOCKER
+# BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
-.PHONY: gen-secret devup devupd dewdown devup-fbuild
+.PHONY: gen-secret devup devupd dewdown devup-fbuild compile-client
 .PHONY: build-dev-be run-dev-be build-dev-fe run-dev-fe
 
 gen-secret:
@@ -60,11 +60,15 @@ devupd: gen-secret
 devdown:
 	docker compose -f docker/docker-compose.dev.yml down
 
-# --- below commands shouldn't be needed for building in 99% of cases.
-
 # like devup, but forces a rebuild of the underlying images
 devup-fbuild: gen-secret
 	docker compose -f docker/docker-compose.dev.yml up --build
+
+# compile a production-optimized version of the client code
+compile-client:
+	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && mv build/ ../be/client/)
+
+# ------- below commands shouldn't be needed for building in 99% of cases. -------
 
 # docker build the BE container for development
 build-dev-be: gen-secret

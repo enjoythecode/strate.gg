@@ -5,3 +5,4 @@ papers/
 venv/
 *node_modules/
 secret_key.json
+be/client/
