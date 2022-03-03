@@ -13,6 +13,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Tests for cookies
 - Cookie signing, preventing forged cookies
 - "SameSite=Lax" and "Secure" to the session cookie
+- Tests for simple websocket connections
+- Tests for the same UID across disconnects of the websocket
 
 ### Changed
 
