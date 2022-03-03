@@ -59,6 +59,8 @@ def load_app_configuration(app, redis_instance):
         app.config.update(json.load(config_file))  # load secret key
         # get_redis_at_runtime = lambda: app.extensions["redis"]
         app.config.update(
+            SESSION_COOKIE_SECURE=True,
+            SESSION_COOKIE_SAMESITE="Lax",
             SESSION_TYPE="redis",  # Flask-Session
             SESSION_REDIS=redis_instance,  # Flask-Session
             # REDIS_HOST="localhost",

@@ -3,7 +3,6 @@
     - Set up pytest and coverage
     - Write first initial test
     * Test: Http route cookies
-      - Any http route gives me a cookie
       - I get the same cookie in subsequent requests
       - Sending a forged cookie is rejected
       - Cookie has same_site and http_only set

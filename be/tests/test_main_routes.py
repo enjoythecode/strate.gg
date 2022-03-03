@@ -1,12 +1,40 @@
 import pytest
+from werkzeug.http import parse_cookie
 
 
 @pytest.mark.usefixtures("client")
-def test_request_example(client):
+def test_index(client):
     response = client.get("/")
 
     assert_response_200(response)
     assert_response_is_index_html(response)
+
+
+@pytest.mark.usefixtures("client")
+def test_index_gives_cookies(client):
+    response = client.get("/")
+
+    session_cookie = get_session_cookie_from_response(response)
+
+    assert session_cookie is not None
+
+
+@pytest.mark.usefixtures("client")
+def test_index_cookie_attributes(client):
+    response = client.get("/")
+
+    session_cookie = get_session_cookie_from_response(response)
+
+    cookie_attrs = parse_cookie(session_cookie)
+    cookie_value = cookie_attrs["session"]
+
+    assert "Secure" in cookie_attrs
+    assert "HttpOnly" in cookie_attrs
+    assert cookie_attrs["SameSite"] == "Lax"
+    assert cookie_attrs["Path"] == "/"
+
+    assert isinstance(cookie_value, str)
+    assert len(cookie_value) > 0
 
 
 def assert_response_200(response):
@@ -15,3 +43,8 @@ def assert_response_200(response):
 
 def assert_response_is_index_html(response):
     assert b"<!doctype html>" in response.data
+
+
+def get_session_cookie_from_response(response):
+    cookies = response.headers.getlist("Set-Cookie")
+    return next((cookie for cookie in cookies if "session" in cookie), None)
