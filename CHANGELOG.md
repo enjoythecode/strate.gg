@@ -4,6 +4,11 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased] -
 
+### Added
+
+- Dockercompose and Dockerfile configuration for production build
+- nginx as reverse proxy in both the development and production deployments
+
 ### Changed
 
 - be/generate_secret.sh now only generates a secret if one
@@ -24,6 +29,10 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Patched a potential security hole in Flask-Session where the
   default data serializer is Pickle (vulnerable to arbitary code
   execution) by changing it to JSON
+
+### Removed
+
+- Old .src files for production (replaced by Docker)
 
 ## [0.5.0] - 2022-02-25
 
