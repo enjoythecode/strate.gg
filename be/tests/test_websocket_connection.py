@@ -38,9 +38,18 @@ def test_socketio_same_uid_across_disconnects(socketio_client):
 
 @pytest.mark.usefixtures("socketio_client")
 def test_user_count_is_one_with_alone_client(socketio_client):
-    assert 1 == get_number_of_currently_online_players_from_websocket_events(
-        socketio_client
-    )
+    assert 1 == get_online_player_count_from_client(socketio_client)
+
+
+@pytest.mark.usefixtures("socketio_client_factory")
+def test_user_count_decrements_after_disconnect(socketio_client_factory):
+    client_one = socketio_client_factory.create()
+    client_two = socketio_client_factory.create()
+    assert 2 == get_online_player_count_from_client(client_one)
+    assert 2 == get_online_player_count_from_client(client_two)
+
+    client_two.disconnect()
+    assert 1 == get_online_player_count_from_client(client_one)
 
 
 def get_uid_from_websocket_connection_player_id_event(socketio_client):
@@ -56,7 +65,7 @@ def get_uid_from_websocket_connection_player_id_event(socketio_client):
     return player_id_event["args"][0]["uid"]
 
 
-def get_number_of_currently_online_players_from_websocket_events(socketio_client):
+def get_online_player_count_from_client(socketio_client):
     events = socketio_client.get_received()
     online_user_events = get_events_with_name(events, "connection-info-update")
 
