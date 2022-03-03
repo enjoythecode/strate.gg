@@ -104,13 +104,12 @@ def create_challenge(game_name, game_config):
 
     if game_name not in GAME_STATE_CLASSES:
         # XXX: standardize error communication!
-        return {"result": "error", "error": "Not a valid name."}
+        raise BaseException
 
     game = GAME_STATE_CLASSES[game_name]
 
     if not game.is_valid_config(game_config):
-        # XXX: standardize error communication!
-        return {"result": "error", "error": "Invalid configuration."}
+        raise BaseException
 
     game_state = game.create_from_config(game_config)
 

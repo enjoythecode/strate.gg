@@ -69,14 +69,18 @@ class AmazonsState(GameState):
 
     @classmethod
     def is_valid_config(self, config):
-        if "size" in config and config["size"]:
+
+        if "size" in config:
             if not config["size"] in [4, 6, 10]:
                 return False
+        else:
+            return False
 
-        if "variation" in config and config["variation"]:
+        if "variation" in config:
             if not config["variation"] in [0]:
                 return False
-
+        else:
+            return False
         return True
 
     @classmethod

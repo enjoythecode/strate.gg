@@ -14,6 +14,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
   - Cookie signing, preventing forged cookies
   - "SameSite=Lax" and "Secure" to the session cookie
 - Tests for websocket connections
+- A base error handler for websocket events
 
 ### Changed
 

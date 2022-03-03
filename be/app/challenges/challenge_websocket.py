@@ -11,7 +11,9 @@ def create_challenge(payload):
     # TODO: what happens on an error?
     # XXX: (application TODO generally)
 
-    # TODO: check for existence of data?
+    if not ("game_name" in payload and "game_config" in payload):
+        raise BaseException
+
     challenge = challenge_service.create_challenge(
         payload["game_name"], payload["game_config"]
     )
