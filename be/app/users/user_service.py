@@ -7,7 +7,6 @@ SESSION_KEY_FOR_UID = "uid"
 
 
 def get_uid_of_session_holder():
-    # TODO: check for non-existence of a uid!
     if SESSION_KEY_FOR_UID not in session:
         setup_server_side_session_cookie()
     return session[SESSION_KEY_FOR_UID]
