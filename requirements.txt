@@ -1,3 +1,4 @@
+attrs==21.4.0
 bidict==0.21.4
 black==22.1.0
 cachelib==0.6.0
@@ -6,10 +7,11 @@ click==8.0.4
 Deprecated==1.2.13
 distlib==0.3.4
 dnspython==2.2.0
-eventlet==0.32.0
+eventlet==0.33.0
 filelock==3.6.0
 flake8==4.0.1
 Flask==2.0.3
+Flask-And-Redis==1.0.0
 Flask-Session==0.4.0
 Flask-SocketIO==5.1.1
 gevent==21.12.0
@@ -17,6 +19,7 @@ greenlet==1.1.2
 gunicorn==20.1.0
 identify==2.4.10
 importlib-metadata==4.2.0
+iniconfig==1.1.1
 itsdangerous==2.1.0
 Jinja2==3.0.3
 MarkupSafe==2.1.0
@@ -26,6 +29,10 @@ nodeenv==1.6.0
 packaging==21.3
 pathspec==0.9.0
 platformdirs==2.5.1
+pluggy==1.0.0
+pre-commit==2.17.0
+psutil==5.9.0
+py==1.11.0
 pycodestyle==2.8.0
 pyflakes==2.4.0
 pyparsing==3.0.7

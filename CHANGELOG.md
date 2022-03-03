@@ -20,6 +20,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
     as challenges, game instances, users, etc.
     - currently, providers such as `redis` are also under `services.
       this might change.
+- Upgraded eventlet to the latest version, removing the related notice
+  in CONTRIBUTING.md
 
 ### Fixed
 

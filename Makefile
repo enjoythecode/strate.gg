@@ -40,6 +40,16 @@ check-all:
 check:
 	venv/bin/pre-commit run
 
+# TESTING
+# -----------------------------------------------------------------------------
+.PHONY: test
+test:
+	(cd be && pytest)
+
+.PHONY: cover
+cover:
+	(cd be && coverage run -m pytest && coverage report)
+
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
 .PHONY: gen-secret devup devupd devdown devup-fbuild compile-client
@@ -65,7 +75,7 @@ devup-fbuild: gen-secret
 
 # compile a production-optimized version of the client code
 compile-client:
-	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && mv build/ ../be/client/)
+	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && cp -r build/ ../be/client)
 
 # BUILDING PRODUCTION SERVERS
 # --------
