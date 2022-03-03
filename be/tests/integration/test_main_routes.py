@@ -50,6 +50,7 @@ def test_same_cookie_across_requests(client):
 
 @pytest.mark.usefixtures("client")
 def test_forged_cookie_is_rejected(client):
+    # TODO Test that this test would actually fail with wrong implementation
     forged_cookie_value = "I_AM_A_HACKER_TRYING_TO_FORGE_THIS_COOKIE"
 
     first_response = client.get("/")

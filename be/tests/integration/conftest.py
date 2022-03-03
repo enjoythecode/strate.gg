@@ -33,12 +33,13 @@ def runner(app):
 
 
 @pytest.fixture
-def socketio_client_factory(app, client):
+def socketio_client_factory(app):
     class SocketIO_Client_Factory:
         def create():
             # emulates the real socketio usage where we load index first
             # and then connect with socketio, and thus the server socketio
             # has access to our cookie!
+            client = app.test_client()
             client.get("/")
             return socketio.test_client(app, flask_test_client=client)
 
