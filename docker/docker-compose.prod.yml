@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  be:
+    build:
+      context: ..
+      dockerfile: ./docker/prod.be.Dockerfile
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/prod.nginx.Dockerfile
+    ports:
+      - "3000:80"
+      - "8020:80"
+
+    # do not launch nginx until be is set up for networking
+    # otherwise, nginx will run faster, and error out because
+    # it can't resolve the be name in nginx.default.conf
+    depends_on:
+      - be
+
+  redis:
+    image: "redis:alpine"

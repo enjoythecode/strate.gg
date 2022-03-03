@@ -13,7 +13,7 @@ from app import main
 
 socketio = sckt.SocketIO()
 sess = Session()
-r = redis.Redis(host="localhost", port=6379, db=0)
+r = redis.Redis(host="redis", port=6379, db=0)
 
 
 def create_app():

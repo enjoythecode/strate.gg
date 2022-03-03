@@ -29,9 +29,9 @@ class Socket {
       (window.location.hostname === "127.0.0.1") |
       (window.location.hostname === "localhost");
     let options = { withCredentials: true };
-    this.io = io(host_is_development ? "localhost:8080" : "strate.gg", options);
-    // Pondering: Can this line ever be slow enough (or light travel fast enough) where the "connect" event happens before it is binded?
-    // Answer: very, very, very unlikely. It is both light, and one is traveling (at least) hundreds of miles.
+
+    this.io = io(host_is_development ? "localhost:8020" : "strate.gg", options);
+
     this.bind_socket_listeners();
     this.set_connection_status("connecting");
   };

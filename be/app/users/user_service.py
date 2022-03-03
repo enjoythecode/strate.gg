@@ -8,11 +8,14 @@ SESSION_KEY_FOR_UID = "uid"
 
 def get_uid_of_session_holder():
     # TODO: check for non-existence of a uid!
+    if SESSION_KEY_FOR_UID not in session:
+        setup_server_side_session_cookie()
     return session[SESSION_KEY_FOR_UID]
 
 
 def get_realtime_challenges_of_user(uid):
-    # TODO check it exists I guess...
+    # TODO: this may not exist...
+    # TODO: better create session with some default variables, probably!
     return session["games_playing"]
 
 

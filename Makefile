@@ -42,8 +42,7 @@ check:
 
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
-.PHONY: gen-secret devup devupd dewdown devup-fbuild compile-client
-.PHONY: build-dev-be run-dev-be build-dev-fe run-dev-fe
+.PHONY: gen-secret devup devupd devdown devup-fbuild compile-client
 
 gen-secret:
 	./be/generate_secret.sh
@@ -51,25 +50,43 @@ gen-secret:
 # uses docker compose to start a complete dev server
 # does not use -d because this is a development server and we may want to see stdout. see devupd
 devup: gen-secret
-	docker compose -f docker/docker-compose.dev.yml up
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up
 
 devupd: gen-secret
-	docker compose -f docker/docker-compose.dev.yml up -d
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up -d
 
 # shut down the development server running with docker compose
 devdown:
-	docker compose -f docker/docker-compose.dev.yml down
+	docker compose -p "dev" -f docker/docker-compose.dev.yml down
 
 # like devup, but forces a rebuild of the underlying images
 devup-fbuild: gen-secret
-	docker compose -f docker/docker-compose.dev.yml up --build
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up --build
 
 # compile a production-optimized version of the client code
 compile-client:
 	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && mv build/ ../be/client/)
 
+# BUILDING PRODUCTION SERVERS
+# --------
+.PHONY: produp produpd proddown produp-fbuild
+produp: gen-secret
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up
+
+produpd: gen-secret
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up -d
+
+proddown:
+	docker compose -p "prod" -f docker/docker-compose.prod.yml down
+
+produp-fbuild: gen-secret
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up --build
+
+
+# DEBUGGING DOCKER
 # ------- below commands shouldn't be needed for building in 99% of cases. -------
 
+.PHONY: build-dev-be run-dev-be build-dev-fe run-dev-fe
 # docker build the BE container for development
 build-dev-be: gen-secret
 	docker build --file docker/dev.be.Dockerfile . -t dev.be
