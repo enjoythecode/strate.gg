@@ -8,6 +8,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 - Dockercompose and Dockerfile configuration for production build
 - nginx as reverse proxy in both the development and production deployments
+- `make test` and `make cover` for running the test suite and coverage, respectively
+  on the BE code
 
 ### Changed
 

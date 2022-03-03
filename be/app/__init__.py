@@ -13,17 +13,19 @@ from app import main
 
 socketio = sckt.SocketIO()
 sess = Session()
-r = redis.Redis(host="redis", port=6379, db=0)
 
 
-def create_app():
+def create_app(redis_instance=None):
+
+    if redis_instance is None:
+        redis_instance = redis.Redis(host="redis", port=6379, db=0)
 
     app = Flask(__name__, instance_relative_config=False, static_folder="../client")
 
-    load_app_configuration(app)
+    load_app_configuration(app, redis_instance)
 
     with app.app_context():
-        current_app.redis = r
+        current_app.redis = redis_instance
 
     # use init_app for all extensions
     sess.init_app(app)
@@ -48,7 +50,7 @@ def create_app():
     return app
 
 
-def load_app_configuration(app):
+def load_app_configuration(app, redis_instance):
     config_location = pathlib.Path(__file__).parent.absolute() / pathlib.Path(
         "secret_key.json"
     )
@@ -58,7 +60,7 @@ def load_app_configuration(app):
         # get_redis_at_runtime = lambda: app.extensions["redis"]
         app.config.update(
             SESSION_TYPE="redis",  # Flask-Session
-            SESSION_REDIS=r,  # Flask-Session
+            SESSION_REDIS=redis_instance,  # Flask-Session
             # REDIS_HOST="localhost",
             # REDIS_PORT="6379",
         )

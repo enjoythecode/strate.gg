@@ -43,12 +43,12 @@ check:
 # TESTING
 # -----------------------------------------------------------------------------
 .PHONY: test
-test:
+test: gen-secret
 	(cd be && pytest)
 
 .PHONY: cover
-cover:
-	(cd be && coverage run -m pytest && coverage report)
+cover: gen-secret
+	(cd be && coverage run -m pytest && coverage report --sort cover)
 
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------

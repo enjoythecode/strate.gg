@@ -1,8 +1,11 @@
-papers/
-*.pyc
 .DS_Store
-*__pycache__*
+
+fe/node_modules/
+
 venv/
-*node_modules/
-secret_key.json
+*.pyc
+*__pycache__*
+be/app/secret_key.json
 be/client/
+be/.pytest_cache
+be/.coverage
