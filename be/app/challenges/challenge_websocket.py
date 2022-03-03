@@ -21,21 +21,6 @@ def create_challenge(payload):
     return {"result": "success", "challenge": challenge}
 
 
-@bp.on("challenge-subscribe")
-def handle_challenge_subscribe(payload):
-    room = challenge_service.socket_room_name_from_cid(payload["cid"])
-    join_room(room)
-    challenge_service.send_challenge_update_to_clients(
-        challenge_service._get_challenge_by_cid(payload["cid"])
-    )
-
-
-@bp.on("challenge-unsubscribe")
-def handle_challenge_unsubscribe(payload):
-    room = challenge_service.socket_room_name_from_cid(payload["cid"])
-    leave_room(room)
-
-
 @bp.on("challenge-join")
 def challenge_join(payload):
     # TODO how to do more comprehensive check of user input?
@@ -53,3 +38,18 @@ def challenge_join(payload):
 @bp.on("challenge-move")
 def challenge_move(payload):
     challenge_service.handle_move(payload["cid"], payload["move"])
+
+
+@bp.on("challenge-subscribe")
+def handle_challenge_subscribe(payload):
+    room = challenge_service.socket_room_name_from_cid(payload["cid"])
+    join_room(room)
+    challenge_service.send_challenge_update_to_clients(
+        challenge_service._get_challenge_by_cid(payload["cid"])
+    )
+
+
+@bp.on("challenge-unsubscribe")
+def handle_challenge_unsubscribe(payload):
+    room = challenge_service.socket_room_name_from_cid(payload["cid"])
+    leave_room(room)

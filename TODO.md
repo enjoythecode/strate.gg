@@ -6,8 +6,6 @@
       - disconnecting terminates the games
         - The win goes to my opponent
     * Test: challenge websocket endpoints
-      - challenge create
-      * challenge subscribe
-      * challenge unsubscribe
-      * challenge join
-      * challenge move
+      - challenge move
+      - challenge subscribe
+      - challenge unsubscribe
