@@ -61,6 +61,7 @@ def load_app_configuration(app, redis_instance):
         app.config.update(
             SESSION_COOKIE_SECURE=True,
             SESSION_COOKIE_SAMESITE="Lax",
+            SESSION_USE_SIGNER=True,
             SESSION_TYPE="redis",  # Flask-Session
             SESSION_REDIS=redis_instance,  # Flask-Session
             # REDIS_HOST="localhost",

@@ -2,9 +2,6 @@
   - BE
     - Set up pytest and coverage
     - Write first initial test
-    * Test: Http route cookies
-      - Sending a forged cookie is rejected
-      - Cookie has same_site and http_only set
     * Test: socketio connection
       - I can connect
       - I get my UID back

@@ -48,6 +48,21 @@ def test_same_cookie_across_requests(client):
     assert first_sess == second_sess
 
 
+@pytest.mark.usefixtures("client")
+def test_forged_cookie_is_rejected(client):
+    forged_cookie_value = "I_AM_A_HACKER_TRYING_TO_FORGE_THIS_COOKIE"
+
+    first_response = client.get("/")
+    client.set_cookie("localhost", "session", forged_cookie_value)
+    second_response = client.get("/")
+
+    first_sess = get_session_value_from_response(first_response)
+    second_sess = get_session_value_from_response(second_response)
+
+    assert first_sess != second_sess
+    assert second_sess != forged_cookie_value
+
+
 def assert_response_200(response):
     assert response.status == "200 OK"
 
