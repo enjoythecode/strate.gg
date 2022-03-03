@@ -9,6 +9,7 @@ from flask_session import Session
 
 from app import challenges
 from app import main
+from app import users
 
 
 socketio = sckt.SocketIO()
@@ -46,6 +47,8 @@ def create_app(redis_instance=None):
     # register blueprints
     app.register_blueprint(challenges.bp)
     app.register_blueprint(main.bp)
+
+    users.online_user_service.reset_number_of_online_users(redis_instance)
 
     return app
 

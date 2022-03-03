@@ -11,10 +11,9 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - `make test` and `make cover` for running the test suite and coverage, respectively
   on the BE code
 - Tests for cookies
-- Cookie signing, preventing forged cookies
-- "SameSite=Lax" and "Secure" to the session cookie
-- Tests for simple websocket connections
-- Tests for the same UID across disconnects of the websocket
+  - Cookie signing, preventing forged cookies
+  - "SameSite=Lax" and "Secure" to the session cookie
+- Tests for websocket connections
 
 ### Changed
 

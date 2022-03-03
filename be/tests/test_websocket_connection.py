@@ -15,7 +15,7 @@ def test_socketio_connection_return_userid(socketio_client):
     assert uid
 
 
-@pytest.mark.usefixtures("client")
+@pytest.mark.usefixtures("socketio_client")
 def test_socketio_same_uid_across_disconnects(socketio_client):
 
     first_response = socketio_client.flask_test_client.get("/")
@@ -36,6 +36,13 @@ def test_socketio_same_uid_across_disconnects(socketio_client):
     assert first_sess == second_sess
 
 
+@pytest.mark.usefixtures("socketio_client")
+def test_user_count_is_one_with_alone_client(socketio_client):
+    assert 1 == get_number_of_currently_online_players_from_websocket_events(
+        socketio_client
+    )
+
+
 def get_uid_from_websocket_connection_player_id_event(socketio_client):
     events = socketio_client.get_received()
     player_id_events = get_events_with_name(events, "connection-player-id")
@@ -47,6 +54,17 @@ def get_uid_from_websocket_connection_player_id_event(socketio_client):
     assert len(player_id_event["args"]) == 1
 
     return player_id_event["args"][0]["uid"]
+
+
+def get_number_of_currently_online_players_from_websocket_events(socketio_client):
+    events = socketio_client.get_received()
+    online_user_events = get_events_with_name(events, "connection-info-update")
+
+    latest_online_user_event = online_user_events[-1]
+
+    online_users = latest_online_user_event["args"][0]["users"]
+
+    return online_users
 
 
 def get_events_with_name(events, name):
