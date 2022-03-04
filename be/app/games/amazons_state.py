@@ -324,9 +324,3 @@ class AmazonsState(GameState):
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
         )
-
-
-# small, informal tests
-if __name__ == "__main__":
-    g = AmazonsState.create_from_size(10, 0)
-    print(g.count_possible_moves())
