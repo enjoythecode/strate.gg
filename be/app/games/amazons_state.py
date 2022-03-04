@@ -27,13 +27,6 @@ starting_board_6x0 = [
 starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
 
 
-def prettify_board_character(n):
-    """
-    Convenience method that maps internal number representations to strings for humans
-    """
-    return ".WBX"[n]
-
-
 class AmazonsState(GameState):
     """
     Holds the state of the Game of Amazons (board etc.).
@@ -321,6 +314,10 @@ class AmazonsState(GameState):
 
     def __str__(self):
         """Returns a string representation of the board."""
+
+        def prettify_board_character(n):
+            return ".WBX"[n]
+
         return "\n".join(
-            [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
+            [" ".join([prettify_board_character(c) for c in row]) for row in self.board]
         )
