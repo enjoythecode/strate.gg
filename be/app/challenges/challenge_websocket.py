@@ -17,6 +17,9 @@ def create_challenge(payload):
     challenge = challenge_service.create_challenge(
         payload["game_name"], payload["game_config"]
     )
+    uid = user_service.get_uid_of_session_holder()
+
+    print(f"created challenge: {challenge} for user {uid}")
 
     return {"result": "success", "challenge": challenge}
 
@@ -37,7 +40,8 @@ def challenge_join(payload):
 
 @bp.on("challenge-move")
 def challenge_move(payload):
-    challenge_service.handle_move(payload["cid"], payload["move"])
+    result = challenge_service.handle_move(payload["cid"], payload["move"])
+    return result
 
 
 @bp.on("challenge-subscribe")

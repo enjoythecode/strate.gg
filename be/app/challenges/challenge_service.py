@@ -246,3 +246,5 @@ def handle_move(cid, move):
 
     _challenge_set(challenge)
     send_challenge_update_to_clients(challenge)
+
+    return {"result": "success"}
