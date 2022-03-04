@@ -235,6 +235,7 @@ def handle_move(cid, move):
     uid = user_service.get_uid_of_session_holder()
     if uid in challenge["players"] and game.turn == challenge["players"].index(uid):
         game.make_move(move)
+        challenge["moves"].append(move)
 
     else:
         return {"result": "error", "error": "not your turn"}

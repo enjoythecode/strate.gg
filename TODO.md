@@ -7,7 +7,6 @@
         - The win goes to my opponent
     * Test: challenge websocket endpoints
       - challenge move
-        - ensure that the move has been announced on the board for both players
         - generate a full game for testing purposes
         - test that a full run of the game works
           - test that the correct side is given the point, and that the status is displayed correctly
