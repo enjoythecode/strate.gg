@@ -65,6 +65,24 @@ def test_challenge_is_broadcasted_correctly_(
     assert user_two_knows["challenge"]["moves"] == [SUCCESSFUL_AMAZONS_GAME[0]]
 
 
+@pytest.mark.usefixtures("socketio_client_factory")
+def test_challenge_moves_are_not_broadcasted_after_unsub(
+    socketio_client_factory,
+):
+    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
+        socketio_client_factory
+    )
+    unsubscribe_user_from_challenge(users[1], cid)
+    users[1].get_received()  # clear their queue
+
+    emit_move_to_cid(users[0], SUCCESSFUL_AMAZONS_GAME[0], cid)
+
+    received_events_keys = [event["name"] for event in users[1].get_received()]
+
+    assert "challenge-update" not in received_events_keys
+    assert len(received_events_keys) == 0
+
+
 def emit_move_to_cid(io_client, move, cid):
     return io_client.emit("challenge-move", {"cid": cid, "move": move}, callback=True)
 
@@ -88,6 +106,11 @@ def create_challenge_between_two_clients_and_subscribe_players_to_it(
 
 def subscribe_user_to_challenge(user, cid):
     response = user.emit("challenge-subscribe", {"cid": cid}, callback=True)
+    return response
+
+
+def unsubscribe_user_from_challenge(user, cid):
+    response = user.emit("challenge-unsubscribe", {"cid": cid}, callback=True)
     return response
 
 
