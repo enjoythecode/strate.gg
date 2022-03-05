@@ -1,4 +1,5 @@
 import copy
+import random
 
 from app.games.game_state import GameState
 
@@ -79,10 +80,7 @@ class AmazonsState(GameState):
     @classmethod
     def create_from_config(self, config):
 
-        print(config)
-
         b = (config["size"], config["variation"])
-        print(b)
         if b == (10, 0):
             starting_board = starting_board_10x0
         elif b == (6, 0):
@@ -138,8 +136,8 @@ class AmazonsState(GameState):
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        move_arr = [v for v in move.values()]
-        return move_arr in self.get_possible_moves()
+        print(move, self.get_possible_moves())
+        return move in self.get_possible_moves()
 
     def count_possible_moves(self, player=None):
         """Get # of possible moves from this state."""
@@ -175,7 +173,7 @@ class AmazonsState(GameState):
         for q in queen_moves:
             out.extend(
                 [
-                    [q[0], q[1], s]
+                    {"from": q[0], "to": q[1], "shoot": s}
                     for s in self.get_possible_shots_from_queen(q[1], q[0])
                 ]
             )
@@ -321,3 +319,17 @@ class AmazonsState(GameState):
         return "\n".join(
             [" ".join([prettify_board_character(c) for c in row]) for row in self.board]
         )
+
+    @staticmethod
+    def generate_random_play():
+        game = AmazonsState.create_from_config({"size": 10, "variation": 0})
+
+        while game.check_game_end() == 0:
+            possible_moves = game.get_possible_moves()
+            move_to_make = random.choice(possible_moves)
+            game.make_move(move_to_make)
+        print(game)
+
+
+if __name__ == "__main__":
+    AmazonsState.generate_random_play()
