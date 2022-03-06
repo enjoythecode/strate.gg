@@ -44,6 +44,20 @@ def test_player_can_not_join_a_full_challenge(socketio_client_factory):
     assert_event_errored(user_three_attempt)
 
 
+@pytest.mark.usefixtures("socketio_client")
+def test_can_not_join_game_without_cid(socketio_client):
+    response = socketio_client.emit("challenge-join", callback=True)
+    assert_event_errored(response)
+
+
+@pytest.mark.usefixtures("socketio_client")
+def test_can_not_join_game_with_invalid_cid(socketio_client):
+    response = socketio_client.emit(
+        "challenge-join", {"cid": "does-not-exist"}, callback=True
+    )
+    assert_event_errored(response)
+
+
 def emit_succesful_amazons_create_challenge(io_client):
     payload = io_client.emit(
         "challenge-create",
