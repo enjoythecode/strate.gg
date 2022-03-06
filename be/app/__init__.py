@@ -36,12 +36,10 @@ def create_app(redis_instance=None):
         app,
         async_mode="eventlet",
         cors_allowed_origins=[
+            "http://localhost",
+            "http://127.0.0.1",
             "http://localhost:80",
             "http://127.0.0.1:80",
-            "http://localhost:3000",
-            "http://localhost:8020",
-            "http://127.0.0.1:3000",
-            "http://127.0.0.1:8020",
         ],
         manage_session=False,
     )

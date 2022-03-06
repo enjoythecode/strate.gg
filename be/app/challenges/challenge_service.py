@@ -142,14 +142,10 @@ def assert_player_can_join_challenge(uid, challenge):
         len(challenge["players"])
         == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
     ):
-        print("1" * 10)
         raise BaseException
     if uid in challenge["players"]:
-        print("2" * 10)
-        print(uid, challenge["players"])
         raise BaseException
     if challenge["status"] != "WAITING_FOR_PLAYERS":
-        print("3" * 10)
         raise BaseException
     return True
 

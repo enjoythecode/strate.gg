@@ -30,7 +30,7 @@ class Socket {
       (window.location.hostname === "localhost");
     let options = { withCredentials: true };
 
-    this.io = io(host_is_development ? "localhost:3000" : "strate.gg", options);
+    this.io = io(host_is_development ? "localhost" : "strate.gg", options);
 
     this.bind_socket_listeners();
     this.set_connection_status("connecting");
