@@ -4,29 +4,36 @@ services:
     build:
       context: ..
       dockerfile: ./docker/dev.be.Dockerfile
-    ports:
-      - 127.0.0.1:8080:8080
     volumes:
       - ../be/:/code
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    stdin_open: true
+    tty: true
 
   fe:
     build:
       context: ..
       dockerfile: ./docker/dev.fe.Dockerfile
-    ports:
-      - 127.0.0.1:3000:3000
-      # this works on the command line:
-      # docker run -it --mount type=bind,source="$(pwd)"/fe,target=/app -p 3000:3000 dev.fe
-      # make it into the following syntax, and then try denying the node_modules
-      # :)
     volumes:
       - /app/node_modules
       - ../fe:/app
 
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
+    stdin_open: true
+
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/dev.nginx.Dockerfile
+    ports:
+      - "80:80"
+
+    # do not launch nginx until be and fe is set up for networking
+    # otherwise, nginx will run faster, and error out because
+    # it can't resolve the be/fe name in nginx.default.conf
+    depends_on:
+      - be
+      - fe
 
   redis:
     image: "redis:alpine"
+    ports:
+      - 127.0.0.1:6379:6379

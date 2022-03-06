@@ -53,7 +53,7 @@ class Amazons {
       lastMove: observable,
       turn: observable,
       setTurn: action,
-      process_new_move: action,
+      update_game_information: action,
     });
 
     this.setTurn(0);
@@ -122,7 +122,7 @@ class Amazons {
     return true;
   };
 
-  format_move_for_human = (move) => {
+  static format_move_for_human = (move) => {
     let ind2coord = (index) => {
       return (
         String.fromCharCode(65 + Number(index[1])) +
@@ -137,6 +137,12 @@ class Amazons {
       ind2coord(move.shoot)
     );
   };
+
+  update_game_information(new_data) {
+    this.board = new_data.board;
+    this.turn = new_data.turn;
+    // XXX: what exactly am I missing here?
+  }
 
   process_new_move(move) {
     let from_x = move.from[0];

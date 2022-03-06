@@ -30,8 +30,8 @@ class Challenge {
       players: observable,
       status: observable,
       game_end: observable,
+      moves: observable,
       update_challenge_information: action,
-      process_new_move: action,
       client_turn: computed,
     });
     this.cid = data.cid;
@@ -45,35 +45,15 @@ class Challenge {
   }
 
   send_move(move) {
-    RootStore.socket.send_move({ cid: this.cid, move: move });
+    RootStore.socket.challenge_send_move({ cid: this.cid, move: move });
   }
 
-  process_new_move(data) {
-    this.moves.push({
-      human: {
-        turn: this.game_state.turn,
-        formatted_move: this.game_state.format_move_for_human(data.move),
-        color: this.game_state.turn_to_color[this.game_state.turn],
-      },
-      robot: data.move,
-    });
-    this.game_state.process_new_move(data.move);
-    this.game_end = data.game_end;
-  }
-
-  update_challenge_information(data) {
-    if ("status" in data) {
-      this.status = data.status;
-    }
-    if ("players" in data) {
-      this.players = data.players;
-    }
-    if ("cid" in data) {
-      this.cid = data.cid;
-    }
-    if ("game_end" in data) {
-      this.game_end = data.game_end;
-    }
+  update_challenge_information(new_chall) {
+    this.players = new_chall.players;
+    this.status = new_chall.status;
+    this.game_end = 0; // TODO: XXX: broken because this is not represented in the backend
+    this.moves = new_chall.moves;
+    this.game_state.update_game_information(new_chall.state);
   }
 
   get client_turn() {
@@ -141,9 +121,9 @@ const MoveList = (props) => {
         <div
           style={{ maxWidth: "22px", maxHeight: "22px", marginRight: "4px" }}
         >
-          {move.human.color.badge}
+          {/*move.color.badge*/}
         </div>
-        <span>{move.human.formatted_move}</span>
+        <span>{move}</span>
       </div>
     );
   }
@@ -230,6 +210,17 @@ const ChallengeView = observer(({ challenge }) => (
           <div className="challenge-board">
             <challenge.ViewComponent game_state={challenge.game_state} />
           </div>
+          {challenge.players.length < 2 ? (
+            <button
+              onClick={() => {
+                RootStore.socket.join_challenge(challenge.cid);
+              }}
+            >
+              Join!
+            </button>
+          ) : (
+            <none></none>
+          )}
           <div className="challenge-dashboard">
             <div style={{ width: "100%" }}>
               <PlayerTagView
@@ -239,7 +230,11 @@ const ChallengeView = observer(({ challenge }) => (
                 colorBadge={challenge.game_state.turn_to_color[1].badge}
               />
 
-              <MoveList moves={challenge.moves} />
+              <MoveList
+                moves={challenge.moves.map((move) =>
+                  Amazons.format_move_for_human(move)
+                )}
+              />
               <StatusIndicator
                 status={challenge.status}
                 end={challenge.game_end}

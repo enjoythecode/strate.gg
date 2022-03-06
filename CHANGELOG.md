@@ -2,6 +2,51 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.0] - 2020-03-06
+
+### Added
+
+- Dockercompose and Dockerfile configuration for production build
+- nginx as reverse proxy in both the development and production deployments
+- `make test` and `make cover` for running the test suite and coverage, respectively
+  on the BE code
+- Tests for cookies
+  - Cookie signing, preventing forged cookies
+  - "SameSite=Lax" and "Secure" to the session cookie
+- Tests for websocket connections
+- A base error handler for websocket events
+- A test suite for all challenge-related websocket actions.
+- Makefile rules for test and coverage: `make test`, `make cover`
+
+### Changed
+
+- be/generate_secret.sh now only generates a secret if one
+  does not exist. This way, sessions from previous deployments
+  are not invalidated.
+- Re-factoring the monolith app.py into `blueprints` and `services`.
+  - `blueprints` attach to certain HTTP routes and/or websocket events
+  - `services` provide the functions that deal with domain state such
+    as challenges, game instances, users, etc.
+    - currently, providers such as `redis` are also under `services.
+      this might change.
+- Upgraded eventlet to the latest version, removing the related notice
+  in CONTRIBUTING.md
+
+### Fixed
+
+- Makefile issue where `make deps` needed to be ran twice.
+- Makefile deploy commands now create a new secret key if one
+  does not exist.
+- Patched a potential security hole in Flask-Session where the
+  default data serializer is Pickle (vulnerable to arbitary code
+  execution) by changing it to JSON
+- Multiple bugs in back-end challenge code stemming that were discovered
+  by the new test suite!
+
+### Removed
+
+- Old .src files for production (replaced by Docker)
+
 ## [0.5.0] - 2022-02-25
 
 ### Added
