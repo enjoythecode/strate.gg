@@ -15,8 +15,6 @@ def get_uid_of_session_holder():
 def get_realtime_challenges_of_user(uid):
     # TODO: this may not exist...
     # TODO: better create session with some default variables, probably!
-    # TDD TODO: this is a hack to get to green!
-    return []
     return session["games_playing"]
 
 

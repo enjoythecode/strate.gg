@@ -124,6 +124,7 @@ def create_challenge(game_name, game_config):
         "cid": cid,
         "game_end_override": None,
     }
+    user_service.add_realtimechallenge_to_user(cid)
 
     _challenge_set(challenge_obj)
     return challenge_obj
