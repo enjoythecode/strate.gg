@@ -9,6 +9,7 @@ from flask_session import Session
 
 from app import challenges
 from app import main
+from app import users
 
 
 socketio = sckt.SocketIO()
@@ -35,10 +36,12 @@ def create_app(redis_instance=None):
         app,
         async_mode="eventlet",
         cors_allowed_origins=[
+            "http://localhost:80",
+            "http://127.0.0.1:80",
             "http://localhost:3000",
-            "http://localhost:8080",
+            "http://localhost:8020",
             "http://127.0.0.1:3000",
-            "http://127.0.0.1:8080",
+            "http://127.0.0.1:8020",
         ],
         manage_session=False,
     )
@@ -46,6 +49,8 @@ def create_app(redis_instance=None):
     # register blueprints
     app.register_blueprint(challenges.bp)
     app.register_blueprint(main.bp)
+
+    users.online_user_service.reset_number_of_online_users(redis_instance)
 
     return app
 
@@ -57,10 +62,11 @@ def load_app_configuration(app, redis_instance):
 
     with open(config_location) as config_file:
         app.config.update(json.load(config_file))  # load secret key
-        # get_redis_at_runtime = lambda: app.extensions["redis"]
+
         app.config.update(
+            SESSION_COOKIE_SECURE=True,
+            SESSION_COOKIE_SAMESITE="Lax",
+            SESSION_USE_SIGNER=True,
             SESSION_TYPE="redis",  # Flask-Session
             SESSION_REDIS=redis_instance,  # Flask-Session
-            # REDIS_HOST="localhost",
-            # REDIS_PORT="6379",
         )

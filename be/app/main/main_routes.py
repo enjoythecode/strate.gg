@@ -1,6 +1,9 @@
 import os
 
+import requests
 from flask import current_app
+from flask import request
+from flask import Response
 from flask import send_from_directory
 
 from app.main import bp
@@ -18,7 +21,39 @@ def serve(path):
     # manage_session = False setting on initialization.
     user_service.setup_server_side_session_cookie()
 
+    if current_app.debug:
+        return proxy_to_npm_development_server()
+    else:
+        return serve_http_request_from_build_client_files(path)
+
+
+def serve_http_request_from_build_client_files(path):
     if path != "" and os.path.exists(current_app.static_folder + "/" + path):
         return send_from_directory(current_app.static_folder, path)
     else:
         return send_from_directory(current_app.static_folder, "index.html")
+
+
+def proxy_to_npm_development_server():
+    resp = requests.request(
+        method="GET",
+        url=request.url.replace(request.host, "fe:3000"),
+        headers={key: value for (key, value) in request.headers if key != "Host"},
+        data=request.get_data(),
+        cookies=request.cookies,
+        allow_redirects=False,
+    )
+
+    excluded_headers = [
+        "content-encoding",
+        "content-length",
+        "transfer-encoding",
+        "connection",
+    ]
+    headers = [
+        (name, value)
+        for (name, value) in resp.raw.headers.items()
+        if name.lower() not in excluded_headers
+    ]
+
+    return Response(resp.content, resp.status_code, headers)

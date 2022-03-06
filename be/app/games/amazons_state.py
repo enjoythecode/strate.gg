@@ -1,4 +1,5 @@
 import copy
+import random
 
 from app.games.game_state import GameState
 
@@ -25,13 +26,6 @@ starting_board_6x0 = [
 ]
 
 starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
-
-
-def prettify_board_character(n):
-    """
-    Convenience method that maps internal number representations to strings for humans
-    """
-    return ".WBX"[n]
 
 
 class AmazonsState(GameState):
@@ -69,23 +63,24 @@ class AmazonsState(GameState):
 
     @classmethod
     def is_valid_config(self, config):
-        if "size" in config and config["size"]:
+
+        if "size" in config:
             if not config["size"] in [4, 6, 10]:
                 return False
+        else:
+            return False
 
-        if "variation" in config and config["variation"]:
+        if "variation" in config:
             if not config["variation"] in [0]:
                 return False
-
+        else:
+            return False
         return True
 
     @classmethod
     def create_from_config(self, config):
 
-        print(config)
-
         b = (config["size"], config["variation"])
-        print(b)
         if b == (10, 0):
             starting_board = starting_board_10x0
         elif b == (6, 0):
@@ -141,8 +136,8 @@ class AmazonsState(GameState):
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        move_arr = [v for v in move.values()]
-        return move_arr in self.get_possible_moves()
+        print(move, self.get_possible_moves())
+        return move in self.get_possible_moves()
 
     def count_possible_moves(self, player=None):
         """Get # of possible moves from this state."""
@@ -178,7 +173,7 @@ class AmazonsState(GameState):
         for q in queen_moves:
             out.extend(
                 [
-                    [q[0], q[1], s]
+                    {"from": q[0], "to": q[1], "shoot": s}
                     for s in self.get_possible_shots_from_queen(q[1], q[0])
                 ]
             )
@@ -317,12 +312,25 @@ class AmazonsState(GameState):
 
     def __str__(self):
         """Returns a string representation of the board."""
+
+        def prettify_board_character(n):
+            return ".WBX"[n]
+
         return "\n".join(
-            [" ".join([prettify_board_character(c) for c in x]) for x in self.board]
+            [" ".join([prettify_board_character(c) for c in row]) for row in self.board]
         )
 
+    @staticmethod
+    def generate_random_play():
+        game = AmazonsState.create_from_config({"size": 10, "variation": 0})
+        moves = []
+        while game.check_game_end() == 0:
+            possible_moves = game.get_possible_moves()
+            move_to_make = random.choice(possible_moves)
+            game.make_move(move_to_make)
+            moves.append(move_to_make)
+        return moves
 
-# small, informal tests
+
 if __name__ == "__main__":
-    g = AmazonsState.create_from_size(10, 0)
-    print(g.count_possible_moves())
+    AmazonsState.generate_random_play()

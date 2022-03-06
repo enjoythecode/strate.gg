@@ -104,13 +104,12 @@ def create_challenge(game_name, game_config):
 
     if game_name not in GAME_STATE_CLASSES:
         # XXX: standardize error communication!
-        return {"result": "error", "error": "Not a valid name."}
+        raise BaseException
 
     game = GAME_STATE_CLASSES[game_name]
 
     if not game.is_valid_config(game_config):
-        # XXX: standardize error communication!
-        return {"result": "error", "error": "Invalid configuration."}
+        raise BaseException
 
     game_state = game.create_from_config(game_config)
 
@@ -125,6 +124,7 @@ def create_challenge(game_name, game_config):
         "cid": cid,
         "game_end_override": None,
     }
+    user_service.add_realtimechallenge_to_user(cid)
 
     _challenge_set(challenge_obj)
     return challenge_obj
@@ -136,15 +136,26 @@ def send_challenge_update_to_clients(challenge):
     emit("challenge-update", payload, to=target_room)
 
 
-def player_can_join_challenge(uid, challenge):
+def assert_player_can_join_challenge(uid, challenge):
 
-    return (
+    if (
         len(challenge["players"])
-        # XXX: smellyyy!!!
-        < GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
-        and uid not in challenge["players"]
-        and challenge["status"] == "WAITING_FOR_PLAYERS"
-    )
+        == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
+    ):
+        print("1" * 10)
+        raise BaseException
+    if uid in challenge["players"]:
+        print("2" * 10)
+        print(uid, challenge["players"])
+        raise BaseException
+    if challenge["status"] != "WAITING_FOR_PLAYERS":
+        print("3" * 10)
+        raise BaseException
+    return True
+
+
+def player_can_join_challenge(uid, challenge):
+    return assert_player_can_join_challenge(uid, challenge)
 
 
 def add_player_to_challenge(uid, cid):
@@ -171,6 +182,9 @@ def add_player_to_challenge(uid, cid):
     _challenge_set(challenge)
 
     send_challenge_update_to_clients(challenge)
+
+    # TODO (design) i am returning this here as just to satisfy tests...
+    return {"result": "success"}
 
 
 def process_disconnect_from_user(uid):
@@ -222,6 +236,7 @@ def handle_move(cid, move):
     uid = user_service.get_uid_of_session_holder()
     if uid in challenge["players"] and game.turn == challenge["players"].index(uid):
         game.make_move(move)
+        challenge["moves"].append(move)
 
     else:
         return {"result": "error", "error": "not your turn"}
@@ -233,3 +248,5 @@ def handle_move(cid, move):
 
     _challenge_set(challenge)
     send_challenge_update_to_clients(challenge)
+
+    return {"result": "success"}

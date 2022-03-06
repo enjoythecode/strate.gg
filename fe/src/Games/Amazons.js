@@ -122,7 +122,7 @@ class Amazons {
     return true;
   };
 
-  format_move_for_human = (move) => {
+  static format_move_for_human = (move) => {
     let ind2coord = (index) => {
       return (
         String.fromCharCode(65 + Number(index[1])) +

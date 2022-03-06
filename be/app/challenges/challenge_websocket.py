@@ -11,27 +11,14 @@ def create_challenge(payload):
     # TODO: what happens on an error?
     # XXX: (application TODO generally)
 
-    # TODO: check for existence of data?
+    if not ("game_name" in payload and "game_config" in payload):
+        raise BaseException
+
     challenge = challenge_service.create_challenge(
         payload["game_name"], payload["game_config"]
     )
 
     return {"result": "success", "challenge": challenge}
-
-
-@bp.on("challenge-subscribe")
-def handle_challenge_subscribe(payload):
-    room = challenge_service.socket_room_name_from_cid(payload["cid"])
-    join_room(room)
-    challenge_service.send_challenge_update_to_clients(
-        challenge_service._get_challenge_by_cid(payload["cid"])
-    )
-
-
-@bp.on("challenge-unsubscribe")
-def handle_challenge_unsubscribe(payload):
-    room = challenge_service.socket_room_name_from_cid(payload["cid"])
-    leave_room(room)
 
 
 @bp.on("challenge-join")
@@ -50,4 +37,20 @@ def challenge_join(payload):
 
 @bp.on("challenge-move")
 def challenge_move(payload):
-    challenge_service.handle_move(payload["cid"], payload["move"])
+    result = challenge_service.handle_move(payload["cid"], payload["move"])
+    return result
+
+
+@bp.on("challenge-subscribe")
+def handle_challenge_subscribe(payload):
+    room = challenge_service.socket_room_name_from_cid(payload["cid"])
+    join_room(room)
+    challenge_service.send_challenge_update_to_clients(
+        challenge_service._get_challenge_by_cid(payload["cid"])
+    )
+
+
+@bp.on("challenge-unsubscribe")
+def handle_challenge_unsubscribe(payload):
+    room = challenge_service.socket_room_name_from_cid(payload["cid"])
+    leave_room(room)

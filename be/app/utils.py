@@ -23,6 +23,7 @@ https://gist.github.com/astrolox/445e84068d12ed9fa28f277241edf57b
 
 Modification by Sinan Yumurtaci:
 - remove the first argument "self" to super() in __init__
+- added on_error(), modeling it after the existing work of on()
 (Flask 1.x -> 2.0 migration, I believe)
 """
 
@@ -59,3 +60,18 @@ class IOBlueprint(Blueprint):
 
     def emit(self, *args, **kwargs):
         self.socketio.emit(*args, **kwargs)
+
+    def on_error(self):
+        """A decorator to make a function the default error handler"""
+
+        def wrapper(f):
+            def wrap(sio):
+                @sio.on_error(namespace=self.namespace)
+                def wrapped(e, *args, **kwargs):
+                    return f(e, *args, **kwargs)
+
+                return sio
+
+            self._socketio_handlers.append(wrap)
+
+        return wrapper

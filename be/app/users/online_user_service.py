@@ -29,3 +29,8 @@ def process_disconnect_from_user(uid):
     current_app.redis.delete(USER_IS_ONLINE_KEY_PREFIX + uid)
 
     send_number_online_users_to_all_clients(number_users)
+
+
+# TODO: passing in redis_client here (from create_app) is a TDD hack to be refactored
+def reset_number_of_online_users(redis_client):
+    redis_client.set(CURRENT_ONLINE_USERS_KEY, 0)

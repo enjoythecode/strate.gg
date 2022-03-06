@@ -50,6 +50,10 @@ test: gen-secret
 cover: gen-secret
 	(cd be && coverage run -m pytest && coverage report --sort cover)
 
+.PHONY: covero
+covero: gen-secret
+	(cd be && coverage html && open htmlcov/index.html)
+
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
 .PHONY: gen-secret devup devupd devdown devup-fbuild compile-client

@@ -121,9 +121,9 @@ const MoveList = (props) => {
         <div
           style={{ maxWidth: "22px", maxHeight: "22px", marginRight: "4px" }}
         >
-          {move.human.color.badge}
+          {/*move.color.badge*/}
         </div>
-        <span>{move.human.formatted_move}</span>
+        <span>{move}</span>
       </div>
     );
   }
@@ -230,7 +230,11 @@ const ChallengeView = observer(({ challenge }) => (
                 colorBadge={challenge.game_state.turn_to_color[1].badge}
               />
 
-              <MoveList moves={challenge.moves} />
+              <MoveList
+                moves={challenge.moves.map((move) =>
+                  Amazons.format_move_for_human(move)
+                )}
+              />
               <StatusIndicator
                 status={challenge.status}
                 end={challenge.game_end}
