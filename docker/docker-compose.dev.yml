@@ -25,7 +25,6 @@ services:
       dockerfile: ./docker/dev.nginx.Dockerfile
     ports:
       - "3000:80"
-      - "8020:8020"
 
     # do not launch nginx until be and fe is set up for networking
     # otherwise, nginx will run faster, and error out because
