@@ -323,12 +323,13 @@ class AmazonsState(GameState):
     @staticmethod
     def generate_random_play():
         game = AmazonsState.create_from_config({"size": 10, "variation": 0})
-
+        moves = []
         while game.check_game_end() == 0:
             possible_moves = game.get_possible_moves()
             move_to_make = random.choice(possible_moves)
             game.make_move(move_to_make)
-        print(game)
+            moves.append(move_to_make)
+        return moves
 
 
 if __name__ == "__main__":
