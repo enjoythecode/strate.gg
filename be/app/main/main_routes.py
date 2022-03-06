@@ -22,19 +22,22 @@ def serve(path):
     user_service.setup_server_side_session_cookie()
 
     if current_app.debug:
-        print("redirecting debug request to npm dev server")
         return proxy_to_npm_development_server()
     else:
-        if path != "" and os.path.exists(current_app.static_folder + "/" + path):
-            return send_from_directory(current_app.static_folder, path)
-        else:
-            return send_from_directory(current_app.static_folder, "index.html")
+        return serve_http_request_from_build_client_files(path)
+
+
+def serve_http_request_from_build_client_files(path):
+    if path != "" and os.path.exists(current_app.static_folder + "/" + path):
+        return send_from_directory(current_app.static_folder, path)
+    else:
+        return send_from_directory(current_app.static_folder, "index.html")
 
 
 def proxy_to_npm_development_server():
     resp = requests.request(
         method="GET",
-        url=request.url.replace(request.host, "localhost:3000"),
+        url=request.url.replace(request.host, "fe:3000"),
         headers={key: value for (key, value) in request.headers if key != "Host"},
         data=request.get_data(),
         cookies=request.cookies,
