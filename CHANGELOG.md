@@ -2,7 +2,7 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] -
+## [0.6.0] - 2020-03-06
 
 ### Added
 
@@ -15,6 +15,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
   - "SameSite=Lax" and "Secure" to the session cookie
 - Tests for websocket connections
 - A base error handler for websocket events
+- A test suite for all challenge-related websocket actions.
+- Makefile rules for test and coverage: `make test`, `make cover`
 
 ### Changed
 
@@ -38,6 +40,8 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Patched a potential security hole in Flask-Session where the
   default data serializer is Pickle (vulnerable to arbitary code
   execution) by changing it to JSON
+- Multiple bugs in back-end challenge code stemming that were discovered
+  by the new test suite!
 
 ### Removed
 
