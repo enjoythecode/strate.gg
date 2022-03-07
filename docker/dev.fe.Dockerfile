@@ -8,12 +8,12 @@ WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
 # add app (incl. dependencies)
-COPY ../fe/package.json ./
-COPY ../fe/package-lock.json ./
-COPY ../fe/.eslintrc.json ./
-COPY ../fe/.prettierrc.json ./
-COPY ../fe/src/ ./src/
-COPY ../fe/public/ ./public/
+COPY ./fe/package.json ./
+COPY ./fe/package-lock.json ./
+COPY ./fe/.eslintrc.json ./
+COPY ./fe/.prettierrc.json ./
+COPY ./fe/src/ ./src/
+COPY ./fe/public/ ./public/
 
 # install dependencies
 RUN npm ci

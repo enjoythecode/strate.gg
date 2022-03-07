@@ -96,6 +96,9 @@ proddown:
 produp-fbuild: gen-secret
 	docker-compose -p "prod" -f docker/docker-compose.prod.yml up --build
 
+.PHONY: prod-buildnocache
+prod-buildnocache:
+	docker-compose -f ./docker/docker-compose.prod.yml build --no-cache
 
 # DEBUGGING DOCKER
 # ------- below commands shouldn't be needed for building in 99% of cases. -------
