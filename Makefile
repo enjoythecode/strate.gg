@@ -61,21 +61,21 @@ covero: gen-secret
 gen-secret:
 	./be/generate_secret.sh
 
-# uses docker compose to start a complete dev server
+# uses docker-compose to start a complete dev server
 # does not use -d because this is a development server and we may want to see stdout. see devupd
 devup: gen-secret
-	docker compose -p "dev" -f docker/docker-compose.dev.yml up
+	docker-compose -p "dev" -f docker/docker-compose.dev.yml up
 
 devupd: gen-secret
-	docker compose -p "dev" -f docker/docker-compose.dev.yml up -d
+	docker-compose -p "dev" -f docker/docker-compose.dev.yml up -d
 
-# shut down the development server running with docker compose
+# shut down the development server running with docker-compose
 devdown:
-	docker compose -p "dev" -f docker/docker-compose.dev.yml down
+	docker-compose -p "dev" -f docker/docker-compose.dev.yml down
 
 # like devup, but forces a rebuild of the underlying images
 devup-fbuild: gen-secret
-	docker compose -p "dev" -f docker/docker-compose.dev.yml up --build
+	docker-compose -p "dev" -f docker/docker-compose.dev.yml up --build
 
 # compile a production-optimized version of the client code
 compile-client:
@@ -85,16 +85,16 @@ compile-client:
 # --------
 .PHONY: produp produpd proddown produp-fbuild
 produp: gen-secret
-	docker compose -p "prod" -f docker/docker-compose.prod.yml up
+	docker-compose -p "prod" -f docker/docker-compose.prod.yml up
 
 produpd: gen-secret
-	docker compose -p "prod" -f docker/docker-compose.prod.yml up -d
+	docker-compose -p "prod" -f docker/docker-compose.prod.yml up -d
 
 proddown:
-	docker compose -p "prod" -f docker/docker-compose.prod.yml down
+	docker-compose -p "prod" -f docker/docker-compose.prod.yml down
 
 produp-fbuild: gen-secret
-	docker compose -p "prod" -f docker/docker-compose.prod.yml up --build
+	docker-compose -p "prod" -f docker/docker-compose.prod.yml up --build
 
 
 # DEBUGGING DOCKER
