@@ -4,6 +4,10 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased] - 2020-03-07
 
+### Added
+
+- strate.gg and HTTPS variations to CORS Allowed Origins in the back-end
+
 ### Changed
 
 - Makefile to use hypenated docker-compose in Makefile
@@ -12,7 +16,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Fixed
 
 - Bug with production Dockerfile where the built client/ was replaced by a folder
-  of the same name if it also existed in the local directory by the same name.
+  of the same name if it also existed in the local directory by the same name
 
 ## [0.6.0] - 2020-03-06
 
