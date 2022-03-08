@@ -9,7 +9,7 @@ const App = observer(({ state }) => (
           <h2>Amazons</h2>
           <button
             onClick={() => {
-              state.socket.create_new_game({
+              state.socket.create_new_challenge({
                 game_name: "amazons",
                 game_config: { size: 10, variation: 0 },
               });
@@ -28,7 +28,7 @@ const App = observer(({ state }) => (
             <h2>Mancala</h2>
             <button
               onClick={() => {
-                state.socket.create_new_game({
+                state.socket.create_new_challenge({
                   game_name: "mancala",
                   game_config: {},
                 });

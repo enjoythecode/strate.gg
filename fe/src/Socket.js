@@ -60,7 +60,7 @@ class Socket {
     });
   };
 
-  create_new_game = (payload) => {
+  create_new_challenge = (payload) => {
     this.io.emit("challenge-create", payload, (data) => {
       if (data.result && data.result === "success") {
         window.location.replace(
