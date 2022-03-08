@@ -6,7 +6,6 @@ certifi==2021.10.8
 cfgv==3.3.1
 charset-normalizer==2.0.12
 click==8.0.4
-coverage==6.3.2
 Deprecated==1.2.13
 distlib==0.3.4
 dnspython==2.2.0

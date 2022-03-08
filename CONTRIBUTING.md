@@ -56,6 +56,10 @@ refactored without fear**. Therefore, **tests should protect all user
 facing functionality**, and _other developers working on the repo are
 also users of your code_.
 
+## Running Tests
+
+First, make sure that the Python venv is activated. Use `source venv/bin/activate`.
+
 `make test` runs tests for the BE.
 
 # Pre-commit Checks
