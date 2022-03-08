@@ -38,8 +38,10 @@ def create_app(redis_instance=None):
         cors_allowed_origins=[
             "http://localhost",
             "http://127.0.0.1",
-            "http://localhost:80",
-            "http://127.0.0.1:80",
+            "http://strate.gg",
+            "https://localhost",
+            "https://127.0.0.1",
+            "https://strate.gg",
         ],
         manage_session=False,
     )
