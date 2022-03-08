@@ -47,7 +47,7 @@ check:
 # TESTING
 # -----------------------------------------------------------------------------
 .PHONY: test
-test: gen-secret
+test: gen-secret compile-client
 	(cd be && pytest)
 
 .PHONY: cover
@@ -112,7 +112,10 @@ produp-build-nocache:
 
 # compile a production-optimized version of the client code
 .PHONY: compile-client
-compile-client:
+compile-client: be/client/
+	echo "Client directory already exists!"
+
+be/client/:
 	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && cp -r build/ ../be/client)
 
 # DEBUGGING DOCKER
