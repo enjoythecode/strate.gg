@@ -1,4 +1,3 @@
-import copy
 import random
 
 from app.games.game_state import GameState
@@ -28,6 +27,13 @@ starting_board_6x0 = [
 starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
 
 
+CONFIG_KEY_TO_BOARD = {
+    "10_0": starting_board_10x0,
+    "6_0": starting_board_6x0,
+    "4_0": starting_board_4x0,
+}
+
+
 class AmazonsState(GameState):
     """
     Holds the state of the Game of Amazons (board etc.).
@@ -51,35 +57,41 @@ class AmazonsState(GameState):
 
     """
 
-    def __init__(self, board, turn=0, config=None):
-        # XXX: smelly code
-        if not config:
-            config = {"size": len(board), "variation": 0}
+    DEFAULT_AMAZONS_CONFIG = {"size": 10, "variation": 0}
 
-        self.turn = turn
-        self.board = copy.deepcopy(board)
+    def __init__(self, config=DEFAULT_AMAZONS_CONFIG):
+
+        self.turn = 0
+        self.board = self.get_board_from_config(config)
         self.config = config
         self.number_of_turns = 0
 
     @classmethod
     def is_valid_config(self, config):
 
-        if "size" in config:
-            if not config["size"] in [4, 6, 10]:
-                return False
-        else:
+        # XXX/TODO: off-load this to the JSON schema library
+        required_keys = ["size", "variation"]
+        required_keys_exist = all([field in config for field in required_keys])
+
+        int_keys = ["size", "variation"]
+        int_keys_are_int = all([isinstance(config[key], int) for key in int_keys])
+        if not required_keys_exist or not int_keys_are_int:
+            return False
+        if not self.config_to_config_key(config) in CONFIG_KEY_TO_BOARD:
             return False
 
-        if "variation" in config:
-            if not config["variation"] in [0]:
-                return False
-        else:
-            return False
         return True
 
     @classmethod
-    def create_from_config(self, config):
+    def config_to_config_key(_, config):
+        return str(config["size"]) + "_" + str(config["variation"])
 
+    @classmethod
+    def create_from_config(self, config):
+        return AmazonsState(config=config)
+
+    @classmethod
+    def get_board_from_config(cls, config):
         b = (config["size"], config["variation"])
         if b == (10, 0):
             starting_board = starting_board_10x0
@@ -88,7 +100,7 @@ class AmazonsState(GameState):
         elif b == (4, 0):
             starting_board = starting_board_4x0
 
-        return AmazonsState(starting_board)
+        return starting_board
 
     @classmethod
     def get_max_no_players(self):
@@ -109,18 +121,20 @@ class AmazonsState(GameState):
 
     @staticmethod
     def init_from_repr(repr):
-        c = AmazonsState(repr["board"])
+        c = AmazonsState()
+        # XXX: this code has to keep up with __repr__, ie, there
+        # is more than one location in the code that would change
+        # if we changed the internal representation of this class!
         c.turn = repr["turn"]
-        # XXX: TECH DEBT!!
         c.board = repr["board"]
         c.config = repr["config"]
         c.number_of_turns = repr["number_of_turns"]
         return c
 
-    def clone(self):
-        """Create a deep clone of this game state."""
-        st = AmazonsState(copy.deepcopy(self.board), self.turn)
-        return st
+    # def clone(self):
+    #    """Create a deep clone of this game state."""
+    #    st = AmazonsState(copy.deepcopy(self.board), self.turn)
+    #    return st
 
     def make_move(self, move):
         fr = move["from"]
