@@ -1,10 +1,12 @@
 All contributions to this project are welcome and will be greatly appreciated. This file includes what you need to do in order to be able to contribute code to strate.gg.
 
-# Pre-requisites
+# Terminology
 
-You'll need `git`, `Docker`, and `python` (>=3.7), and `make` installed on your machine.
+`BE` is the back-end API build with Flask, `FE` is the web UI built with react.
 
 # Installing Dependencies
+
+You'll need `git`, `Docker`, and `python` (>=3.7), and `make` installed on your machine.
 
 `make deps` installs all dependencies. Specifically, it:
 
@@ -21,13 +23,12 @@ You'll need `git`, `Docker`, and `python` (>=3.7), and `make` installed on your 
 The development environment is fully reproducible using docker. The
 Docker configuration files live in `docker/`, though you don't need
 to touch that if you are not doing anything docker-specific. Use the
-below commands instead:
+below commands:
 
-`make devup` composes up a development container including a dev server
-for the fe files (listens to localhost:3000), the Flask server in debug
-mode (listens to localhost:8080), and a Redis instance. After the
-container starts, going to localhost:3000 should give you a fully working
-version of strate.gg!
+`make devup` composes up a development container. Both the BE and FE are
+hot-reloaded with their respective servers. The website is available at
+port 80 (default for HTTP), therefore, going to `localhost` should bring
+up the app after all services are up.
 
 By default, `make devup` runs docker compose up without the `-d` flag,
 meaning that the output will be streamed to your terminal. If you want
@@ -36,13 +37,26 @@ terminal), use `make devupd` (with a `d` in the end).
 
 Use `make devdown` from any terminal to shut down the development server.
 
-The development build has hot-reload set up for both the BE and FE
-codebases. If, for whatever reason, you need to force a re-build of the
-container with docker compose, run `make devup-fbuild`.
+Use `make devup-fbuild` for a forced dev rebuild, `make devup-build-nocache`
+to re-build without the cache.
 
 ## Production Build
 
-TODO: There is no Dockerized production build yet.
+`make produp` runs a production container and exposes it at port 80.
+
+Use `make produpd` for detached mode, `make produp-fbuild` for a forced
+rebuild, `make produp-build-nocache` to re-build without the cache.
+
+`make proddown` shuts the production container down.
+
+# Tests
+
+The goal of testing within this project is to **allow code to be
+refactored without fear**. Therefore, **tests should protect all user
+facing functionality**, and _other developers working on the repo are
+also users of your code_.
+
+`make test` runs tests for the BE.
 
 # Pre-commit Checks
 
