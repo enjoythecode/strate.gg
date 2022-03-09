@@ -8,11 +8,6 @@ SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
 
 # REPOSITORY SET-UP
 # -----------------------------------------------------------------------------
-.PHONY: venv
-venv:
-	(rm -rf venv && \
-    $(SYSTEM_PYTHON) -m venv venv)
-
 .PHONY: deps
 deps: deps-be deps-fe install-commit-hooks
 
@@ -20,7 +15,7 @@ deps: deps-be deps-fe install-commit-hooks
 deps-be:
 	($(SYSTEM_PYTHON) -m venv venv && \
 	. ./venv/bin/activate && \
-	venv/bin/python -m pip install --upgrade pip -r requirements.txt -r requirements-dev.txt)
+	venv/bin/python -m pip install --upgrade pip -r requirements.txt)
 
 .PHONY: deps-fe
 deps-fe:
@@ -46,9 +41,26 @@ check:
 
 # TESTING
 # -----------------------------------------------------------------------------
-.PHONY: test
-test: gen-secret compile-client
-	(cd be && pytest)
+
+# jest runs the test with watch mode, automatically re-running affected files on change
+.PHONY: jest
+jest:
+	(cd fe && npm run jest)
+
+# test runs tests for both FE and BE
+.PHONY:
+test: be-test fe-test
+
+# fe-test runs the tests once, without interactive/watch mode
+.PHONY: fe-test fest
+fest: fe-test
+fe-test:
+	(cd fe && npm run test)
+
+.PHONY: be-test best
+best: be-test
+be-test: gen-secret compile-client
+	(cd be && python -m pytest)
 
 .PHONY: cover
 cover: gen-secret
@@ -112,10 +124,9 @@ produp-build-nocache:
 
 # compile a production-optimized version of the client code
 .PHONY: compile-client
-compile-client: be/client/
-	echo "Client directory already exists!"
+compile-client: be/client/index.html
 
-be/client/:
+be/client/index.html:
 	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && cp -r build/ ../be/client)
 
 # DEBUGGING DOCKER

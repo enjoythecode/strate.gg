@@ -18,7 +18,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "jest": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject",
     "format": "npx prettier --write ./src/",
     "format-check": "npx prettier --check ./src/"
@@ -36,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "jest": "^27.5.1",
     "prettier": "2.5.1"
   }
 }

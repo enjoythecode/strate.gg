@@ -60,7 +60,14 @@ also users of your code_.
 
 First, make sure that the Python venv is activated. Use `source venv/bin/activate`.
 
-`make test` runs tests for the BE.
+`make test` runs the entire test suite. (BE and FE).
+
+`make best` runs tests on the BE.
+
+`make fest` runs tests on the FE.
+
+`make jest` runs `jest` on the FE with watcher, automatically re-running relevant
+tests on file changes.
 
 # Pre-commit Checks
 

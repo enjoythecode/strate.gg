@@ -4,9 +4,15 @@ This file lists all changes to this project, grouped by versions that follow [Se
 
 ## [Unreleased]
 
+### Added
+
+- Added jest to FE.
+
 ### Changed
 
 - Add +x permissions to `be/generate_secret.sh`
+- Makefile testing rules to allow running BE and FE together or
+  individually.
 
 ## [0.6.1] - 2020-03-08
 
