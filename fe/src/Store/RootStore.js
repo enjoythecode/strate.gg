@@ -1,6 +1,6 @@
 import { makeObservable, observable, action } from "mobx";
-import { Challenge } from "./Challenge.js";
-import Socket from "./Socket.js";
+import { Challenge } from "../Challenge/Challenge.js";
+import Socket from "../Network/Socket.js";
 
 class _RootStore {
   challenges = observable.map({});

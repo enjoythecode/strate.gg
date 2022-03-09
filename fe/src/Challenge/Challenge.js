@@ -1,13 +1,14 @@
 import { makeObservable, observable, action, computed } from "mobx";
-import { Amazons, AmazonsView } from "./Games/Amazons";
-import { Mancala, MancalaView } from "./Games/Mancala";
-import { observer } from "mobx-react";
-import RootStore from "./RootStore.js";
+import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic";
+import { AmazonsView } from "../Games/Amazons/AmazonsView";
+import { MancalaLogic } from "../Games/Mancala/MancalaLogic";
+import { MancalaView } from "../Games/Mancala/MancalaView";
+import RootStore from "../Store/RootStore.js";
 import React from "react";
 
 const game_name_to_state_class = {
-  amazons: Amazons,
-  mancala: Mancala,
+  amazons: AmazonsLogic,
+  mancala: MancalaLogic,
 };
 
 const game_name_to_view_component = {
@@ -64,7 +65,7 @@ class Challenge {
   }
 }
 
-const PlayerTagView = (props) => {
+export const PlayerTagView = (props) => {
   let spanClasses = ["player-tag"];
   if (props.isSelf) {
     spanClasses.push("player-tag-self");
@@ -101,7 +102,7 @@ const PlayerTagView = (props) => {
   );
 };
 
-const MoveList = (props) => {
+export const MoveList = (props) => {
   let rendered_moves = [];
 
   for (let index = 0; index < props.moves.length; index++) {
@@ -149,7 +150,7 @@ const MoveList = (props) => {
   }
 };
 
-const StatusIndicator = (props) => {
+export const StatusIndicator = (props) => {
   let text = "";
   let els = [];
   switch (props.status) {
@@ -200,58 +201,4 @@ const StatusIndicator = (props) => {
   );
 };
 
-const ChallengeView = observer(({ challenge }) => (
-  <div>
-    {challenge == null ? (
-      "Loading the game!"
-    ) : (
-      <div>
-        <div className="challenge-wrapper">
-          <div className="challenge-board">
-            <challenge.ViewComponent game_state={challenge.game_state} />
-          </div>
-          {challenge.players.length < 2 ? (
-            <button
-              onClick={() => {
-                RootStore.socket.join_challenge(challenge.cid);
-              }}
-            >
-              Join!
-            </button>
-          ) : (
-            <none></none>
-          )}
-          <div className="challenge-dashboard">
-            <div style={{ width: "100%" }}>
-              <PlayerTagView
-                displayName={challenge.players[1]}
-                isSelf={challenge.client_turn === 1}
-                isTurn={challenge.game_state.turn === 1}
-                colorBadge={challenge.game_state.turn_to_color[1].badge}
-              />
-
-              <MoveList
-                moves={challenge.moves.map((move) =>
-                  Amazons.format_move_for_human(move)
-                )}
-              />
-              <StatusIndicator
-                status={challenge.status}
-                end={challenge.game_end}
-              />
-
-              <PlayerTagView
-                displayName={challenge.players[0]}
-                isSelf={challenge.client_turn === 0}
-                isTurn={challenge.game_state.turn === 0}
-                colorBadge={challenge.game_state.turn_to_color[0].badge}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-));
-
-export { Challenge, ChallengeView };
+export { Challenge };
