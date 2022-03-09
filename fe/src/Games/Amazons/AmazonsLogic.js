@@ -17,7 +17,7 @@ const initializeBoard = (config) => {
     ],
   };
   if (!("size" in config && "variation" in config)) {
-    return false;
+    throw Error("Invalid configuration.");
   }
   let key = config["size"].toString() + "_" + config["variation"].toString();
   if (!(key in startingBoards)) return false;
