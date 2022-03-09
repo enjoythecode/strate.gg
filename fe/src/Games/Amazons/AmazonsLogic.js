@@ -46,6 +46,7 @@ class AmazonsLogic {
   board = null;
   lastMove = [null, null, null];
 
+  // TODO move to AmazonsView
   turn_to_color = [
     {
       name: "White",

@@ -62,10 +62,21 @@ best: be-test
 be-test: gen-secret compile-client
 	(cd be && python -m pytest)
 
+# runs coverage on FE + BE
 .PHONY: cover
-cover: gen-secret
+cover: gen-secret bover fover
+
+# runs coverage on BE
+.PHONY: bover
+bover:
 	(cd be && coverage run -m pytest && coverage report --sort cover)
 
+# runs coverage on FE
+.PHONY: fover
+fover:
+	(cd fe && npm run coverage)
+
+# TODO add FE/BE distinction to this
 .PHONY: covero
 covero: gen-secret
 	(cd be && coverage html && open htmlcov/index.html)

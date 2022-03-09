@@ -69,6 +69,14 @@ First, make sure that the Python venv is activated. Use `source venv/bin/activat
 `make jest` runs `jest` on the FE with watcher, automatically re-running relevant
 tests on file changes.
 
+## Running Coverage
+
+`make cover` runs coverage on both BE and FE.
+
+`make bover` runs coverage on the BE.
+
+`make fover` runs coverage on the FE.
+
 # Pre-commit Checks
 
 It is required that all code changes pass the checks defined in the [pre-commit configuration file](.pre-commit-config.yaml). These checks include linting and auto-formatting for both the FE and BE codebases, among other utilities.
