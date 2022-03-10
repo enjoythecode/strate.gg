@@ -4,17 +4,15 @@ import pytest
 from werkzeug.http import parse_cookie
 
 
-@pytest.mark.usefixtures("client")
-def test_index(client):
-    response = client.get("/")
+def test_index(client_https):
+    response = client_https.get_https("/")
 
     assert_response_200(response)
     assert_response_is_index_html(response)
 
 
-@pytest.mark.usefixtures("client")
-def test_static_js_bundle_route(client):
-    index_response = client.get("/")
+def test_static_js_bundle_route(client_https):
+    index_response = client_https.get_https("/")
     assert_response_200(index_response)
 
     index_html_text = index_response.data.decode("utf-8")
@@ -22,14 +20,13 @@ def test_static_js_bundle_route(client):
     js_path = js_matcher.search(index_html_text).group()
     assert js_path is not None
 
-    js_bundle_response = client.get(js_path)
+    js_bundle_response = client_https.get_https(js_path)
     assert_response_200(js_bundle_response)
     assert_response_is_bundle_js(js_bundle_response)
 
 
-@pytest.mark.usefixtures("client")
-def test_index_gives_cookies(client):
-    response = client.get("/")
+def test_index_gives_cookies(client_https):
+    response = client_https.get_https("/")
 
     session_cookie = get_session_cookie_from_response(response)
 
@@ -82,7 +79,7 @@ def test_forged_cookie_is_rejected(client):
 
 
 def assert_response_200(response):
-    assert response.status == "200 OK"
+    assert response.status_code == 200
 
 
 def assert_response_is_index_html(response):
