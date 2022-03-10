@@ -1,4 +1,5 @@
 import copy
+import functools
 import random
 
 from app.games.game_state import GameState
@@ -138,46 +139,38 @@ class AmazonsState(GameState):
         return move in self.get_possible_moves()
 
     def get_possible_moves(self, player=None):
-        out = []
-        player = self.turn + 1 if player is None else player
-
-        queen_moves = self.get_possible_queen_moves(player)
-        for q in queen_moves:
-            out.extend(
-                [
-                    {"from": q[0], "to": q[1], "shoot": s}
-                    for s in self.get_possible_shots_from_queen(q[1], q[0])
-                ]
-            )
-        return out
-
-    def get_possible_queen_moves(self, player=None):
-        out = []
-        player = self.turn + 1 if player is None else player
-        for q_x in range(self.config["size"]):
-            for q_y in range(self.config["size"]):
-                if self.board[q_x][q_y] == player:
-                    q = str(q_x) + str(q_y)
-                    out.extend([[q, x] for x in self.get_sliding_squares(q)])
-
-        return out
+        x = [move for move in self.generate_possible_moves(player)]
+        print(x)
+        return x
 
     def count_possible_queen_moves(self, player=None):
+        return functools.reduce(
+            lambda x, _: x + 1, self.generate_possible_queen_moves(player), 0
+        )
+
+    def generate_possible_moves(self, player=None):
         player = self.turn + 1 if player is None else player
-        out = 0
+
+        for queen, move_to in self.generate_possible_queen_moves(player):
+            for shoot in self.generate_sliding_squares(cell_from=move_to, ignore=queen):
+                yield ({"from": queen, "to": move_to, "shoot": shoot})
+
+    def generate_possible_queen_moves(self, player=None):
+        player = self.turn + 1 if player is None else player
+
+        for queen in self.generate_queens_of_player(player):
+            for move in self.generate_sliding_squares(cell_from=queen):
+                yield (queen, move)
+
+    def generate_queens_of_player(self, player=None):
+        player = self.turn + 1 if player is None else player
 
         for q_x in range(self.config["size"]):
             for q_y in range(self.config["size"]):
                 if self.board[q_x][q_y] == player:
-                    q = str(q_x) + str(q_y)
-                    out += self.count_sliding_squares(q)
+                    yield (str(q_x) + str(q_y))
 
-        return out
-
-    def get_possible_shots_from_queen(self, source, ignore):
-        return self.get_sliding_squares(source, ignore)
-
-    def get_sliding_squares(self, cell_from, ignore=None):
+    def generate_sliding_squares(self, cell_from, ignore=None):
         """
         Helper function that returns the sliding move squares from a given square in
         the given board state.
@@ -185,13 +178,11 @@ class AmazonsState(GameState):
         This is used by most other move functions since all movement and shooting in
         Amazons is the same 8-direction sliding attack
         """
-        out = []
         from_x = int(cell_from[0])
         from_y = int(cell_from[1])
         ignore_x = int(ignore[0]) if ignore is not None else -1
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
-        # neat!
         deltas = [  # incremental changes to x and y to move in 8 directions
             (-1, 1),
             (0, 1),
@@ -205,61 +196,16 @@ class AmazonsState(GameState):
 
         for dx, dy in deltas:
             x, y = from_x, from_y
-            while (
-                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
-            ):
+
+            board_size = self.config["size"]
+            while 0 <= x + dx < board_size and 0 <= y + dy < board_size:
                 x += dx
                 y += dy
-                if self.board[x][y] != 0:
-                    if ignore_x == x and ignore_y == y:
-                        out.append(str(x) + str(y))
-                        continue
-                    else:
-                        break
-                else:
-                    out.append(str(x) + str(y))
-        return out
 
-    def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
-        """
-        Different from len(get_sliding_squares) because natively counting is faster
-        than adding all the possible moves to a list and counting it.
-        """
-        out = 0
-        from_x = int(cell_from[0])
-        from_y = int(cell_from[1])
-        ignore_x = int(ignore[0]) if ignore is not None else -1
-        ignore_y = int(ignore[1]) if ignore is not None else -1
-
-        # neat!
-        deltas = [  # incremental changes to x and y to move in 8 directions
-            (-1, 1),
-            (0, 1),
-            (1, 1),
-            (-1, 0),
-            (1, 0),
-            (-1, -1),
-            (0, -1),
-            (1, -1),
-        ]
-
-        for dx, dy in deltas:
-            x, y = from_x, from_y
-            while (
-                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
-            ):
-                x += dx
-                y += dy
-                if self.board[x][y] != 0:
-                    if ignore_x == x and ignore_y == y:
-                        if include_ignore:
-                            out += 1
-                        continue
-                    else:
-                        break
-                else:
-                    out += 1
-        return out
+                ignore_blocking_cell = ignore_x == x and ignore_y == y
+                if self.board[x][y] != 0 and not ignore_blocking_cell:
+                    break
+                yield str(x) + str(y)
 
     def check_game_end(self):
         p1 = self.count_possible_queen_moves(1)
@@ -274,13 +220,10 @@ class AmazonsState(GameState):
             return 0
 
     def __str__(self):
-        """Returns a string representation of the board."""
-
-        def prettify_board_character(n):
-            return ".WBX"[n]
+        piece_to_character = ".WBX"
 
         return "\n".join(
-            [" ".join([prettify_board_character(c) for c in row]) for row in self.board]
+            [" ".join([piece_to_character[c] for c in row]) for row in self.board]
         )
 
     @staticmethod
