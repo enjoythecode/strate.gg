@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import RootStore from "./RootStore.js";
+import RootStore from "../Store/RootStore.js";
 import { makeObservable, observable, action } from "mobx";
 
 class Socket {

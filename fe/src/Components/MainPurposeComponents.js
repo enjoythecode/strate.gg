@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import RootStore from "./RootStore.js";
+import RootStore from "../Store/RootStore.js";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
@@ -78,10 +78,10 @@ class Footer extends React.Component {
           </span>
 
           {/*
-                    <marquee truespeed="True" scrolldelay="10" scrollamount="1">
-                        {marqueeTags}
-                    </marquee>
-                    */}
+            <marquee truespeed="True" scrolldelay="10" scrollamount="1">
+                {marqueeTags}
+            </marquee>
+          */}
         </p>
       </footer>
     );

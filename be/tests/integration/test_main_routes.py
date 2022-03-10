@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from werkzeug.http import parse_cookie
 
@@ -8,6 +10,21 @@ def test_index(client):
 
     assert_response_200(response)
     assert_response_is_index_html(response)
+
+
+@pytest.mark.usefixtures("client")
+def test_static_js_bundle_route(client):
+    index_response = client.get("/")
+    assert_response_200(index_response)
+
+    index_html_text = index_response.data.decode("utf-8")
+    js_matcher = re.compile(r"/static/js/main\.[a-zA-Z0-9]+\.js")
+    js_path = js_matcher.search(index_html_text).group()
+    assert js_path is not None
+
+    js_bundle_response = client.get(js_path)
+    assert_response_200(js_bundle_response)
+    assert_response_is_bundle_js(js_bundle_response)
 
 
 @pytest.mark.usefixtures("client")
@@ -70,6 +87,10 @@ def assert_response_200(response):
 
 def assert_response_is_index_html(response):
     assert b"<!doctype html>" in response.data
+
+
+def assert_response_is_bundle_js(response):
+    assert b"!function(){" in response.data
 
 
 def get_session_cookie_from_response(response):

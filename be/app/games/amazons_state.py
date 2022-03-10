@@ -1,4 +1,5 @@
 import copy
+import functools
 import random
 
 from app.games.game_state import GameState
@@ -25,7 +26,7 @@ starting_board_6x0 = [
     [0, 0, 0, 1, 0, 0],
 ]
 
-starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
+VALID_CONFIG_KEYS = ["10_0", "6_0"]
 
 
 class AmazonsState(GameState):
@@ -51,44 +52,46 @@ class AmazonsState(GameState):
 
     """
 
-    def __init__(self, board, turn=0, config=None):
-        # XXX: smelly code
-        if not config:
-            config = {"size": len(board), "variation": 0}
+    DEFAULT_AMAZONS_CONFIG = {"size": 10, "variation": 0}
 
-        self.turn = turn
-        self.board = copy.deepcopy(board)
+    def __init__(self, config=DEFAULT_AMAZONS_CONFIG):
+        self.turn = 0
+        self.board = self.get_board_from_config(config)
         self.config = config
         self.number_of_turns = 0
 
     @classmethod
     def is_valid_config(self, config):
 
-        if "size" in config:
-            if not config["size"] in [4, 6, 10]:
-                return False
-        else:
+        # XXX/TODO: off-load this to the JSON schema library
+        required_keys = ["size", "variation"]
+        required_keys_exist = all([field in config for field in required_keys])
+
+        int_keys = ["size", "variation"]
+        int_keys_are_int = all([isinstance(config[key], int) for key in int_keys])
+        if not required_keys_exist or not int_keys_are_int:
+            return False
+        if not self.config_to_config_key(config) in VALID_CONFIG_KEYS:
             return False
 
-        if "variation" in config:
-            if not config["variation"] in [0]:
-                return False
-        else:
-            return False
         return True
 
     @classmethod
+    def config_to_config_key(_, config):
+        return str(config["size"]) + "_" + str(config["variation"])
+
+    @classmethod
     def create_from_config(self, config):
+        return AmazonsState(config=config)
 
+    @classmethod
+    def get_board_from_config(cls, config):
         b = (config["size"], config["variation"])
-        if b == (10, 0):
-            starting_board = starting_board_10x0
-        elif b == (6, 0):
-            starting_board = starting_board_6x0
-        elif b == (4, 0):
-            starting_board = starting_board_4x0
 
-        return AmazonsState(starting_board)
+        if b == (10, 0):
+            return copy.deepcopy(starting_board_10x0)
+        if b == (6, 0):
+            return copy.deepcopy(starting_board_6x0)
 
     @classmethod
     def get_max_no_players(self):
@@ -109,18 +112,15 @@ class AmazonsState(GameState):
 
     @staticmethod
     def init_from_repr(repr):
-        c = AmazonsState(repr["board"])
+        c = AmazonsState()
+        # XXX: this code has to keep up with __repr__, ie, there
+        # is more than one location in the code that would change
+        # if we changed the internal representation of this class!
         c.turn = repr["turn"]
-        # XXX: TECH DEBT!!
         c.board = repr["board"]
         c.config = repr["config"]
         c.number_of_turns = repr["number_of_turns"]
         return c
-
-    def clone(self):
-        """Create a deep clone of this game state."""
-        st = AmazonsState(copy.deepcopy(self.board), self.turn)
-        return st
 
     def make_move(self, move):
         fr = move["from"]
@@ -136,81 +136,41 @@ class AmazonsState(GameState):
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        print(move, self.get_possible_moves())
         return move in self.get_possible_moves()
 
-    def count_possible_moves(self, player=None):
-        """Get # of possible moves from this state."""
-        out = 0
-        if player is None:
-            player = self.turn + 1
-
-        queen_moves = self.get_possible_queen_moves(player)
-
-        for q in queen_moves:
-            out += self.count_possible_shots_from_queen(q[1], q[0])
-
-        return out
-
     def get_possible_moves(self, player=None):
-        """
-        Returns a list of all possible moves from this state.
-        ---
-        Arguments:
-            player: [1, 2]. The player to get the theoric possible moves from. Does not
-            take into account turns.
-                Defaults to player with the turn.
-        ---
-        Returns:
-            out: list of possible moves of the given player.
-
-        """
-        out = []
-        if player is None:
-            player = self.turn + 1
-
-        queen_moves = self.get_possible_queen_moves(player)
-        for q in queen_moves:
-            out.extend(
-                [
-                    {"from": q[0], "to": q[1], "shoot": s}
-                    for s in self.get_possible_shots_from_queen(q[1], q[0])
-                ]
-            )
-        return out
-
-    def get_possible_queen_moves(self, player=None):
-        out = []
-        if player is None:
-            player = self.turn + 1
-        for q_x in range(self.config["size"]):
-            for q_y in range(self.config["size"]):
-                if self.board[q_x][q_y] == player:
-                    q = str(q_x) + str(q_y)
-                    out.extend([[q, x] for x in self.get_sliding_squares(q)])
-
-        return out
+        x = [move for move in self.generate_possible_moves(player)]
+        print(x)
+        return x
 
     def count_possible_queen_moves(self, player=None):
-        if player is None:
-            player = self.turn + 1
-        out = 0
+        return functools.reduce(
+            lambda x, _: x + 1, self.generate_possible_queen_moves(player), 0
+        )
+
+    def generate_possible_moves(self, player=None):
+        player = self.turn + 1 if player is None else player
+
+        for queen, move_to in self.generate_possible_queen_moves(player):
+            for shoot in self.generate_sliding_squares(cell_from=move_to, ignore=queen):
+                yield ({"from": queen, "to": move_to, "shoot": shoot})
+
+    def generate_possible_queen_moves(self, player=None):
+        player = self.turn + 1 if player is None else player
+
+        for queen in self.generate_queens_of_player(player):
+            for move in self.generate_sliding_squares(cell_from=queen):
+                yield (queen, move)
+
+    def generate_queens_of_player(self, player=None):
+        player = self.turn + 1 if player is None else player
 
         for q_x in range(self.config["size"]):
             for q_y in range(self.config["size"]):
                 if self.board[q_x][q_y] == player:
-                    q = str(q_x) + str(q_y)
-                    out += self.count_sliding_squares(q)
+                    yield (str(q_x) + str(q_y))
 
-        return out
-
-    def get_possible_shots_from_queen(self, source, ignore):
-        return self.get_sliding_squares(source, ignore, True)
-
-    def count_possible_shots_from_queen(self, source, ignore):
-        return self.count_sliding_squares(source, ignore, True)
-
-    def get_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
+    def generate_sliding_squares(self, cell_from, ignore=None):
         """
         Helper function that returns the sliding move squares from a given square in
         the given board state.
@@ -218,13 +178,11 @@ class AmazonsState(GameState):
         This is used by most other move functions since all movement and shooting in
         Amazons is the same 8-direction sliding attack
         """
-        out = []
         from_x = int(cell_from[0])
         from_y = int(cell_from[1])
         ignore_x = int(ignore[0]) if ignore is not None else -1
         ignore_y = int(ignore[1]) if ignore is not None else -1
 
-        # neat!
         deltas = [  # incremental changes to x and y to move in 8 directions
             (-1, 1),
             (0, 1),
@@ -238,65 +196,16 @@ class AmazonsState(GameState):
 
         for dx, dy in deltas:
             x, y = from_x, from_y
-            while (
-                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
-            ):
+
+            board_size = self.config["size"]
+            while 0 <= x + dx < board_size and 0 <= y + dy < board_size:
                 x += dx
                 y += dy
-                if self.board[x][y] != 0:
-                    if ignore_x == x and ignore_y == y:
-                        if include_ignore:
-                            out.append(str(x) + str(y))
-                        continue
-                    else:
-                        break
-                else:
-                    out.append(str(x) + str(y))
-        return out
 
-    def count_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
-        """
-        Different from len(get_sliding_squares) because natively counting is faster
-        than adding all the possible moves to a list and counting it.
-        """
-        out = 0
-        from_x = int(cell_from[0])
-        from_y = int(cell_from[1])
-        ignore_x = int(ignore[0]) if ignore is not None else -1
-        ignore_y = int(ignore[1]) if ignore is not None else -1
-
-        # neat!
-        deltas = [  # incremental changes to x and y to move in 8 directions
-            (-1, 1),
-            (0, 1),
-            (1, 1),
-            (-1, 0),
-            (1, 0),
-            (-1, -1),
-            (0, -1),
-            (1, -1),
-        ]
-
-        for dx, dy in deltas:
-            x, y = from_x, from_y
-            while (
-                0 <= x + dx < self.config["size"] and 0 <= y + dy < self.config["size"]
-            ):
-                x += dx
-                y += dy
-                if self.board[x][y] != 0:
-                    if ignore_x == x and ignore_y == y:
-                        if include_ignore:
-                            out += 1
-                        continue
-                    else:
-                        break
-                else:
-                    out += 1
-        return out
-
-    def is_game_going_on(self):
-        return bool(self.count_possible_queen_moves())
+                ignore_blocking_cell = ignore_x == x and ignore_y == y
+                if self.board[x][y] != 0 and not ignore_blocking_cell:
+                    break
+                yield str(x) + str(y)
 
     def check_game_end(self):
         p1 = self.count_possible_queen_moves(1)
@@ -311,18 +220,15 @@ class AmazonsState(GameState):
             return 0
 
     def __str__(self):
-        """Returns a string representation of the board."""
-
-        def prettify_board_character(n):
-            return ".WBX"[n]
+        piece_to_character = ".WBX"
 
         return "\n".join(
-            [" ".join([prettify_board_character(c) for c in row]) for row in self.board]
+            [" ".join([piece_to_character[c] for c in row]) for row in self.board]
         )
 
     @staticmethod
     def generate_random_play():
-        game = AmazonsState.create_from_config({"size": 10, "variation": 0})
+        game = AmazonsState()
         moves = []
         while game.check_game_end() == 0:
             possible_moves = game.get_possible_moves()
@@ -330,7 +236,3 @@ class AmazonsState(GameState):
             game.make_move(move_to_make)
             moves.append(move_to_make)
         return moves
-
-
-if __name__ == "__main__":
-    AmazonsState.generate_random_play()

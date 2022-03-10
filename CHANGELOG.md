@@ -2,6 +2,20 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.2] - 2020-03-10
+
+### Added
+
+- Added jest to FE.
+- Makefile coverage rules for running BE and FE together or individually.
+- Makefile testing rules to allow running BE and FE together or individually.
+- Tests to BE to reach 98% code coverage.
+
+### Changed
+
+- Add +x permissions to `be/generate_secret.sh`
+- Re-structured the file structure of FE.
+
 ## [0.6.1] - 2020-03-08
 
 ### Added

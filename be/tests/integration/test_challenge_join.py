@@ -2,6 +2,8 @@ import pytest
 
 from .conf_websocket import assert_event_errored
 from .conf_websocket import assert_event_succesful
+from .test_challenge_helpers import emit_join_challenge_with_cid
+from .test_challenge_helpers import emit_succesful_amazons_create_challenge
 
 
 @pytest.mark.usefixtures("socketio_client_factory")
@@ -44,9 +46,8 @@ def test_player_can_not_join_a_full_challenge(socketio_client_factory):
     assert_event_errored(user_three_attempt)
 
 
-@pytest.mark.usefixtures("socketio_client")
 def test_can_not_join_game_without_cid(socketio_client):
-    response = socketio_client.emit("challenge-join", callback=True)
+    response = socketio_client.emit("challenge-join", {}, callback=True)
     assert_event_errored(response)
 
 
@@ -56,17 +57,3 @@ def test_can_not_join_game_with_invalid_cid(socketio_client):
         "challenge-join", {"cid": "does-not-exist"}, callback=True
     )
     assert_event_errored(response)
-
-
-def emit_succesful_amazons_create_challenge(io_client):
-    payload = io_client.emit(
-        "challenge-create",
-        {"game_name": "amazons", "game_config": {"size": 10, "variation": 0}},
-        callback=True,
-    )
-    return payload
-
-
-def emit_join_challenge_with_cid(io_client, cid):
-    response = io_client.emit("challenge-join", {"cid": cid}, callback=True)
-    return response

@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App.js";
-import PlayPage from "./PlayPage.js";
-import RootStore from "./RootStore.js";
+import ChallengePlayPage from "./Challenge/ChallengePlayPage.js";
+import RootStore from "./Store/RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Header, Footer } from "./MainPurposeComponents";
+import { Header, Footer } from "./Components/MainPurposeComponents";
 import "./index.css";
 
 RootStore.socket.connect();
@@ -16,7 +16,7 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route path="/play/:gameName">
-          <PlayPage state={RootStore} />
+          <ChallengePlayPage state={RootStore} />
         </Route>
         <Route path="/">
           <App state={RootStore} />
