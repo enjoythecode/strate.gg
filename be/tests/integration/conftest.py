@@ -28,11 +28,6 @@ def client(app):
 
 
 @pytest.fixture
-def runner(app):
-    return app.test_cli_runner()
-
-
-@pytest.fixture
 def socketio_client_factory(app):
     class SocketIO_Client_Factory:
         def create():
