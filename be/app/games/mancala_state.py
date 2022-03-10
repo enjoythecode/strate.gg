@@ -12,7 +12,7 @@ starting_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 BANKS = [6, 13]  # bank indices
 
 
-class MancalaState(GameState):
+class MancalaState(GameState):  # pragma: no cover
     """
     MancalaState is serialized in JSON as such:
     {
