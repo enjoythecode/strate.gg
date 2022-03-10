@@ -54,7 +54,6 @@ class AmazonsState(GameState):
     DEFAULT_AMAZONS_CONFIG = {"size": 10, "variation": 0}
 
     def __init__(self, config=DEFAULT_AMAZONS_CONFIG):
-
         self.turn = 0
         self.board = self.get_board_from_config(config)
         self.config = config
@@ -122,11 +121,6 @@ class AmazonsState(GameState):
         c.number_of_turns = repr["number_of_turns"]
         return c
 
-    # def clone(self):
-    #    """Create a deep clone of this game state."""
-    #    st = AmazonsState(copy.deepcopy(self.board), self.turn)
-    #    return st
-
     def make_move(self, move):
         fr = move["from"]
         to = move["to"]
@@ -145,8 +139,7 @@ class AmazonsState(GameState):
 
     def get_possible_moves(self, player=None):
         out = []
-        if player is None:
-            player = self.turn + 1
+        player = self.turn + 1 if player is None else player
 
         queen_moves = self.get_possible_queen_moves(player)
         for q in queen_moves:
@@ -160,8 +153,7 @@ class AmazonsState(GameState):
 
     def get_possible_queen_moves(self, player=None):
         out = []
-        if player is None:
-            player = self.turn + 1
+        player = self.turn + 1 if player is None else player
         for q_x in range(self.config["size"]):
             for q_y in range(self.config["size"]):
                 if self.board[q_x][q_y] == player:
@@ -171,8 +163,7 @@ class AmazonsState(GameState):
         return out
 
     def count_possible_queen_moves(self, player=None):
-        if player is None:
-            player = self.turn + 1
+        player = self.turn + 1 if player is None else player
         out = 0
 
         for q_x in range(self.config["size"]):
@@ -184,9 +175,9 @@ class AmazonsState(GameState):
         return out
 
     def get_possible_shots_from_queen(self, source, ignore):
-        return self.get_sliding_squares(source, ignore, True)
+        return self.get_sliding_squares(source, ignore)
 
-    def get_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
+    def get_sliding_squares(self, cell_from, ignore=None):
         """
         Helper function that returns the sliding move squares from a given square in
         the given board state.
@@ -221,8 +212,7 @@ class AmazonsState(GameState):
                 y += dy
                 if self.board[x][y] != 0:
                     if ignore_x == x and ignore_y == y:
-                        if include_ignore:
-                            out.append(str(x) + str(y))
+                        out.append(str(x) + str(y))
                         continue
                     else:
                         break
