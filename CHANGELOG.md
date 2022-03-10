@@ -9,6 +9,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Added jest to FE.
 - Makefile coverage rules for running BE and FE together or individually.
 - Makefile testing rules to allow running BE and FE together or individually.
+- Tests to BE to reach 98% code coverage.
 
 ### Changed
 
