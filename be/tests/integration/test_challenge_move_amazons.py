@@ -48,7 +48,7 @@ def test_challenge_is_broadcasted_consistently_after_move(
 
 
 @pytest.mark.usefixtures("socketio_client_factory")
-def test_challenge_is_broadcasted_correctly_(
+def test_challenge_is_broadcasted_correctly(
     socketio_client_factory,
 ):
 
@@ -92,8 +92,7 @@ def test_amazons_challenge_can_play_full_game(socketio_client_factory):
     for i in range(len(FULL_AMAZON_GAME)):
         move = FULL_AMAZON_GAME[i]
         r = emit_move_to_cid(users[i % 2], move, cid)
-
-    print(r)
+        assert_event_succesful(r)
 
 
 def emit_move_to_cid(io_client, move, cid):

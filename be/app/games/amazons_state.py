@@ -1,3 +1,4 @@
+import copy
 import random
 
 from app.games.game_state import GameState
@@ -24,14 +25,7 @@ starting_board_6x0 = [
     [0, 0, 0, 1, 0, 0],
 ]
 
-starting_board_4x0 = [[0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 2, 0]]
-
-
-CONFIG_KEY_TO_BOARD = {
-    "10_0": starting_board_10x0,
-    "6_0": starting_board_6x0,
-    "4_0": starting_board_4x0,
-}
+VALID_CONFIG_KEYS = ["10_0", "6_0"]
 
 
 class AmazonsState(GameState):
@@ -77,7 +71,7 @@ class AmazonsState(GameState):
         int_keys_are_int = all([isinstance(config[key], int) for key in int_keys])
         if not required_keys_exist or not int_keys_are_int:
             return False
-        if not self.config_to_config_key(config) in CONFIG_KEY_TO_BOARD:
+        if not self.config_to_config_key(config) in VALID_CONFIG_KEYS:
             return False
 
         return True
@@ -93,14 +87,11 @@ class AmazonsState(GameState):
     @classmethod
     def get_board_from_config(cls, config):
         b = (config["size"], config["variation"])
-        if b == (10, 0):
-            starting_board = starting_board_10x0
-        elif b == (6, 0):
-            starting_board = starting_board_6x0
-        elif b == (4, 0):
-            starting_board = starting_board_4x0
 
-        return starting_board
+        if b == (10, 0):
+            return copy.deepcopy(starting_board_10x0)
+        if b == (6, 0):
+            return copy.deepcopy(starting_board_6x0)
 
     @classmethod
     def get_max_no_players(self):
@@ -150,35 +141,9 @@ class AmazonsState(GameState):
         self.number_of_turns += 1
 
     def is_valid_move(self, move):
-        print(move, self.get_possible_moves())
         return move in self.get_possible_moves()
 
-    def count_possible_moves(self, player=None):
-        """Get # of possible moves from this state."""
-        out = 0
-        if player is None:
-            player = self.turn + 1
-
-        queen_moves = self.get_possible_queen_moves(player)
-
-        for q in queen_moves:
-            out += self.count_possible_shots_from_queen(q[1], q[0])
-
-        return out
-
     def get_possible_moves(self, player=None):
-        """
-        Returns a list of all possible moves from this state.
-        ---
-        Arguments:
-            player: [1, 2]. The player to get the theoric possible moves from. Does not
-            take into account turns.
-                Defaults to player with the turn.
-        ---
-        Returns:
-            out: list of possible moves of the given player.
-
-        """
         out = []
         if player is None:
             player = self.turn + 1
@@ -220,9 +185,6 @@ class AmazonsState(GameState):
 
     def get_possible_shots_from_queen(self, source, ignore):
         return self.get_sliding_squares(source, ignore, True)
-
-    def count_possible_shots_from_queen(self, source, ignore):
-        return self.count_sliding_squares(source, ignore, True)
 
     def get_sliding_squares(self, cell_from, ignore=None, include_ignore=False):
         """
@@ -309,9 +271,6 @@ class AmazonsState(GameState):
                     out += 1
         return out
 
-    def is_game_going_on(self):
-        return bool(self.count_possible_queen_moves())
-
     def check_game_end(self):
         p1 = self.count_possible_queen_moves(1)
         p2 = self.count_possible_queen_moves(2)
@@ -336,7 +295,7 @@ class AmazonsState(GameState):
 
     @staticmethod
     def generate_random_play():
-        game = AmazonsState.create_from_config({"size": 10, "variation": 0})
+        game = AmazonsState()
         moves = []
         while game.check_game_end() == 0:
             possible_moves = game.get_possible_moves()
@@ -344,7 +303,3 @@ class AmazonsState(GameState):
             game.make_move(move_to_make)
             moves.append(move_to_make)
         return moves
-
-
-if __name__ == "__main__":
-    AmazonsState.generate_random_play()
