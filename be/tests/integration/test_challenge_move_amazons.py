@@ -133,4 +133,10 @@ def get_latest_challenge_update_ioclient_received(io_client):
         if event["name"] == "challenge-update":
             return event["args"][0]
 
-    raise BaseException  # XXX: not found
+    return None
+
+
+@pytest.mark.usefixtures("socketio_client")
+def test_test_method_get_latest_challenge_is_none_if_no_events(socketio_client):
+    _ = socketio_client.get_received()  # flush received events
+    assert get_latest_challenge_update_ioclient_received(socketio_client) is None
