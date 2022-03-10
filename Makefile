@@ -62,6 +62,12 @@ best: be-test
 be-test: gen-secret compile-client
 	(cd be && python -m pytest)
 
+# COVERAGE
+# -----------------------------------------------------------------------------
+# terminology:
+#	variations of "*over"    print the coverage in the terminal
+# 	variations of "*overage" open an HTML report
+
 # runs coverage on FE + BE
 .PHONY: cover
 cover: gen-secret bover fover
@@ -77,9 +83,9 @@ fover:
 	(cd fe && npm run coverage)
 
 # TODO add FE/BE distinction to this
-.PHONY: covero
-covero: gen-secret
-	(cd be && coverage html && open htmlcov/index.html)
+.PHONY: boverage
+boverage:
+	(cd be && coverage run -m pytest && coverage html && open htmlcov/index.html)
 
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
