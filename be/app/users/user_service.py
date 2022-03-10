@@ -7,18 +7,16 @@ SESSION_KEY_FOR_UID = "uid"
 
 
 def get_uid_of_session_holder():
-    if SESSION_KEY_FOR_UID not in session:
-        setup_server_side_session_cookie()
     return session[SESSION_KEY_FOR_UID]
 
 
 def get_realtime_challenges_of_user(uid):
-    # TODO: this may not exist...
-    # TODO: better create session with some default variables, probably!
-    return session["games_playing"]
+    return session.get("games_playing", [])
 
 
 def add_realtimechallenge_to_user(cid):
+    # XXX/TODO: implement a policy about a user being in multiple games at once
+    #           and test it accordingly
     if "games_playing" in session and session["games_playing"]:
         session["games_playing"].append(cid)
         session.modified = True

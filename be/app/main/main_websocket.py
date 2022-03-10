@@ -10,16 +10,6 @@ def notify_client_of_their_uid(uid, sid):
     bp.emit("connection-player-id", {"uid": uid}, to=sid)
 
 
-@bp.on("message")
-def handle_message(data):
-    """
-    There are no defined/expected "message" events in the current architecture.
-    We want to define this handler so that we can raise a concern.
-    """
-    # TODO: switch this to logging:warning
-    print("UNEXPECTED received message: ", data)
-
-
 @bp.on("connect")
 def handle_connect():
     # TODO: require an UID

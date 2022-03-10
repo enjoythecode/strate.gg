@@ -14,11 +14,14 @@ def create_challenge(payload):
     if not ("game_name" in payload and "game_config" in payload):
         raise BaseException
 
+    uid = user_service.get_uid_of_session_holder()
+
     challenge = challenge_service.create_challenge(
         payload["game_name"], payload["game_config"]
     )
+    response = challenge_service.add_player_to_challenge(uid, challenge["cid"])
 
-    return {"result": "success", "challenge": challenge}
+    return response
 
 
 @bp.on("challenge-join")
@@ -45,6 +48,7 @@ def challenge_move(payload):
 def handle_challenge_subscribe(payload):
     room = challenge_service.socket_room_name_from_cid(payload["cid"])
     join_room(room)
+    # XXX: there are extraneous updates being sent here!
     challenge_service.send_challenge_update_to_clients(
         challenge_service._get_challenge_by_cid(payload["cid"])
     )

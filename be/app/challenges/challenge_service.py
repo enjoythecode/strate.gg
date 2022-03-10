@@ -28,8 +28,7 @@ A challenge is represented as a Dictionary with the following structure:
     "status": String (as defined in ChallengeStatus). Representing the game status
         (waiting for players, in progress, over, etc.)
     "cid": String. ID assigned to the game.
-    "game_end_override": Int or None. If a player won due to externalities (time up
-        for opponent, opponent disconnect, this is the index of the player that won)
+    "player_won": Int or None. If a player won, this is the index of the player that won
         Otherwise, it is None.
 }
 
@@ -69,10 +68,6 @@ def _cid_exists(cid):
     return current_app.redis.exists(_get_redis_key_for_challenge_from_cid(cid))
 
 
-def _challenge_exists(challenge):
-    return _cid_exists(challenge["cid"])
-
-
 def _generate_unique_cid():
     cid = _generate_cid()
     while _cid_exists(cid):
@@ -83,13 +78,10 @@ def _generate_unique_cid():
 
 def _challenge_set(challenge):
     # XXX: I should handle this kind of result checking in the redis service!
-    result = current_app.redis.set(
+    # TODO: that redis service should have proper error checking
+    current_app.redis.set(
         _get_redis_key_for_challenge_from_challenge(challenge), json.dumps(challenge)
     )
-
-    # TODO: proper error checking, please!
-    if result != "OK":
-        pass
 
 
 def _get_challenge_by_cid(cid):
@@ -99,8 +91,6 @@ def _get_challenge_by_cid(cid):
 
 
 def create_challenge(game_name, game_config):
-
-    uid = user_service.get_uid_of_session_holder()
 
     if game_name not in GAME_STATE_CLASSES:
         # XXX: standardize error communication!
@@ -118,13 +108,12 @@ def create_challenge(game_name, game_config):
     challenge_obj = {
         "game_name": game_name,
         "state": game_state.__repr__(),  # XXX: rename key to game_state
-        "players": [uid],
+        "players": [],
         "moves": [],  # XXX: move to game
         "status": "WAITING_FOR_PLAYERS",
         "cid": cid,
-        "game_end_override": None,
+        "player_won": None,
     }
-    user_service.add_realtimechallenge_to_user(cid)
 
     _challenge_set(challenge_obj)
     return challenge_obj
@@ -145,25 +134,17 @@ def assert_player_can_join_challenge(uid, challenge):
         raise BaseException
     if uid in challenge["players"]:
         raise BaseException
-    if challenge["status"] != "WAITING_FOR_PLAYERS":
-        raise BaseException
     return True
-
-
-def player_can_join_challenge(uid, challenge):
-    return assert_player_can_join_challenge(uid, challenge)
 
 
 def add_player_to_challenge(uid, cid):
 
+    if not _cid_exists(cid):
+        raise BaseException  # Challenge not found
+
     challenge = _get_challenge_by_cid(cid)
 
-    if not _cid_exists(cid):
-        print("Error!")
-        return {"result": "error", "error": "Challenge not found"}  # XXX: idk
-
-    if not player_can_join_challenge(uid, challenge):
-        return {"result": "error", "error": "This challenge can't be joined"}
+    assert_player_can_join_challenge(uid, challenge)
 
     challenge["players"].append(uid)
     user_service.add_realtimechallenge_to_user(cid)
@@ -180,7 +161,7 @@ def add_player_to_challenge(uid, cid):
     send_challenge_update_to_clients(challenge)
 
     # TODO (design) i am returning this here as just to satisfy tests...
-    return {"result": "success"}
+    return {"result": "success", "challenge": challenge}
 
 
 def process_disconnect_from_user(uid):
@@ -192,14 +173,6 @@ def process_disconnect_from_user(uid):
     # TODO unsubscribe the user from the rooms to free up resources!
 
 
-def get_game_end(challenge):
-    if challenge["game_end_override"]:
-        return challenge["game_end_override"]
-    # TODO: likely broken
-    game = GAME_STATE_CLASSES[challenge["game_name"]].init_from_repr(challenge["state"])
-    return game.check_game_end()
-
-
 def default_player_due_to_disconnect(cid, uid):
 
     # TODO: also handle dangling games here?
@@ -208,7 +181,7 @@ def default_player_due_to_disconnect(cid, uid):
     if challenge["status"] == "IN_PROGRESS":
         challenge["status"] = "OVER_DISCONNECT"
 
-        challenge["game_end_override"] = (
+        challenge["player_won"] = (
             (challenge["players"].index(uid) + 1) % 2
         ) + 1  # set the remaining player as the winner
 
@@ -240,7 +213,7 @@ def handle_move(cid, move):
     # XXX: moves does not get added. it needs to be moved to the state class either way!
 
     challenge["state"] = game.__repr__()
-    challenge["game_end"] = get_game_end(challenge)
+    challenge["player_won"] = game.check_game_end()
 
     _challenge_set(challenge)
     send_challenge_update_to_clients(challenge)

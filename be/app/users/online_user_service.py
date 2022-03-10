@@ -6,10 +6,8 @@ USER_IS_ONLINE_KEY_PREFIX = "user:is_online:"
 USER_ONLINE_KEEPALIVE_DURATION = 60
 
 
-def send_number_online_users_to_all_clients(number_to_send=None):
+def send_number_online_users_to_all_clients(number_to_send):
     # XXX: as number of users scale, this will consume a lot of cpu and bandwidth!
-    if number_to_send is None:
-        number_to_send = current_app.redis.get(CURRENT_ONLINE_USERS_KEY)
     emit("connection-info-update", {"users": number_to_send}, broadcast=True)
 
 
