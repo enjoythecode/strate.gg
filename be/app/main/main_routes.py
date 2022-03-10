@@ -21,7 +21,7 @@ def serve(path):
     # manage_session = False setting on initialization.
     user_service.setup_server_side_session_cookie()
 
-    if current_app.debug:
+    if current_app.debug:  # pragma: no cover
         return proxy_to_npm_development_server()
     else:
         return serve_http_request_from_build_client_files(path)
@@ -34,7 +34,7 @@ def serve_http_request_from_build_client_files(path):
         return send_from_directory(current_app.static_folder, "index.html")
 
 
-def proxy_to_npm_development_server():
+def proxy_to_npm_development_server():  # pragma: no cover
     resp = requests.request(
         method="GET",
         url=request.url.replace(request.host, "fe:3000"),
