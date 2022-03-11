@@ -24,12 +24,11 @@ RUN npm run build
 
 
 # Build step #2: run the Python back end
-FROM python:3.7-alpine
+FROM python:3.7-slim
 
 WORKDIR /code
 
 ENV FLASK_ENV debug
-RUN apk add --no-cache gcc musl-dev linux-headers
 COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 EXPOSE 8080
