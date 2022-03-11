@@ -20,25 +20,6 @@ const App = observer(({ state }) => (
           <br></br>
         </div>
 
-        <div style={{ visibility: "hidden" }}>
-          <div
-            id="challenge-create-box-mancala"
-            className="challenge-create-box"
-          >
-            <h2>Mancala</h2>
-            <button
-              onClick={() => {
-                state.socket.create_new_challenge({
-                  game_name: "mancala",
-                  game_config: {},
-                });
-              }}
-            >
-              Create Challenge
-            </button>
-          </div>
-        </div>
-
         <div
           id="challenge-create-box-moreToCome"
           className="challenge-create-box"

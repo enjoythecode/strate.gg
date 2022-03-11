@@ -10,6 +10,10 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Custom Content-Security-Policy header that allows unsafe-inline style-src
   and connect-src for relevant ws:// and wss:// headers
 
+### Removed
+
+- Mancala, pending refactoring of FE code to be more stable.
+
 ## [0.6.2] - 2020-03-10
 
 ### Added

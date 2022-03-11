@@ -1,19 +1,15 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic";
 import { AmazonsView } from "../Games/Amazons/AmazonsView";
-import { MancalaLogic } from "../Games/Mancala/MancalaLogic";
-import { MancalaView } from "../Games/Mancala/MancalaView";
 import RootStore from "../Store/RootStore.js";
 import React from "react";
 
 const game_name_to_state_class = {
   amazons: AmazonsLogic,
-  mancala: MancalaLogic,
 };
 
 const game_name_to_view_component = {
   amazons: AmazonsView,
-  mancala: MancalaView,
 };
 
 class Challenge {
