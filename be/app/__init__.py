@@ -18,7 +18,7 @@ CSP_POLICY = {
     "default-src": [
         "'self'",
     ],
-    "connect-src": ["'self'", "ws://localhost:3000"],
+    "connect-src": ["'self'", "ws://localhost:3000", "wss://strate.gg:3000"],
     "style-src": ["'self'", "'unsafe-inline'"],
 }
 talisman = Talisman()
