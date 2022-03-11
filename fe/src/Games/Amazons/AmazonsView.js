@@ -90,8 +90,9 @@ const AmazonsView = observer(({ game_state }) => {
     let y = Number(cell[1]);
 
     // last move indicator
+    /*
     if (game_state.lastMove !== null && game_state.lastMove.includes(cell))
-      classes.push("indicatorLastMove");
+      classes.push("indicatorLastMove");*/
     if (
       currentSelectionStep() === "to" &&
       game_state.cell_can_reach(selection["from"], cell)

@@ -18,7 +18,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "jest": "react-scripts test --coverage",
+    "jest": "react-scripts test",
+    "jestc": "react-scripts test --coverage",
     "test": "react-scripts test --watchAll=false",
     "coverage": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
@@ -39,6 +40,12 @@
   },
   "devDependencies": {
     "jest": "^27.5.1",
-    "prettier": "2.5.1"
+    "prettier": "2.5.1",
+    "react-test-renderer": "^17.0.2"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./src/jest.js"
+    ]
   }
 }

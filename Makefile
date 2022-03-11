@@ -42,10 +42,16 @@ check:
 # TESTING
 # -----------------------------------------------------------------------------
 
-# jest runs the test with watch mode, automatically re-running affected files on change
+# jest runs in watch mode, automatically re-running affected files on change
 .PHONY: jest
 jest:
 	(cd fe && npm run jest)
+
+# jestc runs in watch mode, with --coverage enabled, showing coverage with each
+# test run
+.PHONY: jestc
+jestc:
+	(cd fe && npm run jestc)
 
 # test runs tests for both FE and BE
 .PHONY:

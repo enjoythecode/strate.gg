@@ -28,18 +28,12 @@ class _RootStore {
   update_challenge_information = (challenge) => {
     let cid = challenge.cid;
     let chs = this.challenges;
+    console.log(JSON.stringify(challenge));
 
     if (!chs.has(cid)) {
       chs.set(cid, new Challenge(challenge));
     }
     chs.get(cid).update_challenge_information(challenge);
-  };
-
-  update_challenge_new_move = (data) => {
-    let cid = data.cid;
-    if (this.challenges.has(cid)) {
-      this.challenges.get(cid).process_new_move(data);
-    }
   };
 }
 

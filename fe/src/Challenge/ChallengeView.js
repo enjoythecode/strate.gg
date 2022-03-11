@@ -2,10 +2,12 @@ import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic.js";
 import { observer } from "mobx-react";
 import RootStore from "../Store/RootStore.js";
 import React from "react";
-import { PlayerTagView, MoveList, StatusIndicator } from "./Challenge";
+import { PlayerTagView } from "./Components/PlayerTagView";
+import { MoveList } from "./Components/MoveList";
+import { StatusIndicator } from "./Components/StatusIndicator";
 
 const ChallengeView = observer(({ challenge }) => (
-  <div>
+  <div data-testid="challenge">
     {challenge == null ? (
       "Loading the game!"
     ) : (
@@ -28,7 +30,9 @@ const ChallengeView = observer(({ challenge }) => (
           <div className="challenge-dashboard">
             <div style={{ width: "100%" }}>
               <PlayerTagView
-                displayName={challenge.players[1]}
+                displayName={
+                  challenge.players.length > 1 ? challenge.players[1] : null
+                }
                 isSelf={challenge.client_turn === 1}
                 isTurn={challenge.game_state.turn === 1}
                 colorBadge={challenge.game_state.turn_to_color[1].badge}
