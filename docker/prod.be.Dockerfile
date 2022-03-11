@@ -1,9 +1,16 @@
 # syntax=docker/dockerfile:1
 # Build step #1: build the React front end
 FROM node:16.14.0-alpine as build-step
+
 WORKDIR /app
+
 ENV PATH /app/node_modules/.bin:$PATH
 
+# prevent react from inlining scripts and images, so that we can
+# maintain a strict Content-Security-Policy
+# https://drag13.io/posts/react-inline-runtimer-chunk/index.html
+ENV INLINE_RUNTIME_CHUNK=false
+ENV IMAGE_INLINE_SIZE_LIMIT=0
 
 COPY ./fe/package.json ./
 COPY ./fe/package-lock.json ./

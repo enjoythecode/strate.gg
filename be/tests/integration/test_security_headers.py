@@ -2,7 +2,11 @@ import pytest
 
 expected_security_header_pairs = [
     ("Strict-Transport-Security", "max-age=31556926; includeSubDomains"),  # aka HSTS
-    ("Content-Security-Policy", "default-src 'self'; object-src 'none'"),
+    (
+        "Content-Security-Policy",
+        "default-src 'self'; connect-src 'self' ws://localhost:3000;"
+        + " style-src 'self' 'unsafe-inline'",
+    ),
     ("X-Content-Type-Options", "nosniff"),
     ("X-Frame-Options", "SAMEORIGIN"),
     ("Referrer-Policy", "strict-origin-when-cross-origin"),
