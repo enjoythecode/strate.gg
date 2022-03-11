@@ -6,6 +6,7 @@ import redis
 from flask import current_app
 from flask import Flask
 from flask_session import Session
+from flask_talisman import Talisman
 
 from app import challenges
 from app import main
@@ -13,6 +14,14 @@ from app import users
 
 
 socketio = sckt.SocketIO()
+CSP_POLICY = {
+    "default-src": [
+        "'self'",
+    ],
+    "connect-src": ["'self'", "ws://localhost:3000", "wss://strate.gg:3000"],
+    "style-src": ["'self'", "'unsafe-inline'"],
+}
+talisman = Talisman()
 sess = Session()
 
 
@@ -32,6 +41,7 @@ def create_app(redis_instance=None):
     sess.init_app(app)
     # NOTE: fill security hole with Flask-Session default serializer being pickle
     app.session_interface.serializer = json
+    talisman.init_app(app, content_security_policy=CSP_POLICY)
     socketio.init_app(
         app,
         async_mode="eventlet",
