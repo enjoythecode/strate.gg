@@ -28,8 +28,8 @@ A challenge is represented as a Dictionary with the following structure:
     "status": String (as defined in ChallengeStatus). Representing the game status
         (waiting for players, in progress, over, etc.)
     "cid": String. ID assigned to the game.
-    "player_won": Int or None. If a player won, this is the index of the player that won
-        Otherwise, it is None.
+    "player_won": Int. If a player won, this is the index of the player that won
+        Otherwise, it is -1.
 }
 
 A ChallengeStatus is a string literal with self-explanatory names.
@@ -112,7 +112,7 @@ def create_challenge(game_name, game_config):
         "moves": [],  # XXX: move to game
         "status": "WAITING_FOR_PLAYERS",
         "cid": cid,
-        "player_won": None,
+        "player_won": -1,
     }
 
     _challenge_set(challenge_obj)
@@ -182,8 +182,8 @@ def default_player_due_to_disconnect(cid, uid):
         challenge["status"] = "OVER_DISCONNECT"
 
         challenge["player_won"] = (
-            (challenge["players"].index(uid) + 1) % 2
-        ) + 1  # set the remaining player as the winner
+            challenge["players"].index(uid) + 1
+        ) % 2  # set the remaining player as the winner
 
         _challenge_set(challenge)
 

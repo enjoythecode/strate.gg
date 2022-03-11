@@ -213,11 +213,11 @@ class AmazonsState(GameState):
         if p1 == 0 and p2 == 0:
             return (self.turn - 1) % 2  # player who just moved wins
         elif p1 == 0:  # player 2 won
-            return 2
-        elif p2 == 0:  # player 1 won
             return 1
-        else:  # game going on
+        elif p2 == 0:  # player 1 won
             return 0
+        else:  # game going on
+            return -1
 
     def __str__(self):
         piece_to_character = ".WBX"

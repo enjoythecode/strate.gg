@@ -42,10 +42,5 @@
     "jest": "^27.5.1",
     "prettier": "2.5.1",
     "react-test-renderer": "^17.0.2"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "./src/jest.js"
-    ]
   }
 }

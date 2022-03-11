@@ -23,7 +23,7 @@ const NEW_AMAZONS_CHALLENGE_DATA = {
   moves: [],
   status: "WAITING_FOR_PLAYERS",
   cid: "IJFFOUDW",
-  player_won: null,
+  player_won: -1,
 };
 
 const AMAZONS_CHALLENGE_DATA_AFTER_MOVE = {
@@ -49,7 +49,7 @@ const AMAZONS_CHALLENGE_DATA_AFTER_MOVE = {
   moves: [{ from: "96", to: "16", shoot: "13" }],
   status: "IN_PROGRESS",
   cid: "IJFFOUDW",
-  player_won: 0,
+  player_won: -1,
 };
 
 describe("Challenge class creation and updating methods", () => {
@@ -80,4 +80,4 @@ describe("Challenge class creation and updating methods", () => {
 
 describe("Joining a Challenge", () => {});
 
-export { NEW_AMAZONS_CHALLENGE_DATA };
+export { NEW_AMAZONS_CHALLENGE_DATA, AMAZONS_CHALLENGE_DATA_AFTER_MOVE };

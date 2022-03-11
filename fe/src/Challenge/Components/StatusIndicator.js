@@ -25,13 +25,13 @@ export const StatusIndicator = (props) => {
     els.push(<em key={0}>{text}</em>);
   }
 
-  if (props.end !== null) {
+  if (props.end !== -1) {
     els.push(<br key={1} />);
     switch (props.end) {
-      case 1:
+      case 0:
         els.push(<em key={2}>White wins. 1 - 0</em>);
         break;
-      case 2:
+      case 1:
         els.push(<em key={2}>Black wins. 0 - 1</em>);
         break;
       case -2:

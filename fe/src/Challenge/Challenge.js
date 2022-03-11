@@ -26,8 +26,8 @@ A challenge is represented as a Dictionary with the following structure:
     "status": String (as defined in ChallengeStatus). Representing the game status
         (waiting for players, in progress, over, etc.)
     "cid": String. ID assigned to the game.
-    "player_won": Int or None. If a player won, this is the index of the player that won
-        Otherwise, it is None.
+    "player_won": Int. If a player won, this is the index of the player that won
+        Otherwise, it is -1.
 }
 */
 
