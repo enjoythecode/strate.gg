@@ -62,7 +62,7 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
         } else {
           setSelection({ from: null, to: null, shoot: null });
         }
-      } else if (current_selection_step === "to") {
+      } else if (current_selection_step === "shoot") {
         if (game_state.cell_can_reach(selection["to"], c, selection["from"])) {
           // we do not set the state within this if-block because we want the selection to be reset right away
           handle_move({ ...selection, shoot: c });

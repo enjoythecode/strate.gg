@@ -28,7 +28,6 @@ class _RootStore {
   update_challenge_information = (challenge) => {
     let cid = challenge.cid;
     let chs = this.challenges;
-    console.log(JSON.stringify(challenge));
 
     if (!chs.has(cid)) {
       chs.set(cid, new Challenge(challenge));
