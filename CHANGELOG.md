@@ -11,6 +11,11 @@ This file lists all changes to this project, grouped by versions that follow [Se
   and connect-src for relevant ws:// and wss:// headers
 - Some basic tests to FE, including snapshot testing for a ChallengeView with Amazons
 
+### Changed
+
+- All React Components to be functional.
+- All React Components to get RootStore with useContext() hooks
+
 ### Fixed
 
 - Last move indicator regression

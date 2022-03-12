@@ -1,8 +1,6 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic";
 import { AmazonsView } from "../Games/Amazons/AmazonsView";
-import RootStore from "../Store/RootStore.js";
-import React from "react";
 
 const game_name_to_state_class = {
   amazons: AmazonsLogic,
@@ -48,7 +46,6 @@ class Challenge {
       game_end: observable,
       moves: observable,
       update_challenge_information: action,
-      client_turn: computed,
     });
     this.cid = data.cid;
     this.game_name = data.game_name;
@@ -62,10 +59,6 @@ class Challenge {
     this.ViewComponent = game_name_to_view_component[this.game_name];
   }
 
-  send_move(move) {
-    RootStore.socket.challenge_send_move({ cid: this.cid, move: move });
-  }
-
   update_challenge_information(new_chall) {
     this.players = new_chall.players;
     this.status = new_chall.status;
@@ -74,12 +67,11 @@ class Challenge {
     this.game_state.update_game_information(new_chall.state);
   }
 
-  get client_turn() {
-    // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...), -1 if not a player
-    return this.players.findIndex(
-      (player_id) => player_id === RootStore.client_uid
-    );
-  }
+  turn_of_user = (user_id) => {
+    // 0-indexed player turn (ie. 1st player = 0, 2nd player = 1, ...)
+    // -1 if not a player
+    return this.players.findIndex((player_id) => player_id === user_id);
+  };
 }
 
 export { Challenge };

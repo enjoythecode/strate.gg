@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import RootStore from "../Store/RootStore.js";
+import { useRootStore } from "../Store/RootStore";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
@@ -11,27 +11,33 @@ const shuffleArray = function (array) {
   return array;
 };
 
-const ConnectionWidget = observer(() => (
-  <div style={{ position: "absolute", top: "4px", right: "8px" }}>
-    You're {RootStore.socket.connection_status}.
-    <b> {RootStore.socket.active_users}</b> online users!
-  </div>
-));
+const ConnectionWidget = observer(() => {
+  const RootStore = useRootStore();
+  return (
+    <div style={{ position: "absolute", top: "4px", right: "8px" }}>
+      You're {RootStore.socket.connection_status}.
+      <b> {RootStore.socket.active_users}</b> online users!
+    </div>
+  );
+});
 
-const Header = () => (
-  <header>
-    <h1
-      style={{
-        paddingLeft: "20%",
-        fontFamily: "'Courier New', monospace",
-        margin: "0",
-      }}
-    >
-      strate.gg
-    </h1>
-    <ConnectionWidget />
-  </header>
-);
+const Header = () => {
+  const RootStore = useRootStore();
+  return (
+    <header>
+      <h1
+        style={{
+          paddingLeft: "20%",
+          fontFamily: "'Courier New', monospace",
+          margin: "0",
+        }}
+      >
+        strate.gg
+      </h1>
+      <ConnectionWidget />
+    </header>
+  );
+};
 
 const Footer = () => {
   // marquee is an easter egg, not shown in the UI

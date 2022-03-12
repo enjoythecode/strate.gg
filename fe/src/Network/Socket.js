@@ -1,12 +1,11 @@
 import io from "socket.io-client";
-import RootStore from "../Store/RootStore.js";
 import { makeObservable, observable, action } from "mobx";
 
 class Socket {
   active_users = 0;
   connection_status = "offline";
 
-  constructor() {
+  constructor(RootStore) {
     makeObservable(this, {
       active_users: observable,
       set_active_users: action,
@@ -15,6 +14,7 @@ class Socket {
       set_connection_status: action,
     });
     this.io = null;
+    this.RootStore = RootStore;
   }
 
   set_active_users = (new_active_users) => {
@@ -46,7 +46,7 @@ class Socket {
     });
 
     this.io.on("connection-player-id", (data) => {
-      RootStore.set_client_uid(data["uid"]);
+      this.RootStore.set_client_uid(data["uid"]);
     });
 
     this.io.on("connection-info-update", (data) => {
@@ -55,7 +55,7 @@ class Socket {
 
     this.io.on("challenge-update", (data) => {
       if ("result" in data && data.result === "success") {
-        RootStore.update_challenge_information(data.challenge);
+        this.RootStore.update_challenge_information(data.challenge);
       }
     });
   };
@@ -73,7 +73,7 @@ class Socket {
   join_challenge = (cid) => {
     this.io.emit("challenge-join", { cid: cid }, (data) => {
       if ("result" in data && data.result === "success") {
-        RootStore.update_challenge_information(data.challenge);
+        this.RootStore.update_challenge_information(data.challenge);
       }
     });
   };
