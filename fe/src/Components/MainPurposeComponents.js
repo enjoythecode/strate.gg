@@ -1,6 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useRootStore } from "../Store/RootStore";
+import { EnableSoundToggle } from "../Store/Components/EnableSoundToggle";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
@@ -60,6 +61,8 @@ const Footer = () => {
   return (
     <footer>
       <p style={{ paddingLeft: "20%", paddingRight: "20%" }}>
+        <EnableSoundToggle></EnableSoundToggle>
+        <br></br>
         <span>
           A project by <a href="https://enjoythecode.com">Sinan</a> dedicated to
           the play and exploration of abstract strategy board games.

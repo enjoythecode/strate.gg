@@ -10,6 +10,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Custom Content-Security-Policy header that allows unsafe-inline style-src
   and connect-src for relevant ws:// and wss:// headers
 - Some basic tests to FE, including snapshot testing for a ChallengeView with Amazons
+- Sound effect is played on a move.
 
 ### Changed
 

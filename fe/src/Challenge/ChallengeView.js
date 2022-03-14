@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { toJS } from "mobx";
 import React from "react";
 
 import { useRootStore } from "../Store/RootStore.js";
@@ -30,7 +31,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
             handle_move={player_can_move ? move_handler : undefined}
             last_move={
               challenge.moves.length > 0
-                ? challenge.moves[challenge.moves.length - 1]
+                ? toJS(challenge.moves[challenge.moves.length - 1])
                 : undefined
             }
           />

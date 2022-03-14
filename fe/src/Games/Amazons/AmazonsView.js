@@ -1,5 +1,8 @@
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import isDeepEqual from "fast-deep-equal/react";
+import { useRootStore } from "../../Store/RootStore";
+
 import "../grid.css";
 
 const boardCss = (x) => {
@@ -22,6 +25,21 @@ const pieceCss = {
 
 const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
   let allow_move = handle_move !== undefined;
+
+  const last_move_sound_ref = useRef(last_move);
+  const RootStore = useRootStore();
+
+  useEffect(() => {
+    /* play a sound when 1) last_move is not undefined 2) last_move has changed
+      uses isDeepEqual because regular JS object === is value-shallow
+      https://www.benmvp.com/blog/object-array-dependencies-react-useEffect-hook/ */
+    if (last_move !== undefined) {
+      if (!isDeepEqual(last_move_sound_ref.current, last_move)) {
+        last_move_sound_ref.current = last_move;
+        RootStore.sound_bridge.playMoveSoundEffect();
+      }
+    }
+  }, [last_move]);
 
   // the cells that are clicked as part of the current move
   const [selection, setSelection] = useState({

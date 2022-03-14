@@ -210,8 +210,6 @@ def handle_move(cid, move):
     else:
         return {"result": "error", "error": "not your turn"}
 
-    # XXX: moves does not get added. it needs to be moved to the state class either way!
-
     challenge["state"] = game.__repr__()
     challenge["player_won"] = game.check_game_end()
 

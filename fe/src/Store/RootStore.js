@@ -2,6 +2,8 @@ import { makeObservable, observable, action } from "mobx";
 import { Challenge } from "../Challenge/Challenge.js";
 import Socket from "../Network/Socket.js";
 import React from "react";
+import PreferenceStore from "./PreferenceStore.js";
+import { SoundBridge } from "../Sound/SoundBridge";
 
 class _RootStore {
   challenges = observable.map({});
@@ -15,7 +17,8 @@ class _RootStore {
       set_client_uid: action,
       update_challenge_information: action,
     });
-    this.db = "SINAN";
+    this.preference_store = new PreferenceStore();
+    this.sound_bridge = new SoundBridge(this);
   }
 
   set_socket = (sckt) => {
