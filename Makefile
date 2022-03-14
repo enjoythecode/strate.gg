@@ -121,7 +121,7 @@ devup-fbuild: gen-secret
 
 .PHONY: devup-fbuild-nocache
 devup-build-nocache:
-	docker-compose -f ./docker/docker-compose.prod.yml build --no-cache
+	docker-compose -f ./docker/docker-compose.dev.yml build --no-cache
 
 # BUILDING PRODUCTION SERVERS
 # --------
