@@ -1,6 +1,9 @@
 import { makeObservable, observable, action } from "mobx";
 import { Challenge } from "../Challenge/Challenge.js";
 import Socket from "../Network/Socket.js";
+import React from "react";
+import PreferenceStore from "./PreferenceStore.js";
+import { SoundBridge } from "../Sound/SoundBridge";
 
 class _RootStore {
   challenges = observable.map({});
@@ -14,6 +17,8 @@ class _RootStore {
       set_client_uid: action,
       update_challenge_information: action,
     });
+    this.preference_store = new PreferenceStore();
+    this.sound_bridge = new SoundBridge(this);
   }
 
   set_socket = (sckt) => {
@@ -34,20 +39,24 @@ class _RootStore {
     }
     chs.get(cid).update_challenge_information(challenge);
   };
-
-  update_challenge_new_move = (data) => {
-    let cid = data.cid;
-    if (this.challenges.has(cid)) {
-      this.challenges.get(cid).process_new_move(data);
-    }
-  };
 }
 
-// we create all of our stores, socket IO class
-// and export them from this module to make it available to access
-// from every file without using React Contexts
-const RootStore = new _RootStore();
-const socket = new Socket();
-RootStore.set_socket(socket);
+//  Store helpers from https://codingislove.com/setup-mobx-react-context/
+const RootStoreContext = React.createContext();
 
-export default RootStore;
+export const initRootStoreAndSocket = () => {
+  const RootStore = new _RootStore();
+  const socket = new Socket(RootStore);
+  RootStore.set_socket(socket);
+  return RootStore;
+};
+
+export const RootStoreProvider = ({ children, store }) => {
+  return (
+    <RootStoreContext.Provider value={store}>
+      {children}
+    </RootStoreContext.Provider>
+  );
+};
+
+export const useRootStore = () => React.useContext(RootStoreContext);

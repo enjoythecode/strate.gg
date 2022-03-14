@@ -30,7 +30,6 @@ class AmazonsLogic {
   constructor(challenge, config) {
     makeObservable(this, {
       board: observable,
-      lastMove: observable,
       turn: observable,
       setTurn: action,
       update_game_information: action,
@@ -44,7 +43,6 @@ class AmazonsLogic {
 
   turn = null;
   board = null;
-  lastMove = [null, null, null];
 
   // TODO move to AmazonsView
   turn_to_color = [
@@ -123,23 +121,6 @@ class AmazonsLogic {
     this.board = new_data.board;
     this.turn = new_data.turn;
     // XXX: what exactly am I missing here?
-  }
-
-  process_new_move(move) {
-    let from_x = move.from[0];
-    let from_y = move.from[1];
-    let to_x = move.to[0];
-    let to_y = move.to[1];
-    let shoot_x = move.shoot[0];
-    let shoot_y = move.shoot[1];
-
-    this.board[from_x][from_y] = 0;
-    this.board[to_x][to_y] = this.turn + 1;
-    this.board[shoot_x][shoot_y] = 3;
-
-    this.setTurn((this.turn + 1) % 2);
-
-    this.lastMove = [move.from, move.to, move.shoot];
   }
 }
 

@@ -1,5 +1,8 @@
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import isDeepEqual from "fast-deep-equal/react";
+import { useRootStore } from "../../Store/RootStore";
+
 import "../grid.css";
 
 const boardCss = (x) => {
@@ -20,7 +23,24 @@ const pieceCss = {
   height: "10%",
 };
 
-const AmazonsView = observer(({ game_state }) => {
+const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
+  let allow_move = handle_move !== undefined;
+
+  const last_move_sound_ref = useRef(last_move);
+  const RootStore = useRootStore();
+
+  useEffect(() => {
+    /* play a sound when 1) last_move is not undefined 2) last_move has changed
+      uses isDeepEqual because regular JS object === is value-shallow
+      https://www.benmvp.com/blog/object-array-dependencies-react-useEffect-hook/ */
+    if (last_move !== undefined) {
+      if (!isDeepEqual(last_move_sound_ref.current, last_move)) {
+        last_move_sound_ref.current = last_move;
+        RootStore.sound_bridge.playMoveSoundEffect();
+      }
+    }
+  }, [last_move]);
+
   // the cells that are clicked as part of the current move
   const [selection, setSelection] = useState({
     from: null,
@@ -38,51 +58,42 @@ const AmazonsView = observer(({ game_state }) => {
   };
 
   let clickCell = (c) => {
-    // check if it is the players turn before allowing a click
-    // checks for observers because client_turn == -1 if the client is not a player
-    if (
-      game_state.turn === game_state.challenge.client_turn &&
-      game_state.challenge.status === "IN_PROGRESS"
-    ) {
-      switch (currentSelectionStep()) {
-        case "from":
-          if (
-            game_state.board[Number(c[0])][Number(c[1])] ===
-            game_state.turn + 1
-          ) {
-            // when the new value of selection depends on the old value, we use what is called a
-            // *functional update*. Read more at https://reactjs.org/docs/hooks-reference.html#functional-updates
-            setSelection((selection) => {
-              return { ...selection, from: c };
-            });
-          }
-          break;
+    if (allow_move) {
+      let current_selection_step = currentSelectionStep();
 
-        case "to":
-          if (game_state.cell_can_reach(selection["from"], c)) {
-            setSelection((selection) => {
-              return { ...selection, to: c };
-            });
-          } else {
-            setSelection({ from: null, to: null, shoot: null });
-          }
-          break;
-
-        case "shoot":
-          if (
-            game_state.cell_can_reach(selection["to"], c, selection["from"])
-          ) {
-            // we do not set the state within this if-block because we want the selection to be reset right away
-            game_state.challenge.send_move({ ...selection, shoot: c });
-          }
+      if (current_selection_step === "from") {
+        if (
+          game_state.board[Number(c[0])][Number(c[1])] ===
+          game_state.turn + 1
+        ) {
+          // when the new value of selection depends on the old value, we use what is called a
+          // *functional update*. Read more at https://reactjs.org/docs/hooks-reference.html#functional-updates
+          setSelection((selection) => {
+            return { ...selection, from: c };
+          });
+        }
+      } else if (current_selection_step === "to") {
+        if (game_state.cell_can_reach(selection["from"], c)) {
+          setSelection((selection) => {
+            return { ...selection, to: c };
+          });
+        } else {
           setSelection({ from: null, to: null, shoot: null });
-          break;
-
-        default:
-          break;
+        }
+      } else if (current_selection_step === "shoot") {
+        if (game_state.cell_can_reach(selection["to"], c, selection["from"])) {
+          // we do not set the state within this if-block because we want the selection to be reset right away
+          handle_move({ ...selection, shoot: c });
+        }
+        setSelection({ from: null, to: null, shoot: null });
       }
     }
   };
+
+  let last_move_cells =
+    last_move === undefined
+      ? undefined
+      : [last_move["from"], last_move["to"], last_move["shoot"]];
 
   let styleClassesForCellAtCoord = (cell) => {
     let classes = [];
@@ -90,7 +101,7 @@ const AmazonsView = observer(({ game_state }) => {
     let y = Number(cell[1]);
 
     // last move indicator
-    if (game_state.lastMove !== null && game_state.lastMove.includes(cell))
+    if (last_move_cells !== undefined && last_move_cells.includes(cell))
       classes.push("indicatorLastMove");
     if (
       currentSelectionStep() === "to" &&
@@ -105,8 +116,8 @@ const AmazonsView = observer(({ game_state }) => {
     if (currentSelectionStep() === "shoot" && selection["to"] === cell)
       classes.push("indicatorSecondary");
 
+    // if we have any indicators, we will check if this indicator should be inner or outer
     if (classes.length > 0) {
-      // this checks if this cell got an indicator class
       classes.push(
         currentSelectionStep() === "shoot" &&
           [selection["from"], selection["to"]].includes(cell)

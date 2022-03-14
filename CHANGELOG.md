@@ -9,6 +9,21 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Security headers with Flask-Talisman, including HSTS
 - Custom Content-Security-Policy header that allows unsafe-inline style-src
   and connect-src for relevant ws:// and wss:// headers
+- Some basic tests to FE, including snapshot testing for a ChallengeView with Amazons
+- Sound effect is played on a move.
+
+### Changed
+
+- All React Components to be functional.
+- All React Components to get RootStore with useContext() hooks
+
+### Fixed
+
+- Last move indicator regression
+
+### Removed
+
+- Mancala, pending refactoring of FE code to be more stable.
 
 ## [0.6.2] - 2020-03-10
 
