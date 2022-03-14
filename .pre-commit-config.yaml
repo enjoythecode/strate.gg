@@ -24,7 +24,7 @@ repos:
         args: ["--extend-ignore=E203", "--max-line-length=88"]
 
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: v2.7.1
+    rev: v3.0.1
     hooks:
       - id: reorder-python-imports
         args: ["--application-directories", "be"]
@@ -37,7 +37,7 @@ repos:
 
     # Javascript linting
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.9.0
+    rev: v8.11.0
     hooks:
       - id: eslint
         files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx
