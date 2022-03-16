@@ -1,28 +1,72 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useRootStore } from "../Store/RootStore";
-import Typography from "@mui/material/Typography";
 
-const ConnectionWidget = observer(() => {
-  const RootStore = useRootStore();
+import { CONNECTION_STATUS_ENUM } from "../Network/Socket";
+
+import Typography from "@mui/material/Typography";
+import Chip from "@mui/material/Chip";
+
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Grid from "@mui/material/Grid";
+import { Container } from "@mui/material";
+
+function Header() {
   return (
-    <div>
-      You're {RootStore.socket.connection_status}.
-      <b> {RootStore.socket.active_users}</b> online users!
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" color="transparent" sx={{ marginBottom: 4 }}>
+        <Toolbar variant="dense">
+          <Container fixed>
+            <Grid container justifyContent="space-between" alignItems="center">
+              <Grid item>
+                <Typography variant="h1" color="inherit" sx={{ fontSize: 36 }}>
+                  strate.gg
+                </Typography>
+              </Grid>
+              <Grid item>
+                <ConnectionChip />
+              </Grid>
+            </Grid>
+          </Container>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  );
+}
+
+const ConnectionChip = observer(() => {
+  const RootStore = useRootStore();
+
+  let chip_label;
+  let chip_color;
+
+  switch (RootStore.socket.connection_status) {
+    case CONNECTION_STATUS_ENUM.ONLINE:
+      chip_label = "Online";
+      chip_color = "success";
+      break;
+
+    case CONNECTION_STATUS_ENUM.CONNECTING:
+      chip_label = "Connecting";
+      chip_color = "secondary";
+      break;
+
+    case CONNECTION_STATUS_ENUM.OFFLINE:
+      chip_label = "Offline";
+      chip_color = "error";
+      break;
+  }
+
+  return (
+    <Chip
+      label={chip_label}
+      color={chip_color}
+      variant="outlined"
+      size="small"
+    />
   );
 });
-
-const Header = () => {
-  const RootStore = useRootStore();
-  return (
-    <header>
-      <Typography variant="h1" sx={{ fontSize: 36 }}>
-        strate.gg
-      </Typography>
-      <ConnectionWidget />
-    </header>
-  );
-};
 
 export default Header;

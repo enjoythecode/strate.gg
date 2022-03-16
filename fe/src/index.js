@@ -18,9 +18,10 @@ RootStore.socket.connect();
 ReactDOM.render(
   <React.StrictMode>
     <CssBaseline />
-    <Container fixed sx={{ bgcolor: "background.paper" }}>
-      <RootStoreProvider store={RootStore}>
-        <Header />
+
+    <RootStoreProvider store={RootStore}>
+      <Header />
+      <Container fixed sx={{ bgcolor: "background.paper" }}>
         <Router>
           <Switch>
             <Route path="/play/:gameName">
@@ -32,8 +33,8 @@ ReactDOM.render(
           </Switch>
         </Router>
         <Footer />
-      </RootStoreProvider>
-    </Container>
+      </Container>
+    </RootStoreProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
