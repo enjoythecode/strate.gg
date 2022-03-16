@@ -48,23 +48,11 @@ class AmazonsLogic {
   turn_to_color = [
     {
       name: "White",
-      badge: (
-        <img
-          style={{ width: "100%", height: "100%" }}
-          src="/images/wqueen.png"
-          alt="White Queen Piece"
-        />
-      ),
+      badge: <img src="/images/wqueen.png" alt="White Queen Piece" />,
     },
     {
       name: "Black",
-      badge: (
-        <img
-          style={{ width: "100%", height: "100%" }}
-          src="/images/bqueen.png"
-          alt="Black Queen Piece"
-        />
-      ),
+      badge: <img src="/images/bqueen.png" alt="Black Queen Piece" />,
     },
   ];
 

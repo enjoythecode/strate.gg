@@ -48,7 +48,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
           <></>
         )}
         <div className="challenge-dashboard">
-          <div style={{ width: "100%" }}>
+          <div>
             <PlayerTagView
               displayName={
                 challenge.players.length > 1 ? challenge.players[1] : null

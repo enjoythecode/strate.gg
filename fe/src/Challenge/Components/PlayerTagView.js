@@ -18,18 +18,8 @@ export const PlayerTagView = (props) => {
   }
 
   return (
-    <div
-      className={divClasses.join(" ")}
-      style={{
-        display: "flex",
-        alignContent: "center",
-        textAlign: "center",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ maxWidth: "30px", maxHeight: "30px", marginRight: "5px" }}>
-        {props.colorBadge}
-      </div>
+    <div className={divClasses.join(" ")}>
+      <div>{props.colorBadge}</div>
       <span className={spanClasses.join(" ")}>{display}</span>
     </div>
   );

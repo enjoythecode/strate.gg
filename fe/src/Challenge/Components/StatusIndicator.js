@@ -42,9 +42,5 @@ export const StatusIndicator = (props) => {
     }
   }
 
-  return (
-    <div style={{ textAlign: "center", display: "block", margin: "1em" }}>
-      {els}
-    </div>
-  );
+  return <div>{els}</div>;
 };

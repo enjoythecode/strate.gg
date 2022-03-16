@@ -8,7 +8,6 @@ import {
 } from "./Store/RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, Footer } from "./Components/MainPurposeComponents";
-import "./index.css";
 
 const RootStore = initRootStoreAndSocket();
 RootStore.socket.connect();

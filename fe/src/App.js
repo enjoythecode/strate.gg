@@ -6,7 +6,7 @@ const App = observer(() => {
   const RootStore = useRootStore();
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div>
         <div id="challenge-create-box-container">
           <div
             id="challenge-create-box-amazons"

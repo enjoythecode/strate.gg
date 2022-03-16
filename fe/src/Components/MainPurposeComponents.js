@@ -15,7 +15,7 @@ const shuffleArray = function (array) {
 const ConnectionWidget = observer(() => {
   const RootStore = useRootStore();
   return (
-    <div style={{ position: "absolute", top: "4px", right: "8px" }}>
+    <div>
       You're {RootStore.socket.connection_status}.
       <b> {RootStore.socket.active_users}</b> online users!
     </div>
@@ -26,15 +26,7 @@ const Header = () => {
   const RootStore = useRootStore();
   return (
     <header>
-      <h1
-        style={{
-          paddingLeft: "20%",
-          fontFamily: "'Courier New', monospace",
-          margin: "0",
-        }}
-      >
-        strate.gg
-      </h1>
+      <h1>strate.gg</h1>
       <ConnectionWidget />
     </header>
   );
@@ -51,16 +43,12 @@ const Footer = () => {
   let marqueeArrShuffled = shuffleArray(marqueeArr);
   let marqueeTags = [];
   for (let i = 0; i < marqueeArr.length; i++) {
-    marqueeTags.push(
-      <span style={{ paddingRight: "10em" }} key={i}>
-        {marqueeArrShuffled[i]}
-      </span>
-    );
+    marqueeTags.push(<span key={i}>{marqueeArrShuffled[i]}</span>);
   }
 
   return (
     <footer>
-      <p style={{ paddingLeft: "20%", paddingRight: "20%" }}>
+      <p>
         <EnableSoundToggle></EnableSoundToggle>
         <br></br>
         <span>

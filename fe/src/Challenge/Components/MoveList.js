@@ -5,21 +5,8 @@ export const MoveList = (props) => {
     const move = props.moves[index];
 
     rendered_moves.push(
-      <div
-        style={{
-          display: "flex",
-          alignContent: "center",
-          textAlign: "center",
-          alignItems: "center",
-        }}
-        key={index}
-      >
-        {index + 1}.
-        <div
-          style={{ maxWidth: "22px", maxHeight: "22px", marginRight: "4px" }}
-        >
-          {/*move.color.badge*/}
-        </div>
+      <div key={index}>
+        {index + 1}.<div>{/*move.color.badge*/}</div>
         <span>{move}</span>
       </div>
     );
@@ -29,14 +16,16 @@ export const MoveList = (props) => {
   if (props.moves.length !== 0) {
     return (
       <div
-        style={{
-          maxHeight: "11em",
+        style={
+          {
+            /*maxHeight: "11em",
           overflow: "auto",
           display: "flex",
           flexDirection: "column-reverse",
           fontFamily: "monospace",
-          padding: "1em",
-        }}
+          padding: "1em",*/
+          }
+        }
       >
         <div>{rendered_moves}</div>
       </div>
