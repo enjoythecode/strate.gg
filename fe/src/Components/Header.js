@@ -4,14 +4,13 @@ import { useRootStore } from "../Store/RootStore";
 
 import { CONNECTION_STATUS_ENUM } from "../Network/Socket";
 
-import Typography from "@mui/material/Typography";
-import Chip from "@mui/material/Chip";
-
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid";
-import { Container } from "@mui/material";
+import Chip from "@mui/material/Chip";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 
 function Header() {
   return (
