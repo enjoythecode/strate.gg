@@ -7,7 +7,8 @@ import {
   RootStoreProvider,
 } from "./Store/RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Header, Footer } from "./Components/MainPurposeComponents";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
