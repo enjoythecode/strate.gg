@@ -2,6 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useRootStore } from "../Store/RootStore";
 import { EnableSoundToggle } from "../Store/Components/EnableSoundToggle";
+import Typography from "@mui/material/Typography";
 
 // Modified very slightly from https://stackoverflow.com/a/12646864
 const shuffleArray = function (array) {
@@ -26,7 +27,9 @@ const Header = () => {
   const RootStore = useRootStore();
   return (
     <header>
-      <h1>strate.gg</h1>
+      <Typography variant="h1" sx={{ fontSize: 36 }}>
+        strate.gg
+      </Typography>
       <ConnectionWidget />
     </header>
   );

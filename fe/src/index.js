@@ -8,28 +8,31 @@ import {
 } from "./Store/RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Header, Footer } from "./Components/MainPurposeComponents";
+import CssBaseline from "@mui/material/CssBaseline";
+import Container from "@mui/material/Container";
 
 const RootStore = initRootStoreAndSocket();
 RootStore.socket.connect();
 
 ReactDOM.render(
   <React.StrictMode>
-    <RootStoreProvider store={RootStore}>
-      <Header />
-
-      <Router>
-        <Switch>
-          <Route path="/play/:gameName">
-            <ChallengePlayPage />
-          </Route>
-          <Route path="/">
-            <App />
-          </Route>
-        </Switch>
-      </Router>
-
-      <Footer />
-    </RootStoreProvider>
+    <CssBaseline />
+    <Container fixed sx={{ bgcolor: "background.paper" }}>
+      <RootStoreProvider store={RootStore}>
+        <Header />
+        <Router>
+          <Switch>
+            <Route path="/play/:gameName">
+              <ChallengePlayPage />
+            </Route>
+            <Route path="/">
+              <App />
+            </Route>
+          </Switch>
+        </Router>
+        <Footer />
+      </RootStoreProvider>
+    </Container>
   </React.StrictMode>,
   document.getElementById("root")
 );

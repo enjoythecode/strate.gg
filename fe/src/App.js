@@ -1,40 +1,34 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { useRootStore } from "./Store/RootStore";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 
 const App = observer(() => {
   const RootStore = useRootStore();
   return (
-    <div>
-      <div>
-        <div id="challenge-create-box-container">
-          <div
-            id="challenge-create-box-amazons"
-            className="challenge-create-box"
+    <Grid container>
+      <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+        <Paper elevation={2} sx={{ padding: 2 }}>
+          <Typography variant="h2">Amazons</Typography>
+          <br></br>
+          <Button
+            variant="outlined"
+            fullWidth={false}
+            onClick={() => {
+              RootStore.socket.create_new_challenge({
+                game_name: "amazons",
+                game_config: { size: 10, variation: 0 },
+              });
+            }}
           >
-            <h2>Amazons</h2>
-            <button
-              onClick={() => {
-                RootStore.socket.create_new_challenge({
-                  game_name: "amazons",
-                  game_config: { size: 10, variation: 0 },
-                });
-              }}
-            >
-              Create Challenge
-            </button>
-            <br></br>
-          </div>
-
-          <div
-            id="challenge-create-box-moreToCome"
-            className="challenge-create-box"
-          >
-            <h2>More games soon...</h2>
-          </div>
-        </div>
-      </div>
-    </div>
+            Create Challenge
+          </Button>
+        </Paper>
+      </Grid>
+    </Grid>
   );
 });
 
