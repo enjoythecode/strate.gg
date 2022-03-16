@@ -17,9 +17,16 @@ socketio = sckt.SocketIO()
 CSP_POLICY = {
     "default-src": [
         "'self'",
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
     ],
     "connect-src": ["'self'", "ws://localhost:3000", "wss://strate.gg:3000"],
-    "style-src": ["'self'", "'unsafe-inline'"],
+    "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+    ],
 }
 talisman = Talisman()
 sess = Session()
