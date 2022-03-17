@@ -12,8 +12,6 @@ const boardCss = (x) => {
     gridTemplateColumns: "repeat(" + x + ", 1fr)",
     gridTemplateRows: "repeat(" + x + ", 1fr)",
     position: "relative",
-    width: "70vmin",
-    height: "70vmin",
   };
 };
 
