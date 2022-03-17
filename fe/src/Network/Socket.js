@@ -69,9 +69,8 @@ class Socket {
   create_new_challenge = (payload) => {
     this.io.emit("challenge-create", payload, (data) => {
       if (data.result && data.result === "success") {
-        window.location.replace(
-          "/play/" + data.challenge.game_name + "?cid=" + data.challenge.cid
-        );
+        window.location.href =
+          "/play/" + data.challenge.game_name + "?cid=" + data.challenge.cid;
       }
     });
   };

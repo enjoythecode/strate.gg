@@ -23,6 +23,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 ### Fixed
 
 - Last move indicator regression
+- Bug where creating a new challenge would redirect but not add the previous page to the browser history
 
 ### Removed
 
