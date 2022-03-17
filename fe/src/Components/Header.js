@@ -16,8 +16,8 @@ import Typography from "@mui/material/Typography";
 
 function Header() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" sx={{ marginBottom: 4 }}>
+    <Box sx={{ marginBottom: 4 }}>
+      <AppBar position="static" color="transparent">
         <Toolbar variant="dense">
           <Container fixed>
             <Grid container justifyContent="space-between" alignItems="center">
