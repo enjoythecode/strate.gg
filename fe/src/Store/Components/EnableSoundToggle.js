@@ -18,7 +18,11 @@ export default observer(function EnableSoundToggle() {
   }
   return (
     <IconButton onClick={handleSoundToggleClick}>
-      {preference_store.sound_enabled ? <VolumeUpIcon /> : <VolumeOffIcon />}
+      {preference_store.sound_enabled ? (
+        <VolumeUpIcon color="success" />
+      ) : (
+        <VolumeOffIcon />
+      )}
     </IconButton>
   );
 });
