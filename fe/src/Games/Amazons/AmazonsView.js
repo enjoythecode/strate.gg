@@ -12,8 +12,27 @@ const amazonsBoardDynamicGridRules = (x) => {
   };
 };
 
+const preload_images = () => {
+  let preloadedImages = [];
+  const imagesInAmazons = [
+    "/images/wqueen.png",
+    "/images/bqueen.png",
+    "/images/fire.png",
+  ];
+  imagesInAmazons.forEach((imageSrc) => {
+    let image = new Image();
+    image.src = imageSrc;
+    preloadedImages.push(image);
+  });
+};
+
 const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
   let allow_move = handle_move !== undefined;
+
+  // on first load, pre-load these images
+  useEffect(() => {
+    preload_images();
+  }, []);
 
   const last_move_sound_ref = useRef(last_move);
   const RootStore = useRootStore();
