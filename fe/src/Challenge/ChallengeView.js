@@ -1,11 +1,11 @@
-import { observer } from "mobx-react";
-import { toJS } from "mobx";
 import React from "react";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
+
 import { useRootStore } from "../Store/RootStore.js";
+import ChallengeDashboard from "./Components/ChallengeDashboard";
 
 import Grid from "@mui/material/Grid";
-
-import ChallengeDashboard from "./Components/ChallengeDashboard";
 
 const ChallengeView = observer(({ challenge, move_handler }) => {
   const RootStore = useRootStore();
@@ -17,8 +17,8 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
 
   return (
     <div data-testid="challenge">
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={7} lg={6} xl={6} sx={{ width: "100%" }}>
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
+        <Grid item xs={12} md={7}>
           <challenge.ViewComponent
             game_state={challenge.game_state}
             handle_move={player_can_move ? move_handler : undefined}
@@ -29,7 +29,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
+        <Grid item xs={12} md={5}>
           <ChallengeDashboard challenge={challenge} />
         </Grid>
       </Grid>
