@@ -17,6 +17,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
   let join_as_player2_button = (
     <Button
       variant="contained"
+      disabled={challenge.players.includes(RootStore.client_uid)}
       onClick={() => {
         RootStore.socket.join_challenge(challenge.cid);
       }}
