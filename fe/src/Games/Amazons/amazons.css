@@ -1,3 +1,15 @@
+.amazonsBoard {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  position: relative;
+}
+
+.amazonsPiece {
+  position: absolute;
+  width: 10%;
+  height: 10%;
+}
+
 .cellDark {
   background-color: #946f51;
 }

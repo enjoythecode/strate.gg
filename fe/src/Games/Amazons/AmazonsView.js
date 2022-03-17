@@ -3,22 +3,13 @@ import { useEffect, useState, useRef } from "react";
 import isDeepEqual from "fast-deep-equal/react";
 import { useRootStore } from "../../Store/RootStore";
 
-import "../grid.css";
+import "./amazons.css";
 
-const boardCss = (x) => {
+const amazonsBoardDynamicGridRules = (x) => {
   return {
-    aspectRatio: "1 / 1",
-    display: "grid",
     gridTemplateColumns: "repeat(" + x + ", 1fr)",
     gridTemplateRows: "repeat(" + x + ", 1fr)",
-    position: "relative",
   };
-};
-
-const pieceCss = {
-  position: "absolute",
-  width: "10%",
-  height: "10%",
 };
 
 const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
@@ -155,7 +146,8 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
           <img
             src={img_src}
             alt={img_alt}
-            style={{ ...positionCss, ...pieceCss }}
+            className={"amazonsPiece"}
+            style={{ ...positionCss }}
             key={pieces.length}
             onClick={() => {
               clickCell(x.toString() + y.toString());
@@ -185,7 +177,10 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
     }
 
     return (
-      <div style={boardCss(game_state.board.length)}>
+      <div
+        className={"amazonsBoard"}
+        style={amazonsBoardDynamicGridRules(game_state.board.length)}
+      >
         {boardCells}
         {pieces}
       </div>
