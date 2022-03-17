@@ -6,13 +6,14 @@ exports[`ChallengeView renders challenge with at least one move and the last mov
     data-testid="challenge"
   >
     <div
-      class="challenge-wrapper"
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
     >
       <div
-        class="challenge-board"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-7 MuiGrid-grid-lg-6 MuiGrid-grid-xl-6 css-1udwdj7-MuiGrid-root"
       >
         <div
-          style="display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); position: relative;"
+          class="amazonsBoard"
+          style="grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);"
         >
           <div
             class="cellDark"
@@ -316,114 +317,165 @@ exports[`ChallengeView renders challenge with at least one move and the last mov
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 30%; top: 0%; position: absolute; width: 10%; height: 10%;"
+            style="left: 30%; top: 0%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 60%; top: 0%; position: absolute; width: 10%; height: 10%;"
+            style="left: 60%; top: 0%;"
           />
           <img
             alt="Burnt Off Square"
+            class="amazonsPiece"
             src="/images/fire.png"
-            style="left: 30%; top: 10%; position: absolute; width: 10%; height: 10%;"
+            style="left: 30%; top: 10%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 60%; top: 10%; position: absolute; width: 10%; height: 10%;"
+            style="left: 60%; top: 10%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 0%; top: 30%; position: absolute; width: 10%; height: 10%;"
+            style="left: 0%; top: 30%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 90%; top: 30%; position: absolute; width: 10%; height: 10%;"
+            style="left: 90%; top: 30%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 0%; top: 60%; position: absolute; width: 10%; height: 10%;"
+            style="left: 0%; top: 60%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 90%; top: 60%; position: absolute; width: 10%; height: 10%;"
+            style="left: 90%; top: 60%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 30%; top: 90%; position: absolute; width: 10%; height: 10%;"
+            style="left: 30%; top: 90%;"
           />
         </div>
       </div>
       <div
-        class="challenge-dashboard"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-5 MuiGrid-grid-lg-4 MuiGrid-grid-xl-3 css-b2n9wa-MuiGrid-root"
       >
         <div
-          style="width: 100%;"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
         >
           <div
-            class="challenge-dashboard-player challenge-dashboard-player-hasTurn"
-            style="display: flex; align-content: center; text-align: center; align-items: center;"
+            class="MuiBox-root css-0"
           >
-            <div
-              style="max-width: 30px; max-height: 30px; margin-right: 5px;"
-            >
-              <img
-                alt="Black Queen Piece"
-                src="/images/bqueen.png"
-                style="width: 100%; height: 100%;"
-              />
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Black Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/bqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #zochGd8
+                    </p>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <span
-              class="player-tag"
-            >
-              Guest #zochGd8
-            </span>
           </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
           <div
             style="max-height: 11em; overflow: auto; display: flex; flex-direction: column-reverse; font-family: monospace; padding: 1em;"
           >
-            <div>
-              <div
-                style="display: flex; align-content: center; text-align: center; align-items: center;"
-              >
-                1.
-                <div
-                  style="max-width: 22px; max-height: 22px; margin-right: 4px;"
-                />
-                <span>
-                  G10-G2/D2
-                </span>
-              </div>
-            </div>
+            <ul
+              style="list-style: none;"
+            >
+              <li>
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-an8rnp-MuiTypography-root"
+                >
+                  1. G10-G2/D2
+                </p>
+              </li>
+            </ul>
           </div>
           <div
-            style="text-align: center; display: block; margin: 1em;"
+            class="MuiBox-root css-xi606m"
+          >
+            <em />
+            <br />
+            <em />
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
           />
           <div
-            class="challenge-dashboard-player"
-            style="display: flex; align-content: center; text-align: center; align-items: center;"
+            class="MuiBox-root css-0"
           >
-            <div
-              style="max-width: 30px; max-height: 30px; margin-right: 5px;"
-            >
-              <img
-                alt="White Queen Piece"
-                src="/images/wqueen.png"
-                style="width: 100%; height: 100%;"
-              />
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="White Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/wqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #T6A8IVn
+                    </p>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <span
-              class="player-tag"
-            >
-              Guest #T6A8IVn
-            </span>
           </div>
         </div>
       </div>
@@ -438,13 +490,14 @@ exports[`ChallengeView renders challenge with challenge data 1`] = `
     data-testid="challenge"
   >
     <div
-      class="challenge-wrapper"
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
     >
       <div
-        class="challenge-board"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-7 MuiGrid-grid-lg-6 MuiGrid-grid-xl-6 css-1udwdj7-MuiGrid-root"
       >
         <div
-          style="display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr); position: relative;"
+          class="amazonsBoard"
+          style="grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);"
         >
           <div
             class="cellDark"
@@ -748,99 +801,158 @@ exports[`ChallengeView renders challenge with challenge data 1`] = `
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 30%; top: 0%; position: absolute; width: 10%; height: 10%;"
+            style="left: 30%; top: 0%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 60%; top: 0%; position: absolute; width: 10%; height: 10%;"
+            style="left: 60%; top: 0%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 0%; top: 30%; position: absolute; width: 10%; height: 10%;"
+            style="left: 0%; top: 30%;"
           />
           <img
             alt="Black Queen"
+            class="amazonsPiece"
             src="/images/bqueen.png"
-            style="left: 90%; top: 30%; position: absolute; width: 10%; height: 10%;"
+            style="left: 90%; top: 30%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 0%; top: 60%; position: absolute; width: 10%; height: 10%;"
+            style="left: 0%; top: 60%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 90%; top: 60%; position: absolute; width: 10%; height: 10%;"
+            style="left: 90%; top: 60%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 30%; top: 90%; position: absolute; width: 10%; height: 10%;"
+            style="left: 30%; top: 90%;"
           />
           <img
             alt="White Queen"
+            class="amazonsPiece"
             src="/images/wqueen.png"
-            style="left: 60%; top: 90%; position: absolute; width: 10%; height: 10%;"
+            style="left: 60%; top: 90%;"
           />
         </div>
       </div>
-      <button>
-        Join!
-      </button>
       <div
-        class="challenge-dashboard"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-5 MuiGrid-grid-lg-4 MuiGrid-grid-xl-3 css-b2n9wa-MuiGrid-root"
       >
         <div
-          style="width: 100%;"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
         >
           <div
-            class="challenge-dashboard-player"
-            style="display: flex; align-content: center; text-align: center; align-items: center;"
+            class="MuiBox-root css-0"
           >
-            <div
-              style="max-width: 30px; max-height: 30px; margin-right: 5px;"
-            >
-              <img
-                alt="Black Queen Piece"
-                src="/images/bqueen.png"
-                style="width: 100%; height: 100%;"
-              />
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Black Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/bqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <button
+                      class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-sghohy-MuiButtonBase-root-MuiButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      Join as Player 2
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <span
-              class="player-tag"
-            >
-              Waiting for opponent...
-            </span>
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
+          <div
+            style="max-height: 11em; overflow: auto; display: flex; flex-direction: column-reverse; font-family: monospace; padding: 1em;"
+          >
+            <ul
+              style="list-style: none;"
+            />
           </div>
           <div
-            style="text-align: center; display: block; margin: 1em;"
+            class="MuiBox-root css-xi606m"
           >
             <em>
               Waiting for players to join...
             </em>
+            <br />
+            <em />
           </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
           <div
-            class="challenge-dashboard-player challenge-dashboard-player-hasTurn"
-            style="display: flex; align-content: center; text-align: center; align-items: center;"
+            class="MuiBox-root css-0"
           >
-            <div
-              style="max-width: 30px; max-height: 30px; margin-right: 5px;"
-            >
-              <img
-                alt="White Queen Piece"
-                src="/images/wqueen.png"
-                style="width: 100%; height: 100%;"
-              />
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="White Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/wqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #T6A8IVn
+                    </p>
+                  </div>
+                </li>
+              </ul>
             </div>
-            <span
-              class="player-tag"
-            >
-              Guest #T6A8IVn
-            </span>
           </div>
         </div>
       </div>

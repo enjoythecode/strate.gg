@@ -37,13 +37,6 @@ const renderChallenge = (challenge, RootStore = null) => {
 };
 
 describe("ChallengeView", () => {
-  it("renders text when it does not have challenge data", () => {
-    render(<ChallengeView></ChallengeView>);
-    let chall_view = screen.getByTestId("challenge");
-
-    expect(chall_view.textContent).toBe("Loading the game!");
-  });
-
   it("renders challenge with challenge data", () => {
     let chall_view = renderChallenge(createFreshAmazonsChallenge());
     expect(chall_view).toMatchSnapshot();

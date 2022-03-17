@@ -8,23 +8,20 @@ export const StatusIndicator = (props) => {
     OVER_DISCONNECT: "Game over due to disconnect.",
     OVER_TIME: "Game over due to time out.",
   };
-  let challengeStatusElement = <em>{statusCodeToText[props.status]}</em>;
+  let challengeStatusElement = statusCodeToText[props.status];
 
   const playerWonCodeToText = {
     0: "White wins. 1 - 0",
     1: "Black wins. 0 - 1",
     "-2": "Draw. ½ - ½",
   };
-  let playerWonElement = <em>{playerWonCodeToText[props.end.toString()]}</em>;
-  let renderDivider = !(
-    undefined in [challengeStatusElement, playerWonElement]
-  );
+  let playerWonElement = playerWonCodeToText[props.end.toString()];
+
   return (
     <Box sx={{ textAlign: "center" }}>
-      {renderDivider ? <Divider>Status</Divider> : ""}
-      {challengeStatusElement}
+      <em>{challengeStatusElement}</em>
       <br />
-      {playerWonElement}
+      <em>{playerWonElement}</em>
     </Box>
   );
 };

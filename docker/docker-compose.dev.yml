@@ -15,6 +15,7 @@ services:
       dockerfile: ./docker/dev.fe.Dockerfile
     volumes:
       - ../fe/src:/app/src
+      - ../fe/public:/app/public
 
     stdin_open: true
 

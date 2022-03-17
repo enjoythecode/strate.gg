@@ -18,7 +18,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
   return (
     <div data-testid="challenge">
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={8} lg={6} xl={6} sx={{ width: "100%" }}>
+        <Grid item xs={12} sm={12} md={7} lg={6} xl={6} sx={{ width: "100%" }}>
           <challenge.ViewComponent
             game_state={challenge.game_state}
             handle_move={player_can_move ? move_handler : undefined}
@@ -29,7 +29,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={4} xl={3}>
+        <Grid item xs={12} sm={12} md={5} lg={4} xl={3}>
           <ChallengeDashboard challenge={challenge} />
         </Grid>
       </Grid>
