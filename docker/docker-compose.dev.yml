@@ -14,8 +14,7 @@ services:
       context: ..
       dockerfile: ./docker/dev.fe.Dockerfile
     volumes:
-      - /app/node_modules
-      - ../fe:/app
+      - ../fe/src:/app/src
 
     stdin_open: true
 
