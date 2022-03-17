@@ -6,10 +6,10 @@ exports[`ChallengeView renders challenge with at least one move and the last mov
     data-testid="challenge"
   >
     <div
-      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-6s1xft-MuiGrid-root"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-7 MuiGrid-grid-lg-6 MuiGrid-grid-xl-6 css-1udwdj7-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-7 css-1a4ufwv-MuiGrid-root"
       >
         <div
           class="amazonsBoard"
@@ -372,7 +372,7 @@ exports[`ChallengeView renders challenge with at least one move and the last mov
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-5 MuiGrid-grid-lg-4 MuiGrid-grid-xl-3 css-b2n9wa-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-5 css-urj5pv-MuiGrid-root"
       >
         <div
           class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
@@ -382,7 +382,7 @@ exports[`ChallengeView renders challenge with at least one move and the last mov
           >
             <div>
               <ul
-                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+                class="MuiList-root MuiList-padding MuiList-dense css-190n62h-MuiList-root"
               >
                 <li
                   class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
@@ -490,10 +490,10 @@ exports[`ChallengeView renders challenge with challenge data 1`] = `
     data-testid="challenge"
   >
     <div
-      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-6s1xft-MuiGrid-root"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-7 MuiGrid-grid-lg-6 MuiGrid-grid-xl-6 css-1udwdj7-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-7 css-1a4ufwv-MuiGrid-root"
       >
         <div
           class="amazonsBoard"
@@ -850,7 +850,7 @@ exports[`ChallengeView renders challenge with challenge data 1`] = `
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-5 MuiGrid-grid-lg-4 MuiGrid-grid-xl-3 css-b2n9wa-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-5 css-urj5pv-MuiGrid-root"
       >
         <div
           class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
@@ -886,7 +886,7 @@ exports[`ChallengeView renders challenge with challenge data 1`] = `
                       tabindex="0"
                       type="button"
                     >
-                      Join as Player 2
+                      Join game as Black
                       <span
                         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                       />

@@ -11,51 +11,52 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 
-export default observer(function ChallengeDashboard({ challenge }) {
+/* player is 0-indexed turn. */
+const ChallengeDashboardPlayerComponent = observer(({ challenge, player }) => {
   const RootStore = useRootStore();
-
-  let join_as_player2_button = (
-    <Button
-      variant="contained"
-      disabled={challenge.players.includes(RootStore.client_uid)}
-      onClick={() => {
-        RootStore.socket.join_challenge(challenge.cid);
-      }}
-    >
-      Join game as {challenge.game_state.turn_to_identity[1].name}
-    </Button>
+  return (
+    <Box>
+      <ChallengeDashboardPlayerTag
+        isTurn={challenge.game_state.turn === player && challenge.is_playing}
+        colorBadge={challenge.game_state.turn_to_identity[player].badge}
+      >
+        {challenge.players.length < player + 1 ? (
+          <Button
+            variant="contained"
+            disabled={challenge.players.includes(RootStore.client_uid)}
+            onClick={() => {
+              RootStore.socket.join_challenge(challenge.cid);
+            }}
+          >
+            Join game as {challenge.game_state.turn_to_identity[player].name}
+          </Button>
+        ) : (
+          <UserNametag userId={challenge.players[player]} />
+        )}
+      </ChallengeDashboardPlayerTag>
+    </Box>
   );
+});
+
+const DividerWithMargin = () => (
+  <Divider sx={{ marginTop: 1, marginBottom: 1 }}></Divider>
+);
+
+export default observer(function ChallengeDashboard({ challenge }) {
   return (
     <Paper sx={{ padding: 2 }}>
-      <Box>
-        <ChallengeDashboardPlayerTag
-          isTurn={challenge.game_state.turn === 1 && challenge.is_playing}
-          colorBadge={challenge.game_state.turn_to_identity[1].badge}
-        >
-          {challenge.players.length < 2 ? (
-            join_as_player2_button
-          ) : (
-            <UserNametag userId={challenge.players[1]} />
-          )}
-        </ChallengeDashboardPlayerTag>
-      </Box>
-      <Divider sx={{ marginTop: 1, marginBottom: 1 }}></Divider>
+      <ChallengeDashboardPlayerComponent challenge={challenge} player={1} />
+      <DividerWithMargin />
+
       <MoveList
         moves={challenge.moves.map(
           (move) => AmazonsLogic.format_move_for_human(move) /* XXX */
         )}
       />
-
       <StatusIndicator status={challenge.status} end={challenge.game_end} />
-      <Divider sx={{ marginTop: 1, marginBottom: 1 }}></Divider>
-      <Box>
-        <ChallengeDashboardPlayerTag
-          isTurn={challenge.game_state.turn === 0 && challenge.is_playing}
-          colorBadge={challenge.game_state.turn_to_identity[0].badge}
-        >
-          <UserNametag userId={challenge.players[0]} />
-        </ChallengeDashboardPlayerTag>
-      </Box>
+
+      <DividerWithMargin />
+      <ChallengeDashboardPlayerComponent challenge={challenge} player={0} />
     </Paper>
   );
 });
