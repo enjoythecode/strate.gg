@@ -20,9 +20,14 @@ const ChallengePlayPage = observer(() => {
     };
   }, [cid]);
 
+  const challenge = RootStore.challenges.get(cid);
+  if (challenge == null) {
+    return <span>Loading the game!</span>;
+  }
+
   return (
     <ChallengeView
-      challenge={RootStore.challenges.get(cid)}
+      challenge={challenge}
       move_handler={(move) =>
         RootStore.socket.challenge_send_move({ cid: cid, move: move })
       }
