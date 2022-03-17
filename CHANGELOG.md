@@ -11,11 +11,14 @@ This file lists all changes to this project, grouped by versions that follow [Se
   and connect-src for relevant ws:// and wss:// headers
 - Some basic tests to FE, including snapshot testing for a ChallengeView with Amazons
 - Sound effect is played on a move.
+- Setting to enable/disable sound.
+  - Plays a sound when sound is toggled ON but not OFF.
 
 ### Changed
 
 - All React Components to be functional.
 - All React Components to get RootStore with useContext() hooks
+- Re-wrote UI with React MUI, moving away from my homegrown CSS styles.
 
 ### Fixed
 

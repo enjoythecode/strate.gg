@@ -3,13 +3,22 @@ import { useRootStore } from "../RootStore";
 import IconButton from "@mui/material/IconButton";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import { useEffect } from "react";
 
 export default observer(function EnableSoundToggle() {
-  const preference_store = useRootStore().preference_store;
-  let sound_is_enabled = preference_store.sound_enabled;
+  const RootStore = useRootStore();
+  const preference_store = RootStore.preference_store;
+  const SoundBridge = RootStore.sound_bridge;
+
+  function handleSoundToggleClick() {
+    preference_store.toggle_sound_enabled();
+    if (preference_store.sound_enabled) {
+      SoundBridge.playMoveSoundEffect();
+    }
+  }
   return (
-    <IconButton onClick={preference_store.toggle_sound_enabled}>
-      {sound_is_enabled ? <VolumeUpIcon /> : <VolumeOffIcon />}
+    <IconButton onClick={handleSoundToggleClick}>
+      {preference_store.sound_enabled ? <VolumeUpIcon /> : <VolumeOffIcon />}
     </IconButton>
   );
 });
