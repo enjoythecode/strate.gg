@@ -1,61 +1,40 @@
-import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic.js";
-import { observer } from "mobx-react";
-import RootStore from "../Store/RootStore.js";
 import React from "react";
-import { PlayerTagView, MoveList, StatusIndicator } from "./Challenge";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
 
-const ChallengeView = observer(({ challenge }) => (
-  <div>
-    {challenge == null ? (
-      "Loading the game!"
-    ) : (
-      <div>
-        <div className="challenge-wrapper">
-          <div className="challenge-board">
-            <challenge.ViewComponent game_state={challenge.game_state} />
-          </div>
-          {challenge.players.length < 2 ? (
-            <button
-              onClick={() => {
-                RootStore.socket.join_challenge(challenge.cid);
-              }}
-            >
-              Join!
-            </button>
-          ) : (
-            <none></none>
-          )}
-          <div className="challenge-dashboard">
-            <div style={{ width: "100%" }}>
-              <PlayerTagView
-                displayName={challenge.players[1]}
-                isSelf={challenge.client_turn === 1}
-                isTurn={challenge.game_state.turn === 1}
-                colorBadge={challenge.game_state.turn_to_color[1].badge}
-              />
+import { useRootStore } from "../Store/RootStore.js";
+import ChallengeDashboard from "./Components/ChallengeDashboard";
 
-              <MoveList
-                moves={challenge.moves.map(
-                  (move) => AmazonsLogic.format_move_for_human(move) /* XXX */
-                )}
-              />
-              <StatusIndicator
-                status={challenge.status}
-                end={challenge.game_end}
-              />
+import Grid from "@mui/material/Grid";
 
-              <PlayerTagView
-                displayName={challenge.players[0]}
-                isSelf={challenge.client_turn === 0}
-                isTurn={challenge.game_state.turn === 0}
-                colorBadge={challenge.game_state.turn_to_color[0].badge}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    )}
-  </div>
-));
+const ChallengeView = observer(({ challenge, move_handler }) => {
+  const RootStore = useRootStore();
+
+  let game_is_in_progress = challenge.status === "IN_PROGRESS";
+  let is_users_turn =
+    challenge.game_state.turn === challenge.turn_of_user(RootStore.client_uid);
+  let player_can_move = game_is_in_progress && is_users_turn;
+
+  return (
+    <div data-testid="challenge">
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
+        <Grid item xs={12} md={7}>
+          <challenge.ViewComponent
+            game_state={challenge.game_state}
+            handle_move={player_can_move ? move_handler : undefined}
+            last_move={
+              challenge.moves.length > 0
+                ? toJS(challenge.moves[challenge.moves.length - 1])
+                : undefined
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <ChallengeDashboard challenge={challenge} />
+        </Grid>
+      </Grid>
+    </div>
+  );
+});
 
 export { ChallengeView };

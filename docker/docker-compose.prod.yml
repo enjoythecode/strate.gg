@@ -1,11 +1,16 @@
 version: "3.9"
 services:
+  redis:
+    image: "redis:alpine"
+
   be:
     build:
       context: ..
       dockerfile: ./docker/prod.be.Dockerfile
     stdin_open: true # docker run -i
     tty: true # docker run -t
+    depends_on:
+      - redis
 
   nginx:
     build:
@@ -19,6 +24,3 @@ services:
     # it can't resolve the be name in nginx.default.conf
     depends_on:
       - be
-
-  redis:
-    image: "redis:alpine"

@@ -1,0 +1,962 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChallengeView renders challenge with at least one move and the last move indicator 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="challenge"
+  >
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-6s1xft-MuiGrid-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-7 css-1a4ufwv-MuiGrid-root"
+      >
+        <div
+          class="amazonsBoard"
+          style="grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);"
+        >
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="indicatorLastMove indicatorInner cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="indicatorLastMove indicatorInner cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="indicatorLastMove indicatorInner cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 30%; top: 0%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 60%; top: 0%;"
+          />
+          <img
+            alt="Burnt Off Square"
+            class="amazonsPiece"
+            src="/images/fire.png"
+            style="left: 30%; top: 10%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 60%; top: 10%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 0%; top: 30%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 90%; top: 30%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 0%; top: 60%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 90%; top: 60%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 30%; top: 90%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-5 css-urj5pv-MuiGrid-root"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
+        >
+          <div
+            class="MuiBox-root css-0"
+          >
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-190n62h-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Black Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/bqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #zochGd8
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
+          <div
+            style="max-height: 11em; overflow: auto; display: flex; flex-direction: column-reverse; font-family: monospace; padding: 1em;"
+          >
+            <ul
+              style="list-style: none;"
+            >
+              <li>
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-an8rnp-MuiTypography-root"
+                >
+                  1. G10-G2/D2
+                </p>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="MuiBox-root css-xi606m"
+          >
+            <em />
+            <br />
+            <em />
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
+          <div
+            class="MuiBox-root css-0"
+          >
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="White Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/wqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #T6A8IVn
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`ChallengeView renders challenge with challenge data 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="challenge"
+  >
+    <div
+      class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-6s1xft-MuiGrid-root"
+    >
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-7 css-1a4ufwv-MuiGrid-root"
+      >
+        <div
+          class="amazonsBoard"
+          style="grid-template-columns: repeat(10, 1fr); grid-template-rows: repeat(10, 1fr);"
+        >
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <div
+            class="cellLight"
+          />
+          <div
+            class="cellDark"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 30%; top: 0%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 60%; top: 0%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 0%; top: 30%;"
+          />
+          <img
+            alt="Black Queen"
+            class="amazonsPiece"
+            src="/images/bqueen.png"
+            style="left: 90%; top: 30%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 0%; top: 60%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 90%; top: 60%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 30%; top: 90%;"
+          />
+          <img
+            alt="White Queen"
+            class="amazonsPiece"
+            src="/images/wqueen.png"
+            style="left: 60%; top: 90%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-5 css-urj5pv-MuiGrid-root"
+      >
+        <div
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-i0bk1x-MuiPaper-root"
+        >
+          <div
+            class="MuiBox-root css-0"
+          >
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="Black Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/bqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <button
+                      class="MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButtonBase-root  css-sghohy-MuiButtonBase-root-MuiButton-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      Join game as Black
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
+          <div
+            style="max-height: 11em; overflow: auto; display: flex; flex-direction: column-reverse; font-family: monospace; padding: 1em;"
+          >
+            <ul
+              style="list-style: none;"
+            />
+          </div>
+          <div
+            class="MuiBox-root css-xi606m"
+          >
+            <em>
+              Waiting for players to join...
+            </em>
+            <br />
+            <em />
+          </div>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1b008ma-MuiDivider-root"
+          />
+          <div
+            class="MuiBox-root css-0"
+          >
+            <div>
+              <ul
+                class="MuiList-root MuiList-padding MuiList-dense css-h4y409-MuiList-root"
+              >
+                <li
+                  class="MuiListItem-root MuiListItem-dense MuiListItem-gutters MuiListItem-padding css-6lnq02-MuiListItem-root"
+                >
+                  <div
+                    class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+                  >
+                    <div
+                      class="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+                    >
+                      <img
+                        alt="White Queen Piece"
+                        class="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+                        src="/images/wqueen.png"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    class="MuiListItemText-root MuiListItemText-dense css-tlelie-MuiListItemText-root"
+                  >
+                    <p
+                      class="MuiTypography-root MuiTypography-body1 css-maacv0-MuiTypography-root"
+                    >
+                      Guest #T6A8IVn
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -1,53 +1,35 @@
 import { observer } from "mobx-react";
 import React from "react";
+import { useRootStore } from "./Store/RootStore";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
-const App = observer(({ state }) => (
-  <div>
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <div id="challenge-create-box-container">
-        <div id="challenge-create-box-amazons" className="challenge-create-box">
-          <h2>Amazons</h2>
-          <button
+const App = observer(() => {
+  const RootStore = useRootStore();
+  return (
+    <Grid container>
+      <Grid item xs={12} sm={12} md={6} lg={4} xl={4}>
+        <Paper elevation={2} sx={{ padding: 2 }}>
+          <Typography variant="h2">Amazons</Typography>
+          <br></br>
+          <Button
+            variant="outlined"
+            fullWidth={false}
             onClick={() => {
-              state.socket.create_new_challenge({
+              RootStore.socket.create_new_challenge({
                 game_name: "amazons",
                 game_config: { size: 10, variation: 0 },
               });
             }}
           >
             Create Challenge
-          </button>
-          <br></br>
-        </div>
-
-        <div style={{ visibility: "hidden" }}>
-          <div
-            id="challenge-create-box-mancala"
-            className="challenge-create-box"
-          >
-            <h2>Mancala</h2>
-            <button
-              onClick={() => {
-                state.socket.create_new_challenge({
-                  game_name: "mancala",
-                  game_config: {},
-                });
-              }}
-            >
-              Create Challenge
-            </button>
-          </div>
-        </div>
-
-        <div
-          id="challenge-create-box-moreToCome"
-          className="challenge-create-box"
-        >
-          <h2>More games soon...</h2>
-        </div>
-      </div>
-    </div>
-  </div>
-));
+          </Button>
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+});
 
 export default App;

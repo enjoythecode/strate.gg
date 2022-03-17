@@ -22,7 +22,7 @@ def test_user_disconnecting_defaults_the_win_to_the_other_player(
     latest_update = get_latest_challenge_update_ioclient_received(users[remaining_user])
 
     assert latest_update["challenge"]["status"] == "OVER_DISCONNECT"
-    assert latest_update["challenge"]["player_won"] == remaining_user + 1
+    assert latest_update["challenge"]["player_won"] == remaining_user
 
 
 def test_user_subscribing_to_game_after_gets_correct_game_information(

@@ -2,7 +2,34 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.6.2] - 2020-03-10
+## [0.7.0] - 2022-03-17
+
+### Added
+
+- Security headers with Flask-Talisman, including HSTS
+- Custom Content-Security-Policy header that allows unsafe-inline style-src
+  and connect-src for relevant ws:// and wss:// headers
+- Some basic tests to FE, including snapshot testing for a ChallengeView with Amazons
+- Sound effect is played on a move.
+- Setting to enable/disable sound.
+  - Plays a sound when sound is toggled ON but not OFF.
+
+### Changed
+
+- All React Components to be functional.
+- All React Components to get RootStore with useContext() hooks
+- Re-wrote UI with React MUI, moving away from my homegrown CSS styles.
+
+### Fixed
+
+- Last move indicator regression
+- Bug where creating a new challenge would redirect but not add the previous page to the browser history
+
+### Removed
+
+- Mancala, pending refactoring of FE code to be more stable.
+
+## [0.6.2] - 2022-03-10
 
 ### Added
 
@@ -16,7 +43,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Add +x permissions to `be/generate_secret.sh`
 - Re-structured the file structure of FE.
 
-## [0.6.1] - 2020-03-08
+## [0.6.1] - 2022-03-08
 
 ### Added
 
@@ -32,7 +59,7 @@ This file lists all changes to this project, grouped by versions that follow [Se
 - Bug with production Dockerfile where the built client/ was replaced by a folder
   of the same name if it also existed in the local directory by the same name
 
-## [0.6.0] - 2020-03-06
+## [0.6.0] - 2022-03-06
 
 ### Added
 

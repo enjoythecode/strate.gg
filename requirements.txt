@@ -14,6 +14,7 @@ filelock==3.6.0
 Flask==2.0.3
 Flask-Session==0.4.0
 Flask-SocketIO==5.1.1
+flask-talisman==0.8.1
 greenlet==1.1.2
 identify==2.4.11
 idna==3.3
