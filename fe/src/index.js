@@ -21,7 +21,7 @@ ReactDOM.render(
 
     <RootStoreProvider store={RootStore}>
       <Header />
-      <Container fixed sx={{ bgcolor: "background.paper" }}>
+      <Container fixed>
         <Router>
           <Switch>
             <Route path="/play/:gameName">
