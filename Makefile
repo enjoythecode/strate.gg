@@ -88,6 +88,10 @@ bover:
 fover:
 	(cd fe && npm run coverage)
 
+.PHONY: foverw
+foverw:
+	(cd fe && npm run coverage-watch)
+
 # TODO add FE/BE distinction to this
 .PHONY: boverage
 boverage:

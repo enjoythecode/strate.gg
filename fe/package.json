@@ -24,10 +24,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "jest": "react-scripts test --verbose",
-    "jestc": "react-scripts test --verbose --coverage",
-    "test": "react-scripts test --verbose --watchAll=false",
+    "jest": "react-scripts test",
+    "jestc": "react-scripts test --coverage",
+    "test": "react-scripts test --watchAll=false",
     "coverage": "react-scripts test --coverage --watchAll=false",
+    "coverage-watch": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject",
     "format": "npx prettier --write ./src/",
     "format-check": "npx prettier --check ./src/"
