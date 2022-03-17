@@ -9,10 +9,10 @@ import { CONNECTION_STATUS_ENUM } from "../Network/Socket";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Chip from "@mui/material/Chip";
+import Link from "@mui/material/Link";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
 
 function Header() {
   return (
@@ -25,9 +25,15 @@ function Header() {
                 <ConnectionChip />
               </Grid>
               <Grid item>
-                <Typography variant="h1" color="inherit" sx={{ fontSize: 30 }}>
+                <Link
+                  variant="h1"
+                  color="inherit"
+                  sx={{ fontSize: 30 }}
+                  href="/"
+                  underline="hover"
+                >
                   strate.gg
-                </Typography>
+                </Link>
               </Grid>
               <Grid item>
                 <EnableSoundToggle />
