@@ -1,47 +1,37 @@
-export const MoveList = (props) => {
+import Typography from "@mui/material/Typography";
+
+export const MoveList = ({ moves }) => {
   let rendered_moves = [];
 
-  for (let index = 0; index < props.moves.length; index++) {
-    const move = props.moves[index];
-
+  for (let index = 0; index < moves.length; index++) {
     rendered_moves.push(
-      <div
-        style={{
-          display: "flex",
-          alignContent: "center",
-          textAlign: "center",
-          alignItems: "center",
-        }}
-        key={index}
-      >
-        {index + 1}.
-        <div
-          style={{ maxWidth: "22px", maxHeight: "22px", marginRight: "4px" }}
+      <li key={index}>
+        <Typography
+          sx={{
+            fontFamily: "Inconsolata",
+          }}
         >
-          {/*move.color.badge*/}
-        </div>
-        <span>{move}</span>
-      </div>
+          {index + 1}
+          {". "}
+          {index < moves.length ? moves[index] : "..."}
+        </Typography>
+      </li>
     );
   }
 
   // https://stackoverflow.com/questions/18614301/keep-overflow-div-scrolled-to-bottom-unless-user-scrolls-up
-  if (props.moves.length !== 0) {
-    return (
-      <div
-        style={{
-          maxHeight: "11em",
-          overflow: "auto",
-          display: "flex",
-          flexDirection: "column-reverse",
-          fontFamily: "monospace",
-          padding: "1em",
-        }}
-      >
-        <div>{rendered_moves}</div>
-      </div>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <div
+      style={{
+        maxHeight: "11em",
+        overflow: "auto",
+        display: "flex",
+        flexDirection: "column-reverse",
+        fontFamily: "monospace",
+        padding: "1em",
+      }}
+    >
+      <ul style={{ listStyle: "none" }}>{rendered_moves}</ul>
+    </div>
+  );
 };

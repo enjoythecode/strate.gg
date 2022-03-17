@@ -45,6 +45,7 @@ class Challenge {
       status: observable,
       game_end: observable,
       moves: observable,
+      is_playing: computed,
       update_challenge_information: action,
     });
     this.cid = data.cid;
@@ -57,6 +58,10 @@ class Challenge {
     this.update_challenge_information(data);
 
     this.ViewComponent = game_name_to_view_component[this.game_name];
+  }
+
+  get is_playing() {
+    return this.status == "IN_PROGRESS";
   }
 
   update_challenge_information(new_chall) {

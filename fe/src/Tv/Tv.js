@@ -62,7 +62,7 @@ const Tv = observer(
 
     render() {
       return (
-        <div style={{ border: "solid", display: "block" }}>
+        <div>
           <h1>TV! {this.cid} </h1>
           {this.cid !== null ? (
             <ChallengeView challenge={RootStore.challenges.get(this.cid)} />

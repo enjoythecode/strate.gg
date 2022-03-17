@@ -1,6 +1,8 @@
 import { makeObservable, observable, action } from "mobx";
 import { React } from "react";
 
+import Avatar from "@mui/material/Avatar";
+
 const initializeBoard = (config) => {
   let startingBoards = {
     "10_0": [
@@ -44,27 +46,14 @@ class AmazonsLogic {
   turn = null;
   board = null;
 
-  // TODO move to AmazonsView
-  turn_to_color = [
+  turn_to_identity = [
     {
       name: "White",
-      badge: (
-        <img
-          style={{ width: "100%", height: "100%" }}
-          src="/images/wqueen.png"
-          alt="White Queen Piece"
-        />
-      ),
+      badge: <Avatar src="/images/wqueen.png" alt="White Queen Piece" />,
     },
     {
       name: "Black",
-      badge: (
-        <img
-          style={{ width: "100%", height: "100%" }}
-          src="/images/bqueen.png"
-          alt="Black Queen Piece"
-        />
-      ),
+      badge: <Avatar src="/images/bqueen.png" alt="Black Queen Piece" />,
     },
   ];
 
