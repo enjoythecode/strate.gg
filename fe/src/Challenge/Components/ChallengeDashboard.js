@@ -35,7 +35,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
           {challenge.players.length < 2 ? (
             join_as_player2_button
           ) : (
-            <UserNametag displayName={challenge.players[1]} />
+            <UserNametag userId={challenge.players[1]} />
           )}
         </ChallengeDashboardPlayerTag>
       </Box>
@@ -55,7 +55,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
           isTurn={challenge.game_state.turn === 0}
           colorBadge={challenge.game_state.turn_to_identity[0].badge}
         >
-          <UserNametag displayName={challenge.players[0]} />
+          <UserNametag userId={challenge.players[0]} />
         </ChallengeDashboardPlayerTag>
       </Box>
     </Paper>

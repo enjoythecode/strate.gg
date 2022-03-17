@@ -1,6 +1,11 @@
 import Typography from "@mui/material/Typography";
+import { observer } from "mobx-react-lite";
+import { useRootStore } from "../Store/RootStore";
 
-export default function UserNametag({ displayName }) {
+export default observer(function UserNametag({ userId }) {
+  const RootStore = useRootStore();
+
+  let is_self = RootStore.client_uid === userId;
   return (
     <Typography
       sx={{
@@ -9,7 +14,7 @@ export default function UserNametag({ displayName }) {
         fontSize: 18,
       }}
     >
-      {"Guest #" + displayName.slice(0, 7)}
+      {"Guest #" + userId.slice(0, 7) + (is_self ? " (You)" : "")}
     </Typography>
   );
-}
+});

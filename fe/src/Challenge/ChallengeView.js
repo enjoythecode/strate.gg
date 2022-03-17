@@ -29,7 +29,7 @@ const ChallengeView = observer(({ challenge, move_handler }) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={5} lg={4} xl={3}>
+        <Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
           <ChallengeDashboard challenge={challenge} />
         </Grid>
       </Grid>
