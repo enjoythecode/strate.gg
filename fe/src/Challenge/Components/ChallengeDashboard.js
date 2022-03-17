@@ -22,7 +22,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
         RootStore.socket.join_challenge(challenge.cid);
       }}
     >
-      Join as Player 2
+      Join game as {challenge.game_state.turn_to_identity[1].name}
     </Button>
   );
   return (
