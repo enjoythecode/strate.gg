@@ -1,11 +1,9 @@
 import React from "react";
-import { EnableSoundToggle } from "../Store/Components/EnableSoundToggle";
 
 const Footer = () => {
   return (
     <footer>
       <p>
-        <EnableSoundToggle></EnableSoundToggle>
         <br></br>
         <span>
           A project by <a href="https://enjoythecode.com">Sinan</a> dedicated to

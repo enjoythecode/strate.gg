@@ -2,6 +2,8 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useRootStore } from "../Store/RootStore";
 
+import EnableSoundToggle from "../Store/Components/EnableSoundToggle";
+
 import { CONNECTION_STATUS_ENUM } from "../Network/Socket";
 
 import Box from "@mui/material/Box";
@@ -20,12 +22,15 @@ function Header() {
           <Container fixed>
             <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>
-                <Typography variant="h1" color="inherit" sx={{ fontSize: 36 }}>
+                <ConnectionChip />
+              </Grid>
+              <Grid item>
+                <Typography variant="h1" color="inherit" sx={{ fontSize: 30 }}>
                   strate.gg
                 </Typography>
               </Grid>
               <Grid item>
-                <ConnectionChip />
+                <EnableSoundToggle />
               </Grid>
             </Grid>
           </Container>
@@ -43,7 +48,7 @@ const ConnectionChip = observer(() => {
 
   switch (RootStore.socket.connection_status) {
     case CONNECTION_STATUS_ENUM.ONLINE:
-      chip_label = "Online";
+      chip_label = "Connected";
       chip_color = "success";
       break;
 
