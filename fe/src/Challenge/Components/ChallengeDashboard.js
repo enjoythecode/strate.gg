@@ -28,8 +28,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
     <Paper sx={{ padding: 2 }}>
       <Box>
         <ChallengeDashboardPlayerTag
-          isSelf={challenge.turn_of_user(RootStore.client_uid) === 1}
-          isTurn={challenge.game_state.turn === 1}
+          isTurn={challenge.game_state.turn === 1 && challenge.is_playing}
           colorBadge={challenge.game_state.turn_to_identity[1].badge}
         >
           {challenge.players.length < 2 ? (
@@ -50,9 +49,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
       <Divider sx={{ marginTop: 1, marginBottom: 1 }}></Divider>
       <Box>
         <ChallengeDashboardPlayerTag
-          displayName={challenge.players[0]}
-          isSelf={challenge.turn_of_user(RootStore.client_uid) === 0}
-          isTurn={challenge.game_state.turn === 0}
+          isTurn={challenge.game_state.turn === 0 && challenge.is_playing}
           colorBadge={challenge.game_state.turn_to_identity[0].badge}
         >
           <UserNametag userId={challenge.players[0]} />
