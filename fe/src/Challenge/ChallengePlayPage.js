@@ -5,7 +5,6 @@ import { ChallengeView } from "./ChallengeView.js";
 
 function get_game_id_from_url() {
   let params = new URLSearchParams(window.location.search);
-  console.log(params.keys());
   return params.get("cid");
 }
 
