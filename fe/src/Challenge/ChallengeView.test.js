@@ -8,11 +8,7 @@ import { SoundBridge } from "../Sound/SoundBridge";
 
 import { NEW_AMAZONS_CHALLENGE_DATA } from "./Challenge.test";
 import { AMAZONS_CHALLENGE_DATA_AFTER_MOVE } from "./Challenge.test";
-
-const createFreshRootStore = () => {
-  const RootStore = initRootStoreAndSocket();
-  return RootStore;
-};
+import { renderComponentWithRootStore } from "../TestUtils";
 
 const createFreshAmazonsChallenge = () => {
   return new Challenge(NEW_AMAZONS_CHALLENGE_DATA);
@@ -23,17 +19,9 @@ const createAmazonsChallengeWithOneMove = () => {
 };
 
 const renderChallenge = (challenge, RootStore = null) => {
-  if (RootStore === null) {
-    RootStore = createFreshRootStore();
-  }
+  const component = <ChallengeView challenge={challenge} />;
 
-  const { asFragment } = render(
-    <RootStoreProvider store={RootStore}>
-      <ChallengeView challenge={challenge}></ChallengeView>
-    </RootStoreProvider>
-  );
-
-  return asFragment();
+  return renderComponentWithRootStore(component, RootStore);
 };
 
 describe("ChallengeView", () => {
