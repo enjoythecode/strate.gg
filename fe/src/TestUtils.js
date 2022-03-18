@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { RootStoreProvider, initRootStoreAndSocket } from "./Store/RootStore";
+import { RootStoreProvider, initRootStoreAndSocket } from "Store/RootStore";
 
 export const createFreshRootStore = () => {
   return initRootStoreAndSocket();

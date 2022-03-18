@@ -16,6 +16,7 @@ COPY ./fe/package.json ./
 COPY ./fe/package-lock.json ./
 COPY ./fe/.eslintrc.json ./
 COPY ./fe/.prettierrc.json ./
+COPY ./fe/jsconfig.json ./
 COPY ./fe/src/ ./src/
 COPY ./fe/public/ ./public/
 

@@ -1,12 +1,9 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { act } from "react-dom/test-utils";
-import {
-  createFreshRootStore,
-  renderComponentWithRootStore,
-} from "../../TestUtils";
+import { createFreshRootStore, renderComponentWithRootStore } from "TestUtils";
 
-import { SoundBridge } from "../../Sound/SoundBridge";
-import EnableSoundToggle from "./EnableSoundToggle";
+import { SoundBridge } from "Sound/SoundBridge";
+import EnableSoundToggle from "Store/Components/EnableSoundToggle";
 
 let RootStore;
 

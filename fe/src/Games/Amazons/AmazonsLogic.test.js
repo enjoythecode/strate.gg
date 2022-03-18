@@ -1,4 +1,4 @@
-import { AmazonsLogic } from "./AmazonsLogic";
+import { AmazonsLogic } from "Games/Amazons/AmazonsLogic";
 
 let default_amazons_config = { size: 10, variation: 0 };
 let wrong_amazons_configs = [{}]; // TODO: add more wrong amazons configs

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useRootStore } from "../RootStore";
+import { useRootStore } from "Store/RootStore";
 import IconButton from "@mui/material/IconButton";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";

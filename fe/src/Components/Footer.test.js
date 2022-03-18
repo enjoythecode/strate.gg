@@ -1,6 +1,6 @@
-import { renderComponentWithRootStore } from "../TestUtils";
+import { renderComponentWithRootStore } from "TestUtils";
 
-import Footer from "./Footer";
+import Footer from "Components/Footer";
 
 describe("snapshots", () => {
   it("default footer", () => {

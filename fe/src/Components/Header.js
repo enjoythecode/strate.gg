@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { useRootStore } from "../Store/RootStore";
+import { useRootStore } from "Store/RootStore";
 
-import EnableSoundToggle from "../Store/Components/EnableSoundToggle";
+import EnableSoundToggle from "Store/Components/EnableSoundToggle";
 
-import { CONNECTION_STATUS_ENUM } from "../Network/Socket";
+import { CONNECTION_STATUS_ENUM } from "Network/Socket";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
