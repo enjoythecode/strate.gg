@@ -84,7 +84,7 @@ gen-secret:
 	./be/generate_secret.sh
 
 compile-client: be/client/index.html
-be/client/index.html:
+be/client/index.html: deps-fe
 	(cd fe && \
 		npm run build && \
 		rm -rf ../be/client && \
