@@ -149,7 +149,7 @@ produp-build-nocache:
 .PHONY: compile-client
 compile-client: be/client/index.html
 
-be/client/index.html:
+be/client/index.html: deps-fe
 	(cd fe && npm run build && rm -rf ../be/client && mkdir ../be/client && cp -r build/ ../be/client)
 
 # DEBUGGING DOCKER
