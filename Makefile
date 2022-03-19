@@ -88,9 +88,7 @@ be/client/index.html: deps-fe
 	(cd fe && \
 		npm run build && \
 		rm -rf ../be/client && \
-		cp -r build/ ../be/client && \
-		ls ../be && \
-		ls ../be/client)
+		cp -r build/ ../be/client)
 
 # BUILDING DEVELOPMENT SERVERS
 # -----------------------------------------------------------------------------
