@@ -44,3 +44,19 @@ repos:
         types: [file]
         #additional_dependencies:
         #-   react-app
+
+  - repo: local
+    hooks:
+      - id: fe-test
+        name: fe-test
+        entry: make fest
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: be-test
+        name: be-test
+        entry: make best
+        language: system
+        pass_filenames: false
+        always_run: true
