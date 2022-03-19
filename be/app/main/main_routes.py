@@ -28,6 +28,7 @@ def serve(path):
 
 
 def serve_http_request_from_build_client_files(path):
+    print(os.listdir(current_app.static_folder))
     if path != "" and os.path.exists(current_app.static_folder + "/" + path):
         return send_from_directory(current_app.static_folder, path)
     else:
