@@ -1,0 +1,27 @@
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  test-be:
+    docker:
+      - image: cimg/python:3.7-node
+    steps:
+      - checkout
+      - run:
+          name: "Back-end Tests"
+          command: "make best"
+  test-fe:
+    docker:
+      - image: cimg/node:17.7.2
+    steps:
+      - checkout
+      - run:
+          name: "Front-end Tests"
+          command: "make fest"
+
+workflows:
+  test-suite:
+    jobs:
+      - test-be
+      - test-fe
