@@ -9,34 +9,39 @@ SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
 # REPOSITORY SET-UP
 # -----------------------------------------------------------------------------
 .PHONY: deps
-deps: deps-be deps-fe install-commit-hooks
+deps: deps-py deps-fe install-commit-hooks
 
-.PHONY: deps-be
-deps-be:
+.PHONY: deps-be deps-py
+deps-be: deps-py
+deps-py: venv/bin/activate
+venv/bin/activate:
 	($(SYSTEM_PYTHON) -m venv venv && \
 	. ./venv/bin/activate && \
 	venv/bin/python -m pip install --upgrade pip -r requirements.txt)
 
 .PHONY: deps-fe
-deps-fe:
+# | $(fe/node_modules) checks if folder exists
+# https://stackoverflow.com/questions/20763629/test-whether-a-directory-exists-inside-a-makefile
+deps-fe: | fe/node_modules
 # npm ci instead of i because it ensures consistency with package-lock.json. source:
 # https://stackoverflow.com/questions/48524417/should-the-package-lock-json-file-be-added-to-gitignore#48524475
+fe/node_modules:
 	(cd fe && npm ci)
 
 .PHONY: install-commit-hooks
-install-commit-hooks:
+install-commit-hooks: deps-py
 	venv/bin/pre-commit install
 
 
 # PRE-COMMIT COMMANDS
 # -----------------------------------------------------------------------------
 .PHONY: check-all
-check-all:
+check-all: deps-py
 	venv/bin/pre-commit run --all-files
 
 # run pre-commit checks on modified
 .PHONY: check
-check:
+check: deps-py
 	venv/bin/pre-commit run
 
 # TESTING
@@ -44,13 +49,13 @@ check:
 
 # jest runs in watch mode, automatically re-running affected files on change
 .PHONY: jest
-jest:
+jest: deps-fe
 	(cd fe && npm run jest)
 
 # jestc runs in watch mode, with --coverage enabled, showing coverage with each
 # test run
 .PHONY: jestc
-jestc:
+jestc: deps-fe
 	(cd fe && npm run jestc)
 
 # test runs tests for both FE and BE
@@ -60,13 +65,13 @@ test: be-test fe-test
 # fe-test runs the tests once, without interactive/watch mode
 .PHONY: fe-test fest
 fest: fe-test
-fe-test:
+fe-test: deps-fe
 	(cd fe && npm run test)
 
 .PHONY: be-test best
 best: be-test
-be-test: gen-secret compile-client
-	(cd be && python -m pytest)
+be-test: deps-py gen-secret compile-client
+	(. venv/bin/activate && cd be && python -m pytest)
 
 # COVERAGE
 # -----------------------------------------------------------------------------
@@ -80,21 +85,21 @@ cover: gen-secret bover fover
 
 # runs coverage on BE
 .PHONY: bover
-bover:
-	(cd be && coverage run -m pytest && coverage report --sort cover)
+bover: deps-py
+	(. venv/bin/activate && cd be && coverage run -m pytest && coverage report --sort cover)
 
 # runs coverage on FE
 .PHONY: fover
-fover:
+fover: deps-fe
 	(cd fe && npm run coverage)
 
 .PHONY: foverw
-foverw:
+foverw: deps-fe
 	(cd fe && npm run coverage-watch)
 
 # TODO add FE/BE distinction to this
 .PHONY: boverage
-boverage:
+boverage: deps-py
 	(cd be && coverage run -m pytest && coverage html && open htmlcov/index.html)
 
 # BUILDING DEVELOPMENT SERVERS
