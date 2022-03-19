@@ -25,27 +25,27 @@ Docker configuration files live in `docker/`, though you don't need
 to touch that if you are not doing anything docker-specific. Use the
 below commands:
 
-`make devup` composes up a development container. Both the BE and FE are
+`make dev` composes up a development container. Both the BE and FE are
 hot-reloaded with their respective servers. The website is available at
 port 80 (default for HTTP), therefore, going to `localhost` should bring
 up the app after all services are up.
 
-By default, `make devup` runs docker compose up without the `-d` flag,
+By default, `make dev` runs docker compose up without the `-d` flag,
 meaning that the output will be streamed to your terminal. If you want
 the detached mode (container runs in the background, you get your
-terminal), use `make devupd` (with a `d` in the end).
+terminal), use `make devd`.
 
 Use `make devdown` from any terminal to shut down the development server.
 
-Use `make devup-fbuild` for a forced dev rebuild, `make devup-build-nocache`
+Use `make dev-build` for a forced dev rebuild, `make dev-build-nocache`
 to re-build without the cache.
 
 ## Production Build
 
-`make produp` runs a production container and exposes it at port 80.
+`make prod` runs a production container and exposes it at port 80.
 
-Use `make produpd` for detached mode, `make produp-fbuild` for a forced
-rebuild, `make produp-build-nocache` to re-build without the cache.
+Use `make prodd` for detached mode, `make prod-build` for a forced
+rebuild, `make prod-build-nocache` to re-build without the cache.
 
 `make proddown` shuts the production container down.
 
@@ -57,8 +57,6 @@ facing functionality**, and _other developers working on the repo are
 also users of your code_.
 
 ## Running Tests
-
-First, make sure that the Python venv is activated. Use `source venv/bin/activate`.
 
 `make test` runs the entire test suite. (BE and FE).
 
@@ -76,6 +74,10 @@ tests on file changes.
 `make bover` runs coverage on the BE.
 
 `make fover` runs coverage on the FE.
+
+`make boverage` runs coverage on BE and opens up a HTML report.
+
+`make foverw` runs jest and coverage in watch mode.
 
 # Pre-commit Checks
 
