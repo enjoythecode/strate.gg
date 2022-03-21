@@ -59,7 +59,6 @@ def test_amazons_generate_random_play_is_consistent_with_itself(amazons_state_10
     for move in generated_moves:
         assert amazons_state_10x10.is_valid_move(move)
         amazons_state_10x10.make_move(move)
-    print(amazons_state_10x10, amazons_state_10x10.turn)
     assert amazons_state_10x10.check_game_end() != 0
 
 

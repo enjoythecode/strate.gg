@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
-import { useRootStore } from "../Store/RootStore.js";
-import { ChallengeView } from "./ChallengeView.js";
+import { useRootStore } from "Store/RootStore.js";
+import { ChallengeView } from "Challenge/ChallengeView.js";
 
 function get_game_id_from_url() {
   let params = new URLSearchParams(window.location.search);

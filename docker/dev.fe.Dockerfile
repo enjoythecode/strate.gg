@@ -14,12 +14,14 @@ ENV INLINE_RUNTIME_CHUNK=false
 ENV IMAGE_INLINE_SIZE_LIMIT=0
 
 # add app (incl. dependencies)
+COPY ./fe/src/ ./src/
+COPY ./fe/public/ ./public/
 COPY ./fe/package.json ./
 COPY ./fe/package-lock.json ./
 COPY ./fe/.eslintrc.json ./
 COPY ./fe/.prettierrc.json ./
-COPY ./fe/src/ ./src/
-COPY ./fe/public/ ./public/
+COPY ./fe/jsconfig.json ./
+
 
 # install dependencies
 RUN npm ci

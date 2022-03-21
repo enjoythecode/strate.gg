@@ -1,5 +1,5 @@
 import { Howl } from "howler";
-import { initRootStoreAndSocket } from "../Store/RootStore";
+import { initRootStoreAndSocket } from "Store/RootStore";
 
 jest.mock("howler");
 

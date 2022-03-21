@@ -1,9 +1,8 @@
 import { observer } from "mobx-react";
-import { useRootStore } from "../RootStore";
+import { useRootStore } from "Store/RootStore";
 import IconButton from "@mui/material/IconButton";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
-import { useEffect } from "react";
 
 export default observer(function EnableSoundToggle() {
   const RootStore = useRootStore();
@@ -19,9 +18,9 @@ export default observer(function EnableSoundToggle() {
   return (
     <IconButton onClick={handleSoundToggleClick}>
       {preference_store.sound_enabled ? (
-        <VolumeUpIcon color="success" />
+        <VolumeUpIcon aria-label="toggle sound off" color="success" />
       ) : (
-        <VolumeOffIcon />
+        <VolumeOffIcon aria-label="toggle sound on" />
       )}
     </IconButton>
   );

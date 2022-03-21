@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshots default footer 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiBox-root css-h8m1q6"
+  >
+    <footer>
+      <span>
+        A project by dedicated to the play and exploration of abstract strategy board games.
+        <br />
+        <div
+          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1iwtne7-MuiTypography-root-MuiLink-root"
+              href="https://enjoythecode.com"
+            >
+              About the Developer
+            </a>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1iwtne7-MuiTypography-root-MuiLink-root"
+              href="https://github.com/enjoythecode/strate.gg"
+            >
+              Source Code
+            </a>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item css-13i4rnv-MuiGrid-root"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-1iwtne7-MuiTypography-root-MuiLink-root"
+              href="https://lichess.org/"
+            >
+              Proudly inspired by lichess.org
+            </a>
+          </div>
+        </div>
+      </span>
+    </footer>
+  </div>
+</DocumentFragment>
+`;

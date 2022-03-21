@@ -1,4 +1,4 @@
-import { Challenge } from "./Challenge";
+import { Challenge } from "Challenge/Challenge";
 
 const NEW_AMAZONS_CHALLENGE_DATA = {
   game_name: "amazons",

@@ -1,9 +1,9 @@
 import { makeObservable, observable, action } from "mobx";
-import { Challenge } from "../Challenge/Challenge.js";
-import Socket from "../Network/Socket.js";
+import { Challenge } from "Challenge/Challenge.js";
+import Socket from "Network/Socket.js";
 import React from "react";
-import PreferenceStore from "./PreferenceStore.js";
-import { SoundBridge } from "../Sound/SoundBridge";
+import PreferenceStore from "Store/PreferenceStore.js";
+import { SoundBridge } from "Sound/SoundBridge";
 
 class _RootStore {
   challenges = observable.map({});
