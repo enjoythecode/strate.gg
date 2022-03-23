@@ -2,11 +2,17 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] -
+## [0.7.1] - 2022-03-23
+
+### Added
+
+- CircleCI automated checks of tests on commits
+- Javascript testing improvements
 
 ### Changed
 
 - Converted all relative imports to src-base imports in FE (closes #29)
+- Moved TODOs to GitHub issues
 
 ## [0.7.0] - 2022-03-17
 
