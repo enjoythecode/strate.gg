@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import { useEffect, useState, useRef } from "react";
 import isDeepEqual from "fast-deep-equal/react";
-import { useRootStore } from "../../Store/RootStore";
+import { useRootStore } from "Store/RootStore";
 
-import "./amazons.css";
+import "Games/Amazons/amazons.css";
 
 const amazonsBoardDynamicGridRules = (x) => {
   return {

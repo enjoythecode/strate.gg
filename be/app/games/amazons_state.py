@@ -140,7 +140,6 @@ class AmazonsState(GameState):
 
     def get_possible_moves(self, player=None):
         x = [move for move in self.generate_possible_moves(player)]
-        print(x)
         return x
 
     def count_possible_queen_moves(self, player=None):

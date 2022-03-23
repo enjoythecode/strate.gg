@@ -1,6 +1,6 @@
 import { makeObservable, observable, action, computed } from "mobx";
-import { AmazonsLogic } from "../Games/Amazons/AmazonsLogic";
-import { AmazonsView } from "../Games/Amazons/AmazonsView";
+import { AmazonsLogic } from "Games/Amazons/AmazonsLogic";
+import { AmazonsView } from "Games/Amazons/AmazonsView";
 
 const game_name_to_state_class = {
   amazons: AmazonsLogic,

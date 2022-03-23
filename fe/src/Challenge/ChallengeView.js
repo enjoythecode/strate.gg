@@ -2,8 +2,8 @@ import React from "react";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
 
-import { useRootStore } from "../Store/RootStore.js";
-import ChallengeDashboard from "./Components/ChallengeDashboard";
+import { useRootStore } from "Store/RootStore.js";
+import ChallengeDashboard from "Challenge/Components/ChallengeDashboard";
 
 import Grid from "@mui/material/Grid";
 

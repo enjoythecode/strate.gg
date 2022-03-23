@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import { observer } from "mobx-react-lite";
-import { useRootStore } from "../Store/RootStore";
+import { useRootStore } from "Store/RootStore";
 
 export default observer(function UserNametag({ userId }) {
   const RootStore = useRootStore();

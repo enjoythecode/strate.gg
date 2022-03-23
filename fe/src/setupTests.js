@@ -1,3 +1,3 @@
 import "@testing-library/jest-dom";
 
-jest.mock("./Sound/SoundBridge");
+jest.mock("Sound/SoundBridge");

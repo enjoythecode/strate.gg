@@ -31,8 +31,6 @@ def test_socketio_same_uid_across_disconnects(socketio_client):
     second_sess = get_session_value_from_response(second_response)
 
     assert first_user_id == second_user_id
-
-    print(first_sess, second_sess)
     assert first_sess == second_sess
 
 

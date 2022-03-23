@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite";
-import { useRootStore } from "../../Store/RootStore.js";
-import UserNametag from "../../Components/UserNametag";
-import { MoveList } from "./MoveList";
-import { ChallengeDashboardPlayerTag } from "./ChallengeDashboardPlayerTag";
-import { StatusIndicator } from "./StatusIndicator";
-import { AmazonsLogic } from "../../Games/Amazons/AmazonsLogic.js";
+import { useRootStore } from "Store/RootStore.js";
+import UserNametag from "Components/UserNametag";
+import { MoveList } from "Challenge/Components/MoveList";
+import { ChallengeDashboardPlayerTag } from "Challenge/Components/ChallengeDashboardPlayerTag";
+import { StatusIndicator } from "Challenge/Components/StatusIndicator";
+import { AmazonsLogic } from "Games/Amazons/AmazonsLogic.js";
 
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";

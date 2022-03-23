@@ -1,14 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App.js";
-import ChallengePlayPage from "./Challenge/ChallengePlayPage.js";
-import {
-  initRootStoreAndSocket,
-  RootStoreProvider,
-} from "./Store/RootStore.js";
+import App from "App";
+import ChallengePlayPage from "Challenge/ChallengePlayPage.js";
+import { initRootStoreAndSocket, RootStoreProvider } from "Store/RootStore.js";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
+import Header from "Components/Header";
+import Footer from "Components/Footer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 
