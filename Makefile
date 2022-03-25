@@ -94,13 +94,13 @@ be/client/index.html: deps-fe
 # -----------------------------------------------------------------------------
 .PHONY: dev devd devdown dev-build dev-build-nocache
 
-dev: gen-secret
+dev:
 	docker-compose -p "dev" -f docker/docker-compose.dev.yml up
-devd: gen-secret
+devd:
 	docker-compose -p "dev" -f docker/docker-compose.dev.yml up -d
 devdown:
 	docker-compose -p "dev" down
-dev-build: gen-secret # re-build container in case of change to Docker files
+dev-build: # re-build container in case of change to Docker files
 	docker-compose -p "dev" -f docker/docker-compose.dev.yml up --build
 dev-build-nocache: # force a no-cache rebuild (does not start after build)
 	docker-compose -f ./docker/docker-compose.dev.yml build --no-cache
@@ -109,13 +109,13 @@ dev-build-nocache: # force a no-cache rebuild (does not start after build)
 # -----------------------------------------------------------------------------
 .PHONY: prod prodd proddown prod-build prod-build-nocache
 
-prod: gen-secret
+prod:
 	docker-compose -p "prod" -f docker/docker-compose.prod.yml up
-prodd: gen-secret
+prodd:
 	docker-compose -p "prod" -f docker/docker-compose.prod.yml up -d
 proddown:
 	docker-compose -p "prod" down
-prod-build: gen-secret
+prod-build:
 	docker-compose -p "prod" -f docker/docker-compose.prod.yml up --build
 prod-build-nocache:
 	docker-compose -f ./docker/docker-compose.prod.yml build --no-cache

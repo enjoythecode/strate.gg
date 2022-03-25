@@ -20,7 +20,6 @@ COPY ./fe/.eslintrc.json ./
 COPY ./fe/.prettierrc.json ./
 COPY ./fe/jsconfig.json ./
 
-
 RUN npm ci
 RUN npm run build
 
@@ -35,5 +34,7 @@ COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 EXPOSE 8080
 COPY ./be .
+RUN /code/generate_secret.sh
+
 COPY --from=build-step /app/build /code/client
 CMD ["python",  "serve.py"]
