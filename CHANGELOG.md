@@ -2,7 +2,7 @@
 
 This file lists all changes to this project, grouped by versions that follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html). This file is based on the format set forward by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - 2022-03-25
+## [0.7.2] - 2022-03-25
 
 ## Added
 
