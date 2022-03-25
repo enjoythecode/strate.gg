@@ -81,7 +81,7 @@ boveropen: deps-py # run bover and open html report
 # -----------------------------------------------------------------------------
 .PHONY: gen-secret compile-client
 gen-secret:
-	./be/generate_secret.sh
+	(cd be && ./generate_secret.sh)
 
 compile-client: be/client/index.html
 be/client/index.html: deps-fe
