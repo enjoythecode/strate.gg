@@ -7,6 +7,9 @@ services:
     build:
       context: ..
       dockerfile: ./docker/prod.be.Dockerfile
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     stdin_open: true # docker run -i
     tty: true # docker run -t
     depends_on:

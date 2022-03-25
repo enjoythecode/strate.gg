@@ -1,7 +1,10 @@
-# SystemRandom is secure, 2^1024 is almost INF!
+#!/bin/sh
 
-if [ ! -f "be/secret_key.json" ];
+# expects that $PWD is the folder this script is in
+
+if [ ! -f "$PWD/app/secret_key.json" ];
 then
+    # SystemRandom is secure, 2^1024 is almost INF!
     scrt=$(python -c 'import random; print(hex(random.SystemRandom().getrandbits(1024)))')
-    echo {\"SECRET_KEY\":\"$scrt\"} > be/app/secret_key.json
+    echo {\"SECRET_KEY\":\"$scrt\"} > $PWD/app/secret_key.json
 fi
