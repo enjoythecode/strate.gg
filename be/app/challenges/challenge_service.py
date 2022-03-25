@@ -43,6 +43,20 @@ A ChallengeStatus is a string literal with self-explanatory names.
 CHALLENGE_ID_LENGTH = 8
 
 
+def create_time_control_from_time_config(time_config):
+    if time_config is None:
+        return {}
+
+    time_control = {
+        "time_config": {
+            "base_s": time_config["base_s"],
+            "increment_s": time_config["increment_s"],
+        }
+    }
+
+    return time_control
+
+
 def _generate_cid():
     return generate_random_id(CHALLENGE_ID_LENGTH)
 
@@ -90,7 +104,7 @@ def _get_challenge_by_cid(cid):
     return json.loads(response)
 
 
-def create_challenge(game_name, game_config):
+def create_challenge(game_name, game_config, time_config=None):
 
     if game_name not in GAME_STATE_CLASSES:
         # XXX: standardize error communication!
@@ -113,6 +127,7 @@ def create_challenge(game_name, game_config):
         "status": "WAITING_FOR_PLAYERS",
         "cid": cid,
         "player_won": -1,
+        "time_control": create_time_control_from_time_config(time_config),
     }
 
     _challenge_set(challenge_obj)

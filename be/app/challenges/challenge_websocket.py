@@ -16,9 +16,11 @@ def create_challenge(payload):
 
     uid = user_service.get_uid_of_session_holder()
 
-    challenge = challenge_service.create_challenge(
-        payload["game_name"], payload["game_config"]
-    )
+    game_name = payload["game_name"]
+    game_config = payload["game_config"]
+    time_config = payload["time_config"] if "time_config" in payload else None
+
+    challenge = challenge_service.create_challenge(game_name, game_config, time_config)
     response = challenge_service.add_player_to_challenge(uid, challenge["cid"])
 
     return response
