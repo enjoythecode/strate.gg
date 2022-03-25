@@ -83,8 +83,8 @@ boveropen: deps-py # run bover and open html report
 gen-secret:
 	(cd be && ./generate_secret.sh)
 
-compile-client: be/client/index.html
-be/client/index.html: deps-fe
+compile-client: | be/client
+be/client: | deps-fe
 	(cd fe && \
 		npm run build && \
 		rm -rf ../be/client && \
