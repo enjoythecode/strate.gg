@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: strategg_app
+    env: docker
+    repo: https://github.com/enjoythecode/strate.gg
+    dockerfilePath: ./docker/prod.be.Dockerfile
+    dockerContext: .
+    plan: free # defaults to starter
+    healthCheckPath: /
+
+    envVars:
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: river
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: river
+          property: port
+
+  - type: redis
+    name: river
+    ipAllowList: # required
+      - source: 127.0.0.1
+        description: localhost
+    plan: free # defaults to starter
+    maxmemoryPolicy: noeviction # defaults to allkeys-lru

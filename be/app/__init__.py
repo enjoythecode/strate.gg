@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 
 import flask_socketio as sckt
@@ -35,7 +36,9 @@ sess = Session()
 def create_app(redis_instance=None):
 
     if redis_instance is None:
-        redis_instance = redis.Redis(host="redis", port=6379, db=0)
+        redis_instance = redis.Redis(
+            host=os.environ["REDIS_HOST"], port=os.environ["REDIS_PORT"], db=0
+        )
 
     app = Flask(__name__, instance_relative_config=False, static_folder="../client")
 
