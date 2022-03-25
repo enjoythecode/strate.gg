@@ -12,16 +12,16 @@ services:
       - key: REDIS_HOST
         fromService:
           type: redis
-          name: lightning
+          name: river
           property: host
       - key: REDIS_PORT
         fromService:
           type: redis
-          name: lightning
+          name: river
           property: port
 
   - type: redis
-    name: strategg_redis
+    name: river
     ipAllowList: # required
       - source: 127.0.0.1
         description: localhost
