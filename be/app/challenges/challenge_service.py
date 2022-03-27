@@ -205,6 +205,31 @@ def default_player_due_to_disconnect(cid, uid):
         send_challenge_update_to_clients(challenge)
 
 
+def handle_time_control(challenge):
+    if "time_control" in challenge and challenge["time_control"] != {}:
+        time_config = challenge["time_control"]["time_config"]
+
+        base_s = time_config["base_s"]
+        increment_s = time_config["increment_s"]
+
+        current_time = current_app.time_provider.time()
+
+        if len(challenge["moves"]) == 1:  # first move was just moved
+            challenge["time_control"]["remaining_times_s"] = [base_s, base_s]
+        else:
+            used_time = current_time - challenge["time_control"]["last_move_ts"]
+            added_time = increment_s
+            delta_timeup_ts = added_time - used_time
+            challenge["time_control"]["remaining_times_s"][
+                challenge["state"]["turn"]
+            ] += delta_timeup_ts
+
+        challenge["time_control"]["last_move_ts"] = current_time
+
+    print(challenge)
+    return challenge
+
+
 def handle_move(cid, move):
     challenge = _get_challenge_by_cid(cid)
 
@@ -221,6 +246,7 @@ def handle_move(cid, move):
     if uid in challenge["players"] and game.turn == challenge["players"].index(uid):
         game.make_move(move)
         challenge["moves"].append(move)
+        challenge = handle_time_control(challenge)
 
     else:
         return {"result": "error", "error": "not your turn"}

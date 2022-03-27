@@ -1,6 +1,7 @@
 import json
 import os
 import pathlib
+import time
 
 import flask_socketio as sckt
 import redis
@@ -33,12 +34,15 @@ talisman = Talisman()
 sess = Session()
 
 
-def create_app(redis_instance=None):
+def create_app(redis_instance=None, time_provider=None):
 
     if redis_instance is None:
         redis_instance = redis.Redis(
             host=os.environ["REDIS_HOST"], port=os.environ["REDIS_PORT"], db=0
         )
+
+    if time_provider is None:
+        time_provider = time
 
     app = Flask(__name__, instance_relative_config=False, static_folder="../client")
 
@@ -46,6 +50,7 @@ def create_app(redis_instance=None):
 
     with app.app_context():
         current_app.redis = redis_instance
+        current_app.time_provider = time_provider
 
     # use init_app for all extensions
     sess.init_app(app)

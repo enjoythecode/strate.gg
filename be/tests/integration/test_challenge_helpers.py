@@ -1,10 +1,23 @@
-def emit_succesful_amazons_create_challenge(io_client):
-    payload = io_client.emit(
+TIME_CONTROL_BASE = 10 * 60
+TIME_CONTROL_INCREMENT = 5
+
+
+def emit_succesful_amazons_create_challenge(io_client, time_control=False):
+
+    payload = {"game_name": "amazons", "game_config": {"size": 10, "variation": 0}}
+    if time_control:
+        payload["time_config"] = {
+            "base_s": TIME_CONTROL_BASE,
+            "increment_s": TIME_CONTROL_INCREMENT,
+        }  # 10 + 5]
+
+    response = io_client.emit(
         "challenge-create",
-        {"game_name": "amazons", "game_config": {"size": 10, "variation": 0}},
+        payload,
         callback=True,
     )
-    return payload
+
+    return response
 
 
 def emit_join_challenge_with_cid(io_client, cid):
@@ -17,12 +30,13 @@ def emit_move_to_cid(io_client, move, cid):
 
 
 def create_challenge_between_two_clients_and_subscribe_players_to_it(
-    socketio_client_factory,
+    socketio_client_factory, time_control=False
 ):
+
     user_one = socketio_client_factory.create()
     user_two = socketio_client_factory.create()
 
-    response = emit_succesful_amazons_create_challenge(user_one)
+    response = emit_succesful_amazons_create_challenge(user_one, time_control)
     cid = response["challenge"]["cid"]
 
     subscribe_user_to_challenge(user_one, cid)
