@@ -139,9 +139,17 @@ def test_that_move_after_game_clock_is_up_terminates_game(
     assert payload["challenge"]["player_won"] == 0
 
 
+def test_time_control_assert_request_terminates_game_if_time_is_up():
+    pass
+
+
+def test_time_control_assert_request_returns_error_if_time_is_not_up():
+    pass
+
+
 # todo: test what happens on time end
 # + todo: test when a move is submitted after time was up
-# - todo: test the "test-for-time-control" request by the client
+# ? todo: test the "test-for-time-control" request by the client
 # todo: parametrize time_control tests with different time controls
 # todo: test bad/malicious inputs
 # todo: test what happens when you don't pass in a time control
