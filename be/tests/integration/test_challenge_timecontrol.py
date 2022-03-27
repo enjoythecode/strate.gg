@@ -102,7 +102,6 @@ def test_time_control_counts_down_correctly(
     )
 
     for move_i in range(len(MOVE_MOCK_TSS)):
-        print(f"on move {move_i}")
         move = FULL_AMAZON_GAME[move_i]
         mock_ts = MOVE_MOCK_TSS[move_i]
         user_i = move_i % 2
@@ -118,13 +117,34 @@ def test_time_control_counts_down_correctly(
         assert time_control["remaining_times_s"] == EXPECTED_REMAINING_TIMES_S[move_i]
 
 
+def test_that_move_after_game_clock_is_up_terminates_game(
+    socketio_client_factory, test_time_provider
+):
+    GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
+
+    test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
+    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
+        socketio_client_factory, time_control=True
+    )
+
+    test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS + 5)
+    _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
+
+    # really late second move!
+    test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS + TIME_CONTROL_BASE + 1e4)
+    _ = emit_move_to_cid(users[1], FULL_AMAZON_GAME[1], cid)
+
+    payload = get_latest_challenge_update_ioclient_received(users[0])
+    assert payload["challenge"]["status"] == "OVER_TIME"
+    assert payload["challenge"]["player_won"] == 0
+
+
 # todo: test what happens on time end
-# - todo: test when a move is submitted after time was up
+# + todo: test when a move is submitted after time was up
 # - todo: test the "test-for-time-control" request by the client
 # todo: parametrize time_control tests with different time controls
 # todo: test bad/malicious inputs
 # todo: test what happens when you don't pass in a time control
-
 # todo: error handling improvement, at least dump the stack trace when testing, please!
 
 

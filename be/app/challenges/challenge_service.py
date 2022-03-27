@@ -213,20 +213,34 @@ def handle_time_control(challenge):
         increment_s = time_config["increment_s"]
 
         current_time = current_app.time_provider.time()
+        current_player = challenge["state"]["turn"]
 
-        if len(challenge["moves"]) == 1:  # first move was just moved
+        print("hi!")
+        if len(challenge["moves"]) == 0:  # first move was just moved
             challenge["time_control"]["remaining_times_s"] = [base_s, base_s]
         else:
-            used_time = current_time - challenge["time_control"]["last_move_ts"]
-            added_time = increment_s
-            delta_timeup_ts = added_time - used_time
-            challenge["time_control"]["remaining_times_s"][
-                challenge["state"]["turn"]
-            ] += delta_timeup_ts
+            last_move_ts = challenge["time_control"]["last_move_ts"]
+            remaining_time_of_current_player = challenge["time_control"][
+                "remaining_times_s"
+            ][current_player]
+            player_lost_on_time = (
+                current_time >= last_move_ts + remaining_time_of_current_player
+            )
+            if player_lost_on_time:
+                # set the remaining player as the winner
+                challenge["status"] = "OVER_TIME"
+                challenge["player_won"] = (current_player + 1) % 2
+            else:
+
+                used_time = current_time - challenge["time_control"]["last_move_ts"]
+                added_time = increment_s
+                delta_timeup_ts = added_time - used_time
+                challenge["time_control"]["remaining_times_s"][
+                    current_player
+                ] += delta_timeup_ts
 
         challenge["time_control"]["last_move_ts"] = current_time
 
-    print(challenge)
     return challenge
 
 
@@ -244,15 +258,16 @@ def handle_move(cid, move):
 
     uid = user_service.get_uid_of_session_holder()
     if uid in challenge["players"] and game.turn == challenge["players"].index(uid):
+        challenge = handle_time_control(challenge)
         game.make_move(move)
         challenge["moves"].append(move)
-        challenge = handle_time_control(challenge)
 
     else:
         return {"result": "error", "error": "not your turn"}
 
     challenge["state"] = game.__repr__()
-    challenge["player_won"] = game.check_game_end()
+    if challenge["player_won"] == -1:  # game not terminated due to other reasons
+        challenge["player_won"] = game.check_game_end()
 
     _challenge_set(challenge)
     send_challenge_update_to_clients(challenge)
