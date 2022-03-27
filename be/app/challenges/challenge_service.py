@@ -261,6 +261,23 @@ def handle_time_control(challenge):
     return challenge
 
 
+def handle_clock_check(cid):
+    challenge = _get_challenge_by_cid(cid)
+
+    if not challenge["status"] == "IN_PROGRESS":
+        return {"result": "error", "error": "game is not in progress"}
+
+    if check_game_clock_OK(challenge):
+        return {"result": "error", "error": "clock is OK"}
+    else:
+        challenge = default_game_on_time(challenge)
+
+    _challenge_set(challenge)
+    send_challenge_update_to_clients(challenge)
+
+    return {"result": "success"}
+
+
 def handle_move(cid, move):
     challenge = _get_challenge_by_cid(cid)
 

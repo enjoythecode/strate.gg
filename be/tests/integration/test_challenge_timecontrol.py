@@ -1,3 +1,4 @@
+from .conf_websocket import assert_event_errored
 from .conf_websocket import assert_event_includes_challenge_data
 from .conf_websocket import assert_event_succesful
 from .test_challenge_helpers import (
@@ -139,21 +140,52 @@ def test_that_move_after_game_clock_is_up_terminates_game(
     assert payload["challenge"]["player_won"] == 0
 
 
-def test_time_control_assert_request_terminates_game_if_time_is_up():
-    pass
+def test_time_control_assert_request_terminates_game_if_time_is_up(
+    socketio_client_factory, test_time_provider
+):
+    GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
+    FIRST_MOVE_TS = GAME_CREATE_MOCK_TS + 5
+    test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
+    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
+        socketio_client_factory, time_control=True
+    )
+
+    test_time_provider.set_mocked_time(FIRST_MOVE_TS)
+    _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
+
+    # 2 seconds after the 2nd player time was up...
+    test_time_provider.set_mocked_time(FIRST_MOVE_TS + TIME_CONTROL_BASE + 2)
+    response = emit_clock_check(users[0], cid)
+
+    assert_event_succesful(response)
+
+    payload = get_latest_challenge_update_ioclient_received(users[0])
+    assert payload["challenge"]["status"] == "OVER_TIME"
+    assert payload["challenge"]["player_won"] == 0
 
 
-def test_time_control_assert_request_returns_error_if_time_is_not_up():
-    pass
+def test_time_control_assert_request_returns_error_if_time_is_not_up(
+    socketio_client_factory, test_time_provider
+):
+    GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
+    FIRST_MOVE_TS = GAME_CREATE_MOCK_TS + 5
+    test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
+    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
+        socketio_client_factory, time_control=True
+    )
 
+    test_time_provider.set_mocked_time(FIRST_MOVE_TS)
+    _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
 
-# todo: test what happens on time end
-# + todo: test when a move is submitted after time was up
-# ? todo: test the "test-for-time-control" request by the client
-# todo: parametrize time_control tests with different time controls
-# todo: test bad/malicious inputs
-# todo: test what happens when you don't pass in a time control
-# todo: error handling improvement, at least dump the stack trace when testing, please!
+    # 2 seconds BEFORE the 2nd player time was up...
+    test_time_provider.set_mocked_time(FIRST_MOVE_TS + TIME_CONTROL_BASE - 2)
+    response = emit_clock_check(users[0], cid)
+
+    assert_event_errored(response)
+
+    payload = get_latest_challenge_update_ioclient_received(users[0])
+    assert payload["challenge"]["status"] == "IN_PROGRESS"
+    assert payload["challenge"]["player_won"] == -1
 
 
 def emit_succesful_amazons_create_with_time_control(io_client):
@@ -169,3 +201,7 @@ def emit_succesful_amazons_create_with_time_control(io_client):
         },
         callback=True,
     )
+
+
+def emit_clock_check(io_client, cid):
+    return io_client.emit("challenge-clock-check", {"cid": cid}, callback=True)

@@ -60,3 +60,9 @@ def handle_challenge_subscribe(payload):
 def handle_challenge_unsubscribe(payload):
     room = challenge_service.socket_room_name_from_cid(payload["cid"])
     leave_room(room)
+
+
+@bp.on("challenge-clock-check")
+def handle_clock_check(payload):
+    result = challenge_service.handle_clock_check(payload["cid"])
+    return result
