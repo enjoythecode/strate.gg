@@ -29,24 +29,6 @@ def emit_move_to_cid(io_client, move, cid):
     return io_client.emit("challenge-move", {"cid": cid, "move": move}, callback=True)
 
 
-def create_challenge_between_two_clients_and_subscribe_players_to_it(
-    socketio_client_factory, time_control=False
-):
-
-    user_one = socketio_client_factory.create()
-    user_two = socketio_client_factory.create()
-
-    response = emit_succesful_amazons_create_challenge(user_one, time_control)
-    cid = response["challenge"]["cid"]
-
-    subscribe_user_to_challenge(user_one, cid)
-
-    emit_join_challenge_with_cid(user_two, cid)
-    subscribe_user_to_challenge(user_two, cid)
-
-    return (cid, [user_one, user_two])
-
-
 def subscribe_user_to_challenge(user, cid):
     response = user.emit("challenge-subscribe", {"cid": cid}, callback=True)
     return response

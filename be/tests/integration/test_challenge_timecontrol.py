@@ -1,9 +1,5 @@
 from .conf_websocket import assert_event_errored
-from .conf_websocket import assert_event_includes_challenge_data
 from .conf_websocket import assert_event_succesful
-from .test_challenge_helpers import (
-    create_challenge_between_two_clients_and_subscribe_players_to_it,
-)
 from .test_challenge_helpers import emit_move_to_cid
 from .test_challenge_helpers import get_latest_challenge_update_ioclient_received
 from .test_challenge_move_amazons import FULL_AMAZON_GAME
@@ -12,35 +8,15 @@ TIME_CONTROL_BASE = 10 * 60
 TIME_CONTROL_INCREMENT = 5
 
 
-def test_can_create_amazons_game_with_time_control(socketio_client):
-
-    payload = emit_succesful_amazons_create_with_time_control(socketio_client)
-
-    assert_event_succesful(payload)
-    assert_event_includes_challenge_data(payload)
-
-    challenge_data = payload["challenge"]
-    assert "time_control" in challenge_data
-    time_control = challenge_data["time_control"]
-
-    assert "time_config" in time_control
-    time_config = time_control["time_config"]
-
-    assert time_config["base_s"] == TIME_CONTROL_BASE
-    assert time_config["increment_s"] == TIME_CONTROL_INCREMENT
-
-
 def test_challenge_time_control_starts_on_first_move_and_not_game_creation(
-    socketio_client_factory, test_time_provider
+    amazons_challenge_with_clock, test_time_provider
 ):
 
     GAME_CREATE_MOCK_TS = 1234567890.123456  # epoch, decimal is millisecond
     FIRST_MOVE_MOCK_TS = GAME_CREATE_MOCK_TS + 10  # first move 10 seconds after
 
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
-    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
-        socketio_client_factory, time_control=True
-    )
+    cid, users = amazons_challenge_with_clock
 
     test_time_provider.set_mocked_time(FIRST_MOVE_MOCK_TS)
     _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
@@ -62,7 +38,7 @@ def test_challenge_time_control_starts_on_first_move_and_not_game_creation(
 
 
 def test_time_control_counts_down_correctly(
-    socketio_client_factory, test_time_provider
+    amazons_challenge_with_clock, test_time_provider
 ):
 
     GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
@@ -98,9 +74,7 @@ def test_time_control_counts_down_correctly(
     ]
 
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
-    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
-        socketio_client_factory, time_control=True
-    )
+    cid, users = amazons_challenge_with_clock
 
     for move_i in range(len(MOVE_MOCK_TSS)):
         move = FULL_AMAZON_GAME[move_i]
@@ -119,14 +93,12 @@ def test_time_control_counts_down_correctly(
 
 
 def test_that_move_after_game_clock_is_up_terminates_game(
-    socketio_client_factory, test_time_provider
+    amazons_challenge_with_clock, test_time_provider
 ):
     GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
 
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
-    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
-        socketio_client_factory, time_control=True
-    )
+    cid, users = amazons_challenge_with_clock
 
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS + 5)
     _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
@@ -141,14 +113,12 @@ def test_that_move_after_game_clock_is_up_terminates_game(
 
 
 def test_time_control_assert_request_terminates_game_if_time_is_up(
-    socketio_client_factory, test_time_provider
+    amazons_challenge_with_clock, test_time_provider
 ):
     GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
     FIRST_MOVE_TS = GAME_CREATE_MOCK_TS + 5
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
-    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
-        socketio_client_factory, time_control=True
-    )
+    cid, users = amazons_challenge_with_clock
 
     test_time_provider.set_mocked_time(FIRST_MOVE_TS)
     _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)
@@ -165,14 +135,12 @@ def test_time_control_assert_request_terminates_game_if_time_is_up(
 
 
 def test_time_control_assert_request_returns_error_if_time_is_not_up(
-    socketio_client_factory, test_time_provider
+    amazons_challenge_with_clock, test_time_provider
 ):
     GAME_CREATE_MOCK_TS = 1000000000.000000  # epoch, decimal is millisecond
     FIRST_MOVE_TS = GAME_CREATE_MOCK_TS + 5
     test_time_provider.set_mocked_time(GAME_CREATE_MOCK_TS)
-    cid, users = create_challenge_between_two_clients_and_subscribe_players_to_it(
-        socketio_client_factory, time_control=True
-    )
+    cid, users = amazons_challenge_with_clock
 
     test_time_provider.set_mocked_time(FIRST_MOVE_TS)
     _ = emit_move_to_cid(users[0], FULL_AMAZON_GAME[0], cid)

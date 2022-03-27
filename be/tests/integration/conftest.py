@@ -4,6 +4,9 @@ import time
 import pytest
 import redislite
 
+from .test_challenge_helpers import emit_join_challenge_with_cid
+from .test_challenge_helpers import emit_succesful_amazons_create_challenge
+from .test_challenge_helpers import subscribe_user_to_challenge
 from app import create_app
 from app import socketio
 
@@ -88,3 +91,28 @@ def socketio_client_factory(app):
 @pytest.fixture
 def socketio_client(socketio_client_factory):
     return socketio_client_factory.create()
+
+
+def create_amazons_challenge(client_factory, time_control):
+    user_one = client_factory.create()
+    user_two = client_factory.create()
+
+    response = emit_succesful_amazons_create_challenge(user_one, time_control)
+    cid = response["challenge"]["cid"]
+
+    subscribe_user_to_challenge(user_one, cid)
+
+    emit_join_challenge_with_cid(user_two, cid)
+    subscribe_user_to_challenge(user_two, cid)
+
+    return (cid, [user_one, user_two])
+
+
+@pytest.fixture
+def amazons_challenge_no_clock(socketio_client_factory):
+    return create_amazons_challenge(socketio_client_factory, time_control=False)
+
+
+@pytest.fixture
+def amazons_challenge_with_clock(socketio_client_factory):
+    return create_amazons_challenge(socketio_client_factory, time_control=True)
