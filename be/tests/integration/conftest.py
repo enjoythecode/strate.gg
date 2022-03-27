@@ -16,26 +16,28 @@ def test_redis():
     return redislite.Redis("/tmp/redis.db")
 
 
+class TestTimeProvider:
+    def __init__(self, mocked_time=None):
+        self.mocked_time = mocked_time
+        # for debugging purposes; is the copy given to other fixtures the
+        # same as the one given to the test itself? (yes)
+        self.created_time = time.time()
+
+    def set_mocked_time(self, new_time):
+        self.mocked_time = new_time
+
+    def get_mocked_time(self):
+        print(self.mocked_time)
+        assert self.mocked_time is not None, "Mocked time not set yet!"
+        return self.mocked_time
+
+    def time(self):  # matching the API of the built-in module 'time'
+        return self.get_mocked_time()
+
+
 @pytest.fixture
 def test_time_provider():
-    class TestTimeProvider:
-        def __init__(self, mocked_time=None):
-            self.mocked_time = mocked_time
-            # for debugging purposes; is the copy given to other fixtures the
-            # same as the one given to the test itself? (yes)
-            self.created_time = time.time()
-
-        def set_mocked_time(self, new_time):
-            self.mocked_time = new_time
-
-        def get_mocked_time(self):
-            assert self.mocked_time is not None, "Mocked time not set yet!"
-            return self.mocked_time
-
-        def time(self):  # matching the API of the built-in module 'time'
-            return self.get_mocked_time()
-
-    return TestTimeProvider()
+    return TestTimeProvider(None)
 
 
 @pytest.fixture
@@ -111,8 +113,3 @@ def create_amazons_challenge(client_factory, time_control):
 @pytest.fixture
 def amazons_challenge_no_clock(socketio_client_factory):
     return create_amazons_challenge(socketio_client_factory, time_control=False)
-
-
-@pytest.fixture
-def amazons_challenge_with_clock(socketio_client_factory):
-    return create_amazons_challenge(socketio_client_factory, time_control=True)
