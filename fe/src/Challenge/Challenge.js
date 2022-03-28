@@ -1,6 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import { AmazonsLogic } from "Games/Amazons/AmazonsLogic";
 import { AmazonsView } from "Games/Amazons/AmazonsView";
+import TimeControl from "Challenge/TimeControl";
 
 const game_name_to_state_class = {
   amazons: AmazonsLogic,
@@ -26,6 +27,13 @@ A challenge is represented as a Dictionary with the following structure:
     "cid": String. ID assigned to the game.
     "player_won": Int. If a player won, this is the index of the player that won
         Otherwise, it is -1.
+    "time_control":{
+      "time_config":{
+        "base_s": int
+        "increment_s": int
+      }
+      "move_timestamps": List of floats.
+    }
 }
 */
 
@@ -37,6 +45,7 @@ class Challenge {
   status = "";
   cid = "";
   moves = [];
+  time_control = null;
 
   constructor(data) {
     makeObservable(this, {
@@ -45,6 +54,7 @@ class Challenge {
       status: observable,
       game_end: observable,
       moves: observable,
+      time_control: observable,
       is_playing: computed,
       update_challenge_information: action,
     });
@@ -54,6 +64,7 @@ class Challenge {
       this,
       data.state.config
     );
+    this.time_control = new TimeControl(data.time_control);
 
     this.update_challenge_information(data);
 
@@ -69,6 +80,7 @@ class Challenge {
     this.status = new_chall.status;
     this.game_end = new_chall.player_won;
     this.moves = new_chall.moves;
+    this.time_control.update_time_control_data(new_chall.time_control);
     this.game_state.update_game_information(new_chall.state);
   }
 
