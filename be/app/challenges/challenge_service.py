@@ -205,21 +205,31 @@ def default_player_due_to_disconnect(cid, uid):
         send_challenge_update_to_clients(challenge)
 
 
+def calc_time_user_used_from_timestamps(stamps):
+    # calculates the total amount of time used for the user with the last stamp
+    used_time = 0
+    for i in range(len(stamps) - 1, 0, -2):
+        used_time += stamps[i] - stamps[i - 1]
+
+    return used_time
+
+
 def check_game_clock_OK(challenge):
+    """checks the time for the player with the turn"""
     if challenge["time_control"] == {}:
         return True
 
     current_time = current_app.time_provider.time()
-    current_player = challenge["state"]["turn"]
 
-    last_move_ts = challenge["time_control"]["last_move_ts"]
-    remaining_time_of_current_player = challenge["time_control"]["remaining_times_s"][
-        current_player
-    ]
-    player_lost_on_time = (
-        current_time >= last_move_ts + remaining_time_of_current_player
-    )
-    return not player_lost_on_time
+    timestamps = challenge["time_control"]["move_timestamps"] + [current_time]
+    timeconfig_base = challenge["time_control"]["time_config"]["base_s"]
+    timeconfig_increment = challenge["time_control"]["time_config"]["increment_s"]
+    user_moves_with_increment_counted = (len(challenge["moves"]) - 1) // 2
+    used_time = calc_time_user_used_from_timestamps(timestamps)
+    total_increment_bonus = timeconfig_increment * user_moves_with_increment_counted
+
+    game_clock_is_ok = timeconfig_base + total_increment_bonus > used_time
+    return game_clock_is_ok
 
 
 def default_game_on_time(challenge):
@@ -235,28 +245,17 @@ def default_game_on_time(challenge):
 
 def handle_time_control(challenge):
     if "time_control" in challenge and challenge["time_control"] != {}:
-        time_config = challenge["time_control"]["time_config"]
-
-        base_s = time_config["base_s"]
-        increment_s = time_config["increment_s"]
 
         current_time = current_app.time_provider.time()
-        current_player = challenge["state"]["turn"]
 
         if len(challenge["moves"]) == 0:  # first move was just moved
-            challenge["time_control"]["remaining_times_s"] = [base_s, base_s]
+            challenge["time_control"]["move_timestamps"] = [current_time]
         else:
             if check_game_clock_OK(challenge):
-                used_time = current_time - challenge["time_control"]["last_move_ts"]
-                added_time = increment_s
-                delta_timeup_ts = added_time - used_time
-                challenge["time_control"]["remaining_times_s"][
-                    current_player
-                ] += delta_timeup_ts
+                challenge["time_control"]["move_timestamps"].append(current_time)
+
             else:
                 challenge = default_game_on_time(challenge)
-
-        challenge["time_control"]["last_move_ts"] = current_time
 
     return challenge
 

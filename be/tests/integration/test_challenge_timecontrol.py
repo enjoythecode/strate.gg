@@ -35,8 +35,7 @@ class TestChallengeTimeControl:
                 "base_s": TIME_CONTROL_BASE,
                 "increment_s": TIME_CONTROL_INCREMENT,
             },
-            "last_move_ts": FIRST_MOVE_MOCK_TS,
-            "remaining_times_s": [TIME_CONTROL_BASE, TIME_CONTROL_BASE],
+            "move_timestamps": [FIRST_MOVE_MOCK_TS],
         }
 
         assert payload["challenge"]["time_control"] == expected_time_control
@@ -50,29 +49,12 @@ class TestChallengeTimeControl:
         SECOND_MOVE_MOCK_TS = FIRST_MOVE_MOCK_TS + MOVE_DELAYS[1]
         THIRD_MOVE_MOCK_TS = SECOND_MOVE_MOCK_TS + MOVE_DELAYS[2]
         FOURTH_MOVE_MOCK_TS = THIRD_MOVE_MOCK_TS + MOVE_DELAYS[3]
+
         MOVE_MOCK_TSS = [
             FIRST_MOVE_MOCK_TS,
             SECOND_MOVE_MOCK_TS,
             THIRD_MOVE_MOCK_TS,
             FOURTH_MOVE_MOCK_TS,
-        ]
-        EXPECTED_REMAINING_TIMES_S = [
-            [TIME_CONTROL_BASE, TIME_CONTROL_BASE],  # after first move, clock starts
-            [
-                TIME_CONTROL_BASE,
-                TIME_CONTROL_BASE + TIME_CONTROL_INCREMENT - MOVE_DELAYS[1],
-            ],
-            [
-                TIME_CONTROL_BASE + TIME_CONTROL_INCREMENT - MOVE_DELAYS[2],
-                TIME_CONTROL_BASE + TIME_CONTROL_INCREMENT - MOVE_DELAYS[1],
-            ],
-            [
-                TIME_CONTROL_BASE + TIME_CONTROL_INCREMENT - MOVE_DELAYS[2],
-                TIME_CONTROL_BASE
-                + TIME_CONTROL_INCREMENT * 2
-                - MOVE_DELAYS[1]
-                - MOVE_DELAYS[3],
-            ],
         ]
 
         cid, users = amazons_challenge_with_clock
@@ -89,10 +71,7 @@ class TestChallengeTimeControl:
 
             time_control = payload["challenge"]["time_control"]
 
-            assert time_control["last_move_ts"] == mock_ts
-            assert (
-                time_control["remaining_times_s"] == EXPECTED_REMAINING_TIMES_S[move_i]
-            )
+            assert time_control["move_timestamps"] == MOVE_MOCK_TSS[: move_i + 1]
 
     def test_that_move_after_game_clock_is_up_terminates_game(
         self, amazons_challenge_with_clock, test_time_provider
