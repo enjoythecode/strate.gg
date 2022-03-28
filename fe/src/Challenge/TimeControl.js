@@ -33,6 +33,22 @@ class TimeControl {
 
     return used_time;
   }
+  remaining_time_of_player(player) {
+    const base_s = this.config.base_s;
+    const increment_s = this.config.increment_s;
+    const time_used = this.total_time_used_of_player(player);
+
+    if (this.move_timestamps === undefined || this.move_timestamps.count < 1) {
+      return base_s;
+    }
+
+    let moves_with_increment_bonus = Math.floor(
+      (this.move_timestamps.length - (player == 0 ? 1 : 0)) / 2
+    );
+
+    moves_with_increment_bonus = Math.max(0, moves_with_increment_bonus);
+    return base_s + increment_s * moves_with_increment_bonus - time_used;
+  }
 }
 
 export default TimeControl;
