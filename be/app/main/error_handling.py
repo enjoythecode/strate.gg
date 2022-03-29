@@ -7,5 +7,5 @@ from app.main import bp
 @bp.on_error()
 def handle_websocket_error_default(e):
     # if not isinstance(e, AssertionError):
-    #    raise e
+    # raise e
     return {"result": "error"}

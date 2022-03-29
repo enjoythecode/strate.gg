@@ -49,6 +49,11 @@ class TimeControl:
     def as_dict(self):
         return {"time_config": self.config, "move_timestamps": self.move_stamps}
 
+    @classmethod
+    def from_dict(cls, dict):
+        obj = TimeControl(dict["time_config"], dict["move_timestamps"])
+        return obj
+
     def is_timed_challenge(self):
         return self.config != {}
 
@@ -78,16 +83,16 @@ class Challenge:
         self.time_control = TimeControl(config=time_config)
 
     @classmethod
-    def create_from_dict(self, dict):
+    def from_dict(self, dict):
         game = GAME_STATE_CLASSES[dict["game_name"]]
         self.game_name = dict["game_name"]
-        self.state = game.create_from_dict(dict["state"])
+        self.state = game.from_dict(dict["state"])
         self.players = dict["players"]
         self.moves = dict["moves"]
         self.status = dict["status"]
         self.cid = dict["cid"]
         self.player_won = dict["player_won"]
-        self.time_control = TimeControl.create_from_dict(dict["time_control"])
+        self.time_control = TimeControl.from_dict(dict["time_control"])
 
     def as_dict(self):
         return {
@@ -338,9 +343,11 @@ def create_challenge(game_name, game_config, time_config=None):
     return challenge_obj
 
 
-def add_player_to_challenge(uid, cid):  # API (challenge-join)
+def add_player_to_challenge(uid, cid):
 
     challenge = _get_challenge_by_cid(cid)
+    challenge_class = Challenge.from_dict(challenge)
+    assert challenge_class  # .user_can_join(uid)
 
     assert_player_can_join_challenge(uid, challenge)
 
