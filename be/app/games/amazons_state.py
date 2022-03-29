@@ -82,12 +82,11 @@ class AmazonsState(GameState):
 
         # XXX/TODO: off-load this to the JSON schema library
         required_keys = ["size", "variation"]
-        required_keys_exist = all([field in config for field in required_keys])
+        assert all([field in config for field in required_keys]), "bad input"
 
         int_keys = ["size", "variation"]
         int_keys_are_int = all([isinstance(config[key], int) for key in int_keys])
-        if not required_keys_exist or not int_keys_are_int:
-            return False
+        assert int_keys_are_int, "bad input"
         if not self.config_to_config_key(config) in VALID_CONFIG_KEYS:
             return False
 

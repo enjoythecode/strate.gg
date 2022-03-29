@@ -11,8 +11,7 @@ def create_challenge(payload):
     # TODO: what happens on an error?
     # XXX: (application TODO generally)
 
-    if not ("game_name" in payload and "game_config" in payload):
-        raise BaseException
+    assert "game_name" in payload and "game_config" in payload, "bad input"
 
     uid = user_service.get_uid_of_session_holder()
 
@@ -29,10 +28,8 @@ def create_challenge(payload):
 @bp.on("challenge-join")
 def challenge_join(payload):
     # TODO how to do more comprehensive check of user input?
-    if "cid" in payload:
-        cid = payload["cid"]
-    else:
-        raise BaseException  # bad input
+    assert "cid" in payload, "bad input"
+    cid = payload["cid"]
 
     uid = user_service.get_uid_of_session_holder()
 

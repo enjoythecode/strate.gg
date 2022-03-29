@@ -64,6 +64,7 @@ class TimeControl:
     def is_timed_challenge(self):
         return self.config != {}
 
+    # xxx>><<????
     def calc_time_user_used_from_timestamps(stamps):  # helper for clock
         """calculates the total amount of time used for the user with the last stamp"""
         used_time = 0
@@ -71,6 +72,23 @@ class TimeControl:
             used_time += stamps[i] - stamps[i - 1]
 
         return used_time
+
+    def check_game_clock_OK(self):
+        """checks the time for the player with the turn"""
+        if not self.is_timed_challenge():
+            return True
+
+        current_time = current_app.time_provider.time()
+
+        timestamps = self.move_stamps + [current_time]
+        timeconfig_base = self.config["base_s"]
+        timeconfig_increment = self.config["increment_s"]
+        user_moves_with_increment_counted = (len(timestamps) - 2) // 2
+        used_time = calc_time_user_used_from_timestamps(timestamps)
+        total_increment_bonus = timeconfig_increment * user_moves_with_increment_counted
+
+        game_clock_is_ok = timeconfig_base + total_increment_bonus > used_time
+        return game_clock_is_ok
 
 
 class Challenge:
@@ -88,7 +106,7 @@ class Challenge:
 
     @classmethod
     def create_new(cls, game_name, game_config, cid=None, time_config=None):
-
+        assert game_name in GAME_STATE_CLASSES, "bad game name"
         game = GAME_STATE_CLASSES[game_name]
         assert game.is_valid_config(game_config), "Game configuration is invalid"
         game_state = game.create_from_config(game_config)
@@ -132,7 +150,6 @@ class Challenge:
         return self.cid
 
     def user_can_be_added(self, uid):
-        print("!!!", uid, self.players)
         if len(self.players) == self.state.get_max_no_players():
             return False
         if uid in self.players:
@@ -141,7 +158,6 @@ class Challenge:
         return True
 
     def player_spots_are_full(self):
-        print(self.players, self.state.get_max_no_players())
         return len(self.players) == self.state.get_max_no_players()
 
     def add_player(self, player):
@@ -154,6 +170,16 @@ class Challenge:
 
     def is_in_progress(self):
         return self.status == "IN_PROGRESS"
+
+    def default_on_time(self):
+        current_player = self.state.turn
+
+        self.status = "OVER_TIME"
+        # set the remaining player as the winner
+        self.player_won = (current_player + 1) % 2
+
+    def check_game_clock_OK(self):
+        return self.time_control.check_game_clock_OK()
 
 
 CHALLENGE_ID_LENGTH = 8
@@ -268,37 +294,6 @@ def create_time_control_from_time_config(time_config):  # helper: clock init
     return time_control
 
 
-def check_game_clock_OK(challenge):  # helper for clock
-    """checks the time for the player with the turn"""
-    if challenge["time_control"]["time_config"] == {}:
-        return True
-    print("\n" * 15)
-    print(challenge)
-
-    current_time = current_app.time_provider.time()
-
-    timestamps = challenge["time_control"]["move_timestamps"] + [current_time]
-    timeconfig_base = challenge["time_control"]["time_config"]["base_s"]
-    timeconfig_increment = challenge["time_control"]["time_config"]["increment_s"]
-    user_moves_with_increment_counted = (len(challenge["moves"]) - 1) // 2
-    used_time = calc_time_user_used_from_timestamps(timestamps)
-    total_increment_bonus = timeconfig_increment * user_moves_with_increment_counted
-
-    game_clock_is_ok = timeconfig_base + total_increment_bonus > used_time
-    return game_clock_is_ok
-
-
-def default_game_on_time(challenge):  # action, sub-API
-
-    current_player = challenge["state"]["turn"]
-
-    # set the remaining player as the winner
-    challenge["status"] = "OVER_TIME"
-    challenge["player_won"] = (current_player + 1) % 2
-
-    return challenge
-
-
 def handle_time_control(challenge):  # helper for API
     if "time_control" in challenge and challenge["time_control"] != {}:
 
@@ -307,11 +302,13 @@ def handle_time_control(challenge):  # helper for API
         if len(challenge["moves"]) == 0:  # first move was just moved
             challenge["time_control"]["move_timestamps"] = [current_time]
         else:
-            if check_game_clock_OK(challenge):
+            if Challenge.from_dict(challenge).check_game_clock_OK():
                 challenge["time_control"]["move_timestamps"].append(current_time)
 
             else:
-                challenge = default_game_on_time(challenge)
+                ch = Challenge.from_dict(challenge)
+                ch.default_on_time()
+                challenge = ch.as_dict()
 
     return challenge
 
@@ -377,12 +374,13 @@ def add_player_to_challenge(uid, cid):
 def handle_clock_check(cid):  # action, API
 
     challenge = Challenge.from_database(cid)
+
     assert challenge.is_in_progress(), "Game is not in progress"
+    assert not challenge.check_game_clock_OK(), "clock is OK"
+
+    challenge.default_on_time()
 
     challenge_obj = challenge.as_dict()
-
-    assert not check_game_clock_OK(challenge_obj), "clock is OK"
-    challenge_obj = default_game_on_time(challenge_obj)
 
     _challenge_set(challenge_obj)
     send_challenge_update_to_clients(challenge_obj)
