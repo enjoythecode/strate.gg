@@ -23,7 +23,7 @@ def create_challenge(payload):
     challenge = challenge_service.create_challenge(game_name, game_config, time_config)
     response = challenge_service.add_player_to_challenge(uid, challenge["cid"])
 
-    return response
+    return {"result": "success", "challenge": response}
 
 
 @bp.on("challenge-join")
@@ -37,7 +37,7 @@ def challenge_join(payload):
     uid = user_service.get_uid_of_session_holder()
 
     response = challenge_service.add_player_to_challenge(uid, cid)
-    return response
+    return {"result": "success", "challenge": response}
 
 
 @bp.on("challenge-move")

@@ -151,20 +151,15 @@ def _challenge_set(challenge):  # helper, database
     )
 
 
+def redis_key_exists(key):
+    return current_app.redis.exists(key)
+
+
 def _get_challenge_by_cid(cid):  # helper, database
     key = _get_redis_key_for_challenge_from_cid(cid)
+    assert redis_key_exists(key)
     response = current_app.redis.get(key)
     return json.loads(response)
-
-
-def create_challenge(game_name, game_config, time_config=None):  # API
-
-    challenge = Challenge(
-        game_name=game_name, game_config=game_config, time_config=time_config
-    )
-    challenge_obj = challenge.as_dict()
-    _challenge_set(challenge_obj)
-    return challenge_obj
 
 
 def send_challenge_update_to_clients(challenge):  # action
@@ -183,33 +178,6 @@ def assert_player_can_join_challenge(uid, challenge):  # assert
     if uid in challenge["players"]:
         raise BaseException
     return True
-
-
-def add_player_to_challenge(uid, cid):  # API (challenge-join)
-
-    if not _cid_exists(cid):
-        raise BaseException  # Challenge not found
-
-    challenge = _get_challenge_by_cid(cid)
-
-    assert_player_can_join_challenge(uid, challenge)
-
-    challenge["players"].append(uid)
-    user_service.add_realtimechallenge_to_user(cid)
-
-    if (
-        len(challenge["players"])
-        # XXX: smellyyy!!!. change with "challenge_players_is_full"
-        == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
-    ):
-        challenge["status"] = "IN_PROGRESS"
-
-    _challenge_set(challenge)
-
-    send_challenge_update_to_clients(challenge)
-
-    # TODO (design) i am returning this here as just to satisfy tests...
-    return {"result": "success", "challenge": challenge}
 
 
 def process_disconnect_from_user(uid):  # action
@@ -358,3 +326,37 @@ def handle_move(cid, move):  # action, API
     send_challenge_update_to_clients(challenge)
 
     return {"result": "success"}
+
+
+# API METHODS
+def create_challenge(game_name, game_config, time_config=None):
+    challenge = Challenge(
+        game_name=game_name, game_config=game_config, time_config=time_config
+    )
+    challenge_obj = challenge.as_dict()
+    _challenge_set(challenge_obj)
+    return challenge_obj
+
+
+def add_player_to_challenge(uid, cid):  # API (challenge-join)
+
+    challenge = _get_challenge_by_cid(cid)
+
+    assert_player_can_join_challenge(uid, challenge)
+
+    challenge["players"].append(uid)
+    user_service.add_realtimechallenge_to_user(cid)
+
+    if (
+        len(challenge["players"])
+        # XXX: smellyyy!!!. change with "challenge_players_is_full"
+        == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
+    ):
+        challenge["status"] = "IN_PROGRESS"
+
+    _challenge_set(challenge)
+
+    send_challenge_update_to_clients(challenge)
+
+    # TODO (design) i am returning this here as just to satisfy tests...
+    return challenge
