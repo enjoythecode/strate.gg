@@ -69,6 +69,7 @@ class AmazonsState(GameState):
         obj.board = dict["board"]
         obj.config = dict["config"]
         obj.number_of_turns = dict["number_of_turns"]
+        return obj
 
     def __init__(self, config=DEFAULT_AMAZONS_CONFIG):
         self.turn = 0

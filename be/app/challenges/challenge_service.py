@@ -50,9 +50,15 @@ class TimeControl:
         return {"time_config": self.config, "move_timestamps": self.move_stamps}
 
     @classmethod
-    def from_dict(cls, dict):
-        obj = TimeControl(dict["time_config"], dict["move_timestamps"])
+    def from_dict(cls, data):
+        obj = TimeControl(data["time_config"], data["move_timestamps"])
         return obj
+
+    @classmethod
+    def from_config(cls, config):
+        if config is {}:
+            return cls(config=None, move_timestamps=None)
+        return cls(config=config, move_timestamps=None)
 
     def is_timed_challenge(self):
         return self.config != {}
@@ -67,32 +73,42 @@ class TimeControl:
 
 
 class Challenge:
-    def __init__(self, game_name, game_config, cid=None, time_config=None):
+    def __init__(self, data):
+        game = GAME_STATE_CLASSES[data["game_name"]]
+
+        self.game_name = data["game_name"]
+        self.state = game.from_dict(data["state"])
+        self.players = data["players"]
+        self.moves = data["moves"]
+        self.status = data["status"]
+        self.cid = data["cid"]
+        self.player_won = data["player_won"]
+        self.time_control = TimeControl.from_dict(data["time_control"])
+
+    @classmethod
+    def create_new(cls, game_name, game_config, cid=None, time_config=None):
+
         game = GAME_STATE_CLASSES[game_name]
         assert game.is_valid_config(game_config), "Game configuration is invalid"
         game_state = game.create_from_config(game_config)
-        cid = cid if cid else _generate_unique_cid()
 
-        self.game_name = game_name
-        self.state = game_state
-        self.players = []
-        self.moves = []
-        self.status = "WAITING_FOR_PLAYERS"
-        self.cid = cid
-        self.player_won = -1
-        self.time_control = TimeControl(config=time_config)
+        cid = cid if cid else _generate_unique_cid()
+        data = {
+            "game_name": game_name,
+            "state": game_state.as_dict(),
+            "players": [],
+            "moves": [],
+            "status": "WAITING_FOR_PLAYERS",
+            "cid": cid,
+            "player_won": -1,
+            "time_control": TimeControl.from_config(time_config).as_dict(),
+        }
+
+        return cls(data)
 
     @classmethod
-    def from_dict(self, dict):
-        game = GAME_STATE_CLASSES[dict["game_name"]]
-        self.game_name = dict["game_name"]
-        self.state = game.from_dict(dict["state"])
-        self.players = dict["players"]
-        self.moves = dict["moves"]
-        self.status = dict["status"]
-        self.cid = dict["cid"]
-        self.player_won = dict["player_won"]
-        self.time_control = TimeControl.from_dict(dict["time_control"])
+    def from_dict(cls, data):
+        return cls(data)
 
     def as_dict(self):
         return {
@@ -108,6 +124,13 @@ class Challenge:
 
     def get_cid(self):
         return self.cid
+
+    def user_can_join(self, uid):
+        if len(self.players) == self.state.get_max_no_players():
+            return False
+        if uid in self.players:
+            return False
+        return True
 
 
 CHALLENGE_ID_LENGTH = 8
@@ -335,7 +358,7 @@ def handle_move(cid, move):  # action, API
 
 # API METHODS
 def create_challenge(game_name, game_config, time_config=None):
-    challenge = Challenge(
+    challenge = Challenge.create_new(
         game_name=game_name, game_config=game_config, time_config=time_config
     )
     challenge_obj = challenge.as_dict()
@@ -347,9 +370,8 @@ def add_player_to_challenge(uid, cid):
 
     challenge = _get_challenge_by_cid(cid)
     challenge_class = Challenge.from_dict(challenge)
-    assert challenge_class  # .user_can_join(uid)
 
-    assert_player_can_join_challenge(uid, challenge)
+    assert challenge_class.user_can_join(uid)
 
     challenge["players"].append(uid)
     user_service.add_realtimechallenge_to_user(cid)
