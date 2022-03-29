@@ -132,6 +132,9 @@ class Challenge:
             return False
         return True
 
+    def player_spots_are_full(self):
+        return len(self.players) == self.state.get_max_no_players()
+
 
 CHALLENGE_ID_LENGTH = 8
 
@@ -376,11 +379,7 @@ def add_player_to_challenge(uid, cid):
     challenge["players"].append(uid)
     user_service.add_realtimechallenge_to_user(cid)
 
-    if (
-        len(challenge["players"])
-        # XXX: smellyyy!!!. change with "challenge_players_is_full"
-        == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
-    ):
+    if challenge_class.player_spots_are_full():
         challenge["status"] = "IN_PROGRESS"
 
     _challenge_set(challenge)
