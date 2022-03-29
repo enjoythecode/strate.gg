@@ -319,8 +319,8 @@ def handle_time_control(challenge):  # helper for API
 def handle_move(cid, move):  # action, API
     challenge = _get_challenge_by_cid(cid)
 
-    if not challenge["status"] == "IN_PROGRESS":
-        return {"result": "error", "error": "game is not in progress"}
+    challenge_class = Challenge.from_database(cid)
+    assert challenge_class.is_in_progress(), "Game is not in progress"
 
     # xxx instantiating these classes are tech debt!
     game = GAME_STATE_CLASSES[challenge["game_name"]].init_from_repr(challenge["state"])
