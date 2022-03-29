@@ -301,20 +301,6 @@ def calc_time_user_used_from_timestamps(stamps):  # helper for clock
     return used_time
 
 
-def create_time_control_from_time_config(time_config):  # helper: clock init
-    if time_config is None:
-        return {}
-
-    time_control = {
-        "time_config": {
-            "base_s": time_config["base_s"],
-            "increment_s": time_config["increment_s"],
-        }
-    }
-
-    return time_control
-
-
 # API METHODS
 def create_challenge(game_name, game_config, time_config=None):
     challenge = Challenge.create_new(
