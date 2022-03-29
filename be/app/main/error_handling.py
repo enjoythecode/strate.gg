@@ -6,4 +6,5 @@ from app.main import bp
 # instead, throw and catch specific errors
 @bp.on_error()
 def handle_websocket_error_default(e):
+
     return {"result": "error"}

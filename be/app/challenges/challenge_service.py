@@ -1,3 +1,4 @@
+import copy
 import json
 
 from flask import current_app
@@ -78,7 +79,7 @@ class Challenge:
 
         self.game_name = data["game_name"]
         self.state = game.from_dict(data["state"])
-        self.players = data["players"]
+        self.players = copy.deepcopy(data["players"])
         self.moves = data["moves"]
         self.status = data["status"]
         self.cid = data["cid"]
@@ -110,6 +111,11 @@ class Challenge:
     def from_dict(cls, data):
         return cls(data)
 
+    @classmethod
+    def from_database(cls, cid):
+        data = _get_challenge_by_cid(cid)
+        return cls.from_dict(data)
+
     def as_dict(self):
         return {
             "game_name": self.game_name,
@@ -125,15 +131,26 @@ class Challenge:
     def get_cid(self):
         return self.cid
 
-    def user_can_join(self, uid):
+    def user_can_be_added(self, uid):
+        print("!!!", uid, self.players)
         if len(self.players) == self.state.get_max_no_players():
             return False
         if uid in self.players:
+
             return False
         return True
 
     def player_spots_are_full(self):
+        print(self.players, self.state.get_max_no_players())
         return len(self.players) == self.state.get_max_no_players()
+
+    def add_player(self, player):
+        self.players.append(player)
+        if self.player_spots_are_full():
+            self.change_status_to_in_progress()
+
+    def change_status_to_in_progress(self):
+        self.status = "IN_PROGRESS"
 
 
 CHALLENGE_ID_LENGTH = 8
@@ -197,18 +214,6 @@ def send_challenge_update_to_clients(challenge):  # action
     payload = {"result": "success", "challenge": challenge}
     target_room = socket_room_name_from_challenge(challenge)
     emit("challenge-update", payload, to=target_room)
-
-
-def assert_player_can_join_challenge(uid, challenge):  # assert
-
-    if (
-        len(challenge["players"])
-        == GAME_STATE_CLASSES[challenge["game_name"]].get_max_no_players()
-    ):
-        raise BaseException
-    if uid in challenge["players"]:
-        raise BaseException
-    return True
 
 
 def process_disconnect_from_user(uid):  # action
@@ -371,20 +376,13 @@ def create_challenge(game_name, game_config, time_config=None):
 
 def add_player_to_challenge(uid, cid):
 
-    challenge = _get_challenge_by_cid(cid)
-    challenge_class = Challenge.from_dict(challenge)
+    challenge = Challenge.from_database(cid)
+    assert challenge.user_can_be_added(uid)
 
-    assert challenge_class.user_can_join(uid)
-
-    challenge["players"].append(uid)
+    challenge.add_player(uid)
     user_service.add_realtimechallenge_to_user(cid)
 
-    if challenge_class.player_spots_are_full():
-        challenge["status"] = "IN_PROGRESS"
-
-    _challenge_set(challenge)
-
-    send_challenge_update_to_clients(challenge)
-
-    # TODO (design) i am returning this here as just to satisfy tests...
-    return challenge
+    challenge_obj = challenge.as_dict()
+    _challenge_set(challenge_obj)
+    send_challenge_update_to_clients(challenge_obj)
+    return challenge_obj
