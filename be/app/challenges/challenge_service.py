@@ -321,15 +321,15 @@ def handle_move(cid, move):  # action, API
 
     challenge_class = Challenge.from_database(cid)
     assert challenge_class.is_in_progress(), "Game is not in progress"
+    assert challenge_class.state.is_valid_move(move), "Invalid move"
 
     # xxx instantiating these classes are tech debt!
     game = GAME_STATE_CLASSES[challenge["game_name"]].init_from_repr(challenge["state"])
 
-    if not game.is_valid_move(move):
-        return {"result": "error", "error": "invalid move"}
-
     uid = user_service.get_uid_of_session_holder()
-    if uid in challenge["players"] and game.turn == challenge["players"].index(uid):
+    if uid in challenge["players"] and challenge_class.state.turn == challenge[
+        "players"
+    ].index(uid):
         challenge = handle_time_control(challenge)
         game.make_move(move)
         challenge["moves"].append(move)
