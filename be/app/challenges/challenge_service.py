@@ -90,6 +90,9 @@ class TimeControl:
         game_clock_is_ok = timeconfig_base + total_increment_bonus > used_time
         return game_clock_is_ok
 
+    def record_move_timestamp(self):
+        self.move_stamps.append(current_app.time_provider.time())
+
 
 class Challenge:
     def __init__(self, data):
@@ -180,6 +183,24 @@ class Challenge:
 
     def check_game_clock_OK(self):
         return self.time_control.check_game_clock_OK()
+
+    def user_is_a_player(self, uid):
+        return uid in self.players
+
+    def user_may_make_move(self, uid):
+        return self.state.turn == self.players.index(uid)
+
+    def make_move(self, move):
+
+        self.state.make_move(move)
+        self.moves.append(move)
+        self.time_control.record_move_timestamp()
+
+        if self.has_no_winner():  # game not terminated due to other reasons
+            self.player_won = self.state.check_game_end()
+
+    def has_no_winner(self):
+        return self.player_won == -1
 
 
 CHALLENGE_ID_LENGTH = 8
@@ -294,59 +315,6 @@ def create_time_control_from_time_config(time_config):  # helper: clock init
     return time_control
 
 
-def handle_time_control(challenge):  # helper for API
-    if "time_control" in challenge and challenge["time_control"] != {}:
-
-        current_time = current_app.time_provider.time()
-
-        if len(challenge["moves"]) == 0:  # first move was just moved
-            challenge["time_control"]["move_timestamps"] = [current_time]
-        else:
-            if Challenge.from_dict(challenge).check_game_clock_OK():
-                challenge["time_control"]["move_timestamps"].append(current_time)
-
-            else:
-                ch = Challenge.from_dict(challenge)
-                ch.default_on_time()
-                challenge = ch.as_dict()
-
-    return challenge
-
-
-######################
-
-
-def handle_move(cid, move):  # action, API
-    challenge = _get_challenge_by_cid(cid)
-
-    challenge_class = Challenge.from_database(cid)
-    assert challenge_class.is_in_progress(), "Game is not in progress"
-    assert challenge_class.state.is_valid_move(move), "Invalid move"
-
-    # xxx instantiating these classes are tech debt!
-    game = GAME_STATE_CLASSES[challenge["game_name"]].init_from_repr(challenge["state"])
-
-    uid = user_service.get_uid_of_session_holder()
-    if uid in challenge["players"] and challenge_class.state.turn == challenge[
-        "players"
-    ].index(uid):
-        challenge = handle_time_control(challenge)
-        game.make_move(move)
-        challenge["moves"].append(move)
-
-    else:
-        return {"result": "error", "error": "not your turn"}
-
-    challenge["state"] = game.__repr__()
-    if challenge["player_won"] == -1:  # game not terminated due to other reasons
-        challenge["player_won"] = game.check_game_end()
-
-    _challenge_set(challenge)
-    send_challenge_update_to_clients(challenge)
-
-    return {"result": "success"}
-
-
 # API METHODS
 def create_challenge(game_name, game_config, time_config=None):
     challenge = Challenge.create_new(
@@ -379,6 +347,28 @@ def handle_clock_check(cid):  # action, API
     assert not challenge.check_game_clock_OK(), "clock is OK"
 
     challenge.default_on_time()
+
+    challenge_obj = challenge.as_dict()
+
+    _challenge_set(challenge_obj)
+    send_challenge_update_to_clients(challenge_obj)
+
+    return {"result": "success"}
+
+
+def handle_move(cid, move):
+    uid = user_service.get_uid_of_session_holder()
+
+    challenge = Challenge.from_database(cid)
+    assert challenge.is_in_progress(), "Game is not in progress"
+    assert challenge.state.is_valid_move(move), "Invalid move"
+    assert challenge.user_is_a_player(uid), "You are not a player"
+    assert challenge.user_may_make_move(uid), "Not your turn"
+
+    if challenge.check_game_clock_OK():
+        challenge.make_move(move)
+    else:
+        challenge.default_on_time()
 
     challenge_obj = challenge.as_dict()
 
