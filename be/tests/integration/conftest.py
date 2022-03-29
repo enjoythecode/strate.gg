@@ -17,7 +17,7 @@ def test_redis():
 
 
 class TestTimeProvider:
-    def __init__(self, mocked_time=None):
+    def __init__(self, mocked_time=0):
         self.mocked_time = mocked_time
         # for debugging purposes; is the copy given to other fixtures the
         # same as the one given to the test itself? (yes)
@@ -27,8 +27,6 @@ class TestTimeProvider:
         self.mocked_time = new_time
 
     def get_mocked_time(self):
-        print(self.mocked_time)
-        assert self.mocked_time is not None, "Mocked time not set yet!"
         return self.mocked_time
 
     def time(self):  # matching the API of the built-in module 'time'

@@ -40,49 +40,102 @@ A ChallengeStatus is a string literal with self-explanatory names.
     OVER_TIME
 """
 
+
+class TimeControl:
+    def __init__(self, config=None, move_timestamps=None):
+        self.config = config if config is not None else {}
+        self.move_stamps = move_timestamps if move_timestamps is not None else []
+
+    def as_dict(self):
+        return {"time_config": self.config, "move_timestamps": self.move_stamps}
+
+    def is_timed_challenge(self):
+        return self.config != {}
+
+    def calc_time_user_used_from_timestamps(stamps):  # helper for clock
+        """calculates the total amount of time used for the user with the last stamp"""
+        used_time = 0
+        for i in range(len(stamps) - 1, 0, -2):
+            used_time += stamps[i] - stamps[i - 1]
+
+        return used_time
+
+
+class Challenge:
+    def __init__(self, game_name, game_config, cid=None, time_config=None):
+        game = GAME_STATE_CLASSES[game_name]
+        assert game.is_valid_config(game_config), "Game configuration is invalid"
+        game_state = game.create_from_config(game_config)
+        cid = cid if cid else _generate_unique_cid()
+
+        self.game_name = game_name
+        self.state = game_state
+        self.players = []
+        self.moves = []
+        self.status = "WAITING_FOR_PLAYERS"
+        self.cid = cid
+        self.player_won = -1
+        self.time_control = TimeControl(config=time_config)
+
+    @classmethod
+    def create_from_dict(self, dict):
+        game = GAME_STATE_CLASSES[dict["game_name"]]
+        self.game_name = dict["game_name"]
+        self.state = game.create_from_dict(dict["state"])
+        self.players = dict["players"]
+        self.moves = dict["moves"]
+        self.status = dict["status"]
+        self.cid = dict["cid"]
+        self.player_won = dict["player_won"]
+        self.time_control = TimeControl.create_from_dict(dict["time_control"])
+
+    def as_dict(self):
+        return {
+            "game_name": self.game_name,
+            "state": self.state.as_dict(),
+            "players": self.players,
+            "moves": self.moves,
+            "status": self.status,
+            "cid": self.cid,
+            "player_won": self.player_won,
+            "time_control": self.time_control.as_dict(),
+        }
+
+    def get_cid(self):
+        return self.cid
+
+
 CHALLENGE_ID_LENGTH = 8
 
 
-def create_time_control_from_time_config(time_config):
-    if time_config is None:
-        return {}
-
-    time_control = {
-        "time_config": {
-            "base_s": time_config["base_s"],
-            "increment_s": time_config["increment_s"],
-        }
-    }
-
-    return time_control
-
-
-def _generate_cid():
+def _generate_cid():  # helper
     return generate_random_id(CHALLENGE_ID_LENGTH)
 
 
-def socket_room_name_from_cid(cid):
+def socket_room_name_from_cid(cid):  # helper, socket
     return "challenge" + "_" + cid
 
 
-def socket_room_name_from_challenge(challenge):
+def socket_room_name_from_challenge(challenge):  # helper, socket
     return socket_room_name_from_cid(challenge["cid"])
 
 
-def _get_redis_key_for_challenge_from_cid(cid):
+def _get_redis_key_for_challenge_from_cid(cid):  # helper, database
     return "challenge:" + cid
 
 
 # TODO: shorter names PLEASE
-def _get_redis_key_for_challenge_from_challenge(challenge):
+def _get_redis_key_for_challenge_from_challenge(challenge):  # helper, database
+    if isinstance(challenge, Challenge):
+        return _get_redis_key_for_challenge_from_cid(challenge.get_cid())
     return _get_redis_key_for_challenge_from_cid(challenge["cid"])
 
 
-def _cid_exists(cid):
+def _cid_exists(cid):  # helper, database
     return current_app.redis.exists(_get_redis_key_for_challenge_from_cid(cid))
 
 
-def _generate_unique_cid():
+def _generate_unique_cid():  # helper
     cid = _generate_cid()
     while _cid_exists(cid):
         cid = _generate_cid()
@@ -90,7 +143,7 @@ def _generate_unique_cid():
     return cid
 
 
-def _challenge_set(challenge):
+def _challenge_set(challenge):  # helper, database
     # XXX: I should handle this kind of result checking in the redis service!
     # TODO: that redis service should have proper error checking
     current_app.redis.set(
@@ -98,49 +151,29 @@ def _challenge_set(challenge):
     )
 
 
-def _get_challenge_by_cid(cid):
+def _get_challenge_by_cid(cid):  # helper, database
     key = _get_redis_key_for_challenge_from_cid(cid)
     response = current_app.redis.get(key)
     return json.loads(response)
 
 
-def create_challenge(game_name, game_config, time_config=None):
+def create_challenge(game_name, game_config, time_config=None):  # API
 
-    if game_name not in GAME_STATE_CLASSES:
-        # XXX: standardize error communication!
-        raise BaseException
-
-    game = GAME_STATE_CLASSES[game_name]
-
-    if not game.is_valid_config(game_config):
-        raise BaseException
-
-    game_state = game.create_from_config(game_config)
-
-    cid = _generate_unique_cid()
-
-    challenge_obj = {
-        "game_name": game_name,
-        "state": game_state.__repr__(),  # XXX: rename key to game_state
-        "players": [],
-        "moves": [],  # XXX: move to game
-        "status": "WAITING_FOR_PLAYERS",
-        "cid": cid,
-        "player_won": -1,
-        "time_control": create_time_control_from_time_config(time_config),
-    }
-
+    challenge = Challenge(
+        game_name=game_name, game_config=game_config, time_config=time_config
+    )
+    challenge_obj = challenge.as_dict()
     _challenge_set(challenge_obj)
     return challenge_obj
 
 
-def send_challenge_update_to_clients(challenge):
+def send_challenge_update_to_clients(challenge):  # action
     payload = {"result": "success", "challenge": challenge}
     target_room = socket_room_name_from_challenge(challenge)
     emit("challenge-update", payload, to=target_room)
 
 
-def assert_player_can_join_challenge(uid, challenge):
+def assert_player_can_join_challenge(uid, challenge):  # assert
 
     if (
         len(challenge["players"])
@@ -152,7 +185,7 @@ def assert_player_can_join_challenge(uid, challenge):
     return True
 
 
-def add_player_to_challenge(uid, cid):
+def add_player_to_challenge(uid, cid):  # API (challenge-join)
 
     if not _cid_exists(cid):
         raise BaseException  # Challenge not found
@@ -179,7 +212,7 @@ def add_player_to_challenge(uid, cid):
     return {"result": "success", "challenge": challenge}
 
 
-def process_disconnect_from_user(uid):
+def process_disconnect_from_user(uid):  # action
 
     cids_to_terminate = user_service.get_realtime_challenges_of_user(uid)
     for cid in cids_to_terminate:
@@ -188,8 +221,7 @@ def process_disconnect_from_user(uid):
     # TODO unsubscribe the user from the rooms to free up resources!
 
 
-def default_player_due_to_disconnect(cid, uid):
-
+def default_player_due_to_disconnect(cid, uid):  # action
     # TODO: also handle dangling games here?
 
     challenge = _get_challenge_by_cid(cid)
@@ -205,7 +237,8 @@ def default_player_due_to_disconnect(cid, uid):
         send_challenge_update_to_clients(challenge)
 
 
-def calc_time_user_used_from_timestamps(stamps):
+# TIME CONTROL
+def calc_time_user_used_from_timestamps(stamps):  # helper for clock
     # calculates the total amount of time used for the user with the last stamp
     used_time = 0
     for i in range(len(stamps) - 1, 0, -2):
@@ -214,10 +247,26 @@ def calc_time_user_used_from_timestamps(stamps):
     return used_time
 
 
-def check_game_clock_OK(challenge):
+def create_time_control_from_time_config(time_config):  # helper: clock init
+    if time_config is None:
+        return {}
+
+    time_control = {
+        "time_config": {
+            "base_s": time_config["base_s"],
+            "increment_s": time_config["increment_s"],
+        }
+    }
+
+    return time_control
+
+
+def check_game_clock_OK(challenge):  # helper for clock
     """checks the time for the player with the turn"""
-    if challenge["time_control"] == {}:
+    if challenge["time_control"]["time_config"] == {}:
         return True
+    print("\n" * 15)
+    print(challenge)
 
     current_time = current_app.time_provider.time()
 
@@ -232,7 +281,7 @@ def check_game_clock_OK(challenge):
     return game_clock_is_ok
 
 
-def default_game_on_time(challenge):
+def default_game_on_time(challenge):  # action, sub-API
 
     current_player = challenge["state"]["turn"]
 
@@ -243,7 +292,7 @@ def default_game_on_time(challenge):
     return challenge
 
 
-def handle_time_control(challenge):
+def handle_time_control(challenge):  # helper for API
     if "time_control" in challenge and challenge["time_control"] != {}:
 
         current_time = current_app.time_provider.time()
@@ -260,7 +309,7 @@ def handle_time_control(challenge):
     return challenge
 
 
-def handle_clock_check(cid):
+def handle_clock_check(cid):  # action, API
     challenge = _get_challenge_by_cid(cid)
 
     if not challenge["status"] == "IN_PROGRESS":
@@ -277,7 +326,10 @@ def handle_clock_check(cid):
     return {"result": "success"}
 
 
-def handle_move(cid, move):
+######################
+
+
+def handle_move(cid, move):  # action, API
     challenge = _get_challenge_by_cid(cid)
 
     if not challenge["status"] == "IN_PROGRESS":

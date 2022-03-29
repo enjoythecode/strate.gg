@@ -54,6 +54,14 @@ class AmazonsState(GameState):
 
     DEFAULT_AMAZONS_CONFIG = {"size": 10, "variation": 0}
 
+    def as_dict(self):
+        return {
+            "turn": self.turn,
+            "board": self.board,
+            "config": self.config,
+            "number_of_turns": self.number_of_turns,
+        }
+
     def __init__(self, config=DEFAULT_AMAZONS_CONFIG):
         self.turn = 0
         self.board = self.get_board_from_config(config)
@@ -81,7 +89,7 @@ class AmazonsState(GameState):
         return str(config["size"]) + "_" + str(config["variation"])
 
     @classmethod
-    def create_from_config(self, config):
+    def create_from_config(cls, config):
         return AmazonsState(config=config)
 
     @classmethod
