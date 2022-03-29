@@ -152,6 +152,9 @@ class Challenge:
     def change_status_to_in_progress(self):
         self.status = "IN_PROGRESS"
 
+    def is_in_progress(self):
+        return self.status == "IN_PROGRESS"
+
 
 CHALLENGE_ID_LENGTH = 8
 
@@ -313,23 +316,6 @@ def handle_time_control(challenge):  # helper for API
     return challenge
 
 
-def handle_clock_check(cid):  # action, API
-    challenge = _get_challenge_by_cid(cid)
-
-    if not challenge["status"] == "IN_PROGRESS":
-        return {"result": "error", "error": "game is not in progress"}
-
-    if check_game_clock_OK(challenge):
-        return {"result": "error", "error": "clock is OK"}
-    else:
-        challenge = default_game_on_time(challenge)
-
-    _challenge_set(challenge)
-    send_challenge_update_to_clients(challenge)
-
-    return {"result": "success"}
-
-
 ######################
 
 
@@ -386,3 +372,19 @@ def add_player_to_challenge(uid, cid):
     _challenge_set(challenge_obj)
     send_challenge_update_to_clients(challenge_obj)
     return challenge_obj
+
+
+def handle_clock_check(cid):  # action, API
+
+    challenge = Challenge.from_database(cid)
+    assert challenge.is_in_progress(), "Game is not in progress"
+
+    challenge_obj = challenge.as_dict()
+
+    assert not check_game_clock_OK(challenge_obj), "clock is OK"
+    challenge_obj = default_game_on_time(challenge_obj)
+
+    _challenge_set(challenge_obj)
+    send_challenge_update_to_clients(challenge_obj)
+
+    return {"result": "success"}
