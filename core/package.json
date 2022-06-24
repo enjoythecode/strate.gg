@@ -1,7 +1,5 @@
 {
-  "dependencies": {
-    "typescript": "^4.7.4"
-  },
+  "dependencies": {},
   "name": "core",
   "version": "1.0.0",
   "description": "core objects and functions for strate.gg logic",
@@ -9,7 +7,7 @@
   "directories": {
     "test": "tests"
   },
-  "devDependencies": {},
+  "devDependencies": {"typescript": "^4.7.4"},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
