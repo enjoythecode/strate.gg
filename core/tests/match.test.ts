@@ -1,12 +1,12 @@
 import { Match } from "../src/match"
-import { AMAZONS } from "../src/game"
+import { GameName } from "../src/game"
 
 describe("Match", () => {
     it("is initialized with a game name", () => {
-        const match = new Match(AMAZONS);
+        const match = new Match(GameName.AMAZONS);
     })
     it("getGameName", () => {
-        const match = new Match(AMAZONS);
-        expect(match.getGameName()).toBe(AMAZONS)
+        const match = new Match(GameName.AMAZONS);
+        expect(match.getGameName()).toBe(GameName.AMAZONS)
     })
 })

@@ -1,4 +1,4 @@
-export const AMAZONS = "amazons"
-export const MANCALA = "mancala"
-
-export type gameName = typeof AMAZONS | typeof MANCALA
+export enum GameName {
+    AMAZONS = "AMAZONS",
+    MANCALA = "MANCALA"
+}

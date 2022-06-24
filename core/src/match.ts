@@ -1,9 +1,9 @@
-import {gameName} from "./game"
+import { GameName } from "./game"
 
 export class Match {
-    gameName: gameName
+    gameName: GameName
 
-    constructor(gameName: gameName){
+    constructor(gameName: GameName){
         this.gameName = gameName
     }
 
