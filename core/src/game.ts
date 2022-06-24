@@ -1,4 +1,12 @@
 export enum GameName {
     AMAZONS = "AMAZONS",
-    MANCALA = "MANCALA"
+    MANCALA = "MANCALA",
+}
+
+export enum GameStatus {
+    WAITING_FOR_PLAYERS = "WAITING_FOR_PLAYERS",
+    IN_PROGRESS = "IN_PROGRESS",
+    OVER_RULES = "OVER_RULES",
+    OVER_DISCONNECT = "OVER_DISCONNECT",
+    OVER_TIME = "OVER_TIME",
 }
