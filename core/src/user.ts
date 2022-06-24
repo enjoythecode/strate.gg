@@ -2,8 +2,9 @@ export class User {
     displayName: string
     isRegistered: boolean
 
-    constructor(displayName : string = ""){
+    constructor(displayName : string = "", isRegistered : boolean = false){
         this.displayName = displayName
+        this.isRegistered = isRegistered
     }
 
     getDisplayName() : string {

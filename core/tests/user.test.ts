@@ -13,4 +13,7 @@ describe("User", () => {
         const sinan = new User(SINAN);
         expect(sinan.getDisplayName()).toBe(SINAN)
     })
+    it("can be initialized with whether the user is registered", () => {
+        const sinan = new User(SINAN, true);
+    })
 })
