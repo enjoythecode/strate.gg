@@ -1,5 +1,18 @@
 {
   "dependencies": {
     "typescript": "^4.7.4"
-  }
+  },
+  "name": "core",
+  "version": "1.0.0",
+  "description": "core objects and functions for strate.gg logic",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
