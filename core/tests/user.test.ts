@@ -9,11 +9,19 @@ describe("User", () => {
     it("can be initialized with a name", () => {
         const sinan = new User(SINAN);
     })
-    it("gives access to the name it was given", () => {
+    it("getDisplayName()", () => {
         const sinan = new User(SINAN);
         expect(sinan.getDisplayName()).toBe(SINAN)
     })
     it("can be initialized with whether the user is registered", () => {
         const sinan = new User(SINAN, true);
     })
+    it("getIsRegistered()", () => {
+        const sinan = new User(SINAN, true);
+        expect(sinan.getIsRegistered()).toBe(true)
+
+        const guest = new User("anonymous42", false);
+        expect(guest.getIsRegistered()).toBe(false)
+    })
+    
 })

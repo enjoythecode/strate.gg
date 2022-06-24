@@ -10,4 +10,8 @@ export class User {
     getDisplayName() : string {
         return this.displayName
     }
+
+    getIsRegistered() : boolean {
+        return this.isRegistered
+    }
 }
