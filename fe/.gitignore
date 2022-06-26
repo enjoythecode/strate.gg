@@ -8,6 +8,8 @@
 
 # production
 /build
+## compiled core/ files
+/src/core
 
 # misc
 .DS_Store
