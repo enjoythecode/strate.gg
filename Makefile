@@ -4,7 +4,11 @@
 # https://stackoverflow.com/a/70572654
 
 # Use SYSTEM_PYTHON to create venv
-SYSTEM_PYTHON  = $(or $(shell which python3), $(shell which python))
+# python3.7 works, however, BE tests break in python3.10
+# since the project is migrating away from using Python in the backend and
+# end-of-support for py3.7 is on 2023-06-27, I am simply hard-coding py3.7 until
+# then
+SYSTEM_PYTHON  = $(or $(shell which python3.7), $(shell which python3.7))
 
 # REPOSITORY SET-UP
 # -----------------------------------------------------------------------------
@@ -46,7 +50,7 @@ test: fest best
 fest: deps-fe
 	(cd fe && npm run test)
 best: deps-py gen-secret compile-client
-	(. venv/bin/activate && cd be && python -m pytest)
+	(. venv/bin/activate && cd be && ../venv/bin/python -m pytest)
 
 jest: deps-fe # runs in watch mode
 	(cd fe && npm run jest)
