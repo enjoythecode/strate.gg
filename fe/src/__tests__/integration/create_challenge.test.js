@@ -22,7 +22,7 @@ describe("Main page", () => {
     render(
       <RootStoreProvider store={RootStore}>
         <App></App>
-      </RootStoreProvider>
+      </RootStoreProvider>,
     );
     let create_chall_button = screen.getByRole("button", {
       name: /create challenge/i,

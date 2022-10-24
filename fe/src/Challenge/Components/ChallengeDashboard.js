@@ -50,7 +50,7 @@ export default observer(function ChallengeDashboard({ challenge }) {
 
       <MoveList
         moves={challenge.moves.map(
-          (move) => AmazonsLogic.format_move_for_human(move) /* XXX */
+          (move) => AmazonsLogic.format_move_for_human(move) /* XXX */,
         )}
       />
       <StatusIndicator status={challenge.status} end={challenge.game_end} />

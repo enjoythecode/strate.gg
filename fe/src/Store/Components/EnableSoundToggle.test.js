@@ -49,7 +49,7 @@ describe("the sound preference is toggled on click and a SFX is played on sound 
     });
     expect(RootStore.preference_store.sound_enabled).toBe(true);
     expect(SoundBridge.mock.instances[0].playMoveSoundEffect).toBeCalledTimes(
-      1
+      1,
     );
   });
 });

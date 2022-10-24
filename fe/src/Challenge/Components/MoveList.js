@@ -15,7 +15,7 @@ export const MoveList = ({ moves }) => {
           {". "}
           {index < moves.length ? moves[index] : "..."}
         </Typography>
-      </li>
+      </li>,
     );
   }
 

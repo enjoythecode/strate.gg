@@ -52,7 +52,7 @@ class Challenge {
     this.game_name = data.game_name;
     this.game_state = new game_name_to_state_class[this.game_name](
       this,
-      data.state.config
+      data.state.config,
     );
 
     this.update_challenge_information(data);
