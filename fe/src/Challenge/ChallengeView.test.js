@@ -51,14 +51,14 @@ describe("new move sound effect", () => {
     });
 
     expect(
-      SoundBridge.mock.instances[0].playMoveSoundEffect.mock.calls.length
+      SoundBridge.mock.instances[0].playMoveSoundEffect.mock.calls.length,
     ).toBe(1);
   });
 
   describe("is not triggered when", () => {
     afterEach(() => {
       expect(
-        SoundBridge.mock.instances[0].playMoveSoundEffect
+        SoundBridge.mock.instances[0].playMoveSoundEffect,
       ).not.toHaveBeenCalled();
     });
 

@@ -4,7 +4,7 @@ repos:
   # these hooks are from the output of `pre-commit sample-config`.
   # keeping as they are sane defaults.
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.3.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -12,32 +12,32 @@ repos:
 
     # Python auto-formatting
   - repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.10.0
     hooks:
       - id: black
 
     # Python linting
   - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 5.0.4
     hooks:
       - id: flake8
         args: ["--extend-ignore=E203", "--max-line-length=88"]
 
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: v3.0.1
+    rev: v3.8.5
     hooks:
       - id: reorder-python-imports
         args: ["--application-directories", "be"]
 
     # Javascript auto-formatting
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.6.0
+    rev: v3.0.0-alpha.3
     hooks:
       - id: prettier
 
     # Javascript linting
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.11.0
+    rev: v8.26.0
     hooks:
       - id: eslint
         files: \.[jt]sx?$ # *.js, *.jsx, *.ts and *.tsx

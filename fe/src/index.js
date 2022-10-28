@@ -33,5 +33,5 @@ ReactDOM.render(
       </Container>
     </RootStoreProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );

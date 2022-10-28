@@ -11,7 +11,7 @@ export const renderComponentWithRootStore = (component, RootStore = null) => {
   }
 
   const { asFragment } = render(
-    <RootStoreProvider store={RootStore}>{component}</RootStoreProvider>
+    <RootStoreProvider store={RootStore}>{component}</RootStoreProvider>,
   );
 
   return asFragment();
