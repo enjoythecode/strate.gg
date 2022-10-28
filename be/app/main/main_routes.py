@@ -4,7 +4,6 @@ import requests
 from flask import current_app
 from flask import request
 from flask import Response
-from flask import send_from_directory
 
 from app.main import bp
 from app.users import user_service
@@ -37,6 +36,7 @@ def serve_http_request_from_build_client_files(path):
         static_contents = static_file.read()
 
     return static_contents
+
 
 def proxy_to_npm_development_server():  # pragma: no cover
     resp = requests.request(
