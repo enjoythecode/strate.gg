@@ -130,13 +130,13 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
         currentSelectionStep() === "shoot" &&
           [selection["from"], selection["to"]].includes(cell)
           ? "indicatorOuter"
-          : "indicatorInner"
+          : "indicatorInner",
       );
     }
 
     // TODO: separate this logic because it never changes
     classes.push(
-      ((y % game_state.config.size) + x) % 2 ? "cellLight" : "cellDark"
+      ((y % game_state.config.size) + x) % 2 ? "cellLight" : "cellDark",
     );
 
     return classes.join(" ");
@@ -171,7 +171,7 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
             onClick={() => {
               clickCell(x.toString() + y.toString());
             }}
-          ></img>
+          ></img>,
         );
       }
     }
@@ -190,7 +190,7 @@ const AmazonsView = observer(({ game_state, handle_move, last_move }) => {
             onClick={() => {
               clickCell(x.toString() + y.toString());
             }}
-          ></div>
+          ></div>,
         );
       }
     }
