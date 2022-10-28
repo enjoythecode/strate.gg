@@ -4,7 +4,6 @@ import requests
 from flask import current_app
 from flask import request
 from flask import Response
-from flask import send_from_directory
 
 from app.main import bp
 from app.users import user_service
@@ -28,10 +27,15 @@ def serve(path):
 
 
 def serve_http_request_from_build_client_files(path):
-    if path != "" and os.path.exists(current_app.static_folder + "/" + path):
-        return send_from_directory(current_app.static_folder, path)
-    else:
-        return send_from_directory(current_app.static_folder, "index.html")
+    if path == "" or not os.path.exists(os.path.join(current_app.static_folder, path)):
+        path = "index.html"
+
+    path_in_static = os.path.join(current_app.static_folder, path)
+
+    with open(path_in_static, "r") as static_file:
+        static_contents = static_file.read()
+
+    return static_contents
 
 
 def proxy_to_npm_development_server():  # pragma: no cover
