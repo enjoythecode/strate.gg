@@ -38,6 +38,7 @@ def serve_http_request_from_build_client_files(path):
 
     return static_contents
 
+
 def proxy_to_npm_development_server():  # pragma: no cover
     resp = requests.request(
         method="GET",
