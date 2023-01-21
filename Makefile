@@ -94,31 +94,31 @@ be/client/index.html: deps-fe
 # -----------------------------------------------------------------------------
 .PHONY: dev devd devdown dev-build dev-build-nocache
 
-dev:
-	docker-compose -p "dev" -f docker/docker-compose.dev.yml up
+dev: gen-secret
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up
 devd:
-	docker-compose -p "dev" -f docker/docker-compose.dev.yml up -d
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up -d
 devdown:
-	docker-compose -p "dev" down
+	docker compose -p "dev" down
 dev-build: # re-build container in case of change to Docker files
-	docker-compose -p "dev" -f docker/docker-compose.dev.yml up --build
+	docker compose -p "dev" -f docker/docker-compose.dev.yml up --build
 dev-build-nocache: # force a no-cache rebuild (does not start after build)
-	docker-compose -f ./docker/docker-compose.dev.yml build --no-cache
+	docker compose -f ./docker/docker-compose.dev.yml build --no-cache
 
 # BUILDING PRODUCTION SERVERS
 # -----------------------------------------------------------------------------
 .PHONY: prod prodd proddown prod-build prod-build-nocache
 
 prod:
-	docker-compose -p "prod" -f docker/docker-compose.prod.yml up
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up
 prodd:
-	docker-compose -p "prod" -f docker/docker-compose.prod.yml up -d
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up -d
 proddown:
-	docker-compose -p "prod" down
+	docker compose -p "prod" down
 prod-build:
-	docker-compose -p "prod" -f docker/docker-compose.prod.yml up --build
+	docker compose -p "prod" -f docker/docker-compose.prod.yml up --build
 prod-build-nocache:
-	docker-compose -f ./docker/docker-compose.prod.yml build --no-cache
+	docker compose -f ./docker/docker-compose.prod.yml build --no-cache
 
 
 # MISCELLANEOUS

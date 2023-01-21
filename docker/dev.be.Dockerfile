@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM python:3.7-slim
+FROM python:3.10-slim
 WORKDIR /code
 ENV FLASK_ENV=development
 COPY ./requirements.txt requirements.txt
