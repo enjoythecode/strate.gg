@@ -13,7 +13,7 @@ eventlet==0.33.0
 filelock==3.6.0
 Flask==2.0.3
 Flask-Session==0.4.0
-Flask-SocketIO==5.1.1
+Flask-SocketIO==5.3.2
 flask-talisman==0.8.1
 greenlet==1.1.2
 identify==2.4.11
@@ -36,7 +36,7 @@ python-engineio==4.3.1
 python-socketio==5.5.2
 PyYAML==6.0
 redis==4.1.4
-redislite==6.0.674960
+redislite==6.2.805324
 requests==2.27.1
 six==1.16.0
 toml==0.10.2
